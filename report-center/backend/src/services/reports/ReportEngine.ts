@@ -152,12 +152,12 @@ export class ReportEngine {
       const durationMs = Date.now() - startTime;
       ReportRepository.addLog('Scheduler', `✅ Finalizado: Reporte "${report.name}" enviado con éxito a ${sendCount} destinatarios en ${durationMs}ms.`, 'success', report.id);
 
-      // Record counts
+// Record counts
       let recordsCount = 0;
       if (reportData.isGrouped && reportData.porSupervisor) {
-        recordsCount = Object.values(reportData.porSupervisor).reduce((acc: number, vs: any) => acc + vs.length, 0);
+        recordsCount = (Object.values(reportData.porSupervisor) as any[]).reduce((acc: number, vs: any) => acc + (vs?.length || 0), 0);
       } else if (reportData.isSeguimientoBO && reportData.porSupervisor) {
-        recordsCount = Object.values(reportData.porSupervisor).reduce((acc: number, val: any) => acc + val.totalVentas, 0);
+        recordsCount = (Object.values(reportData.porSupervisor) as any[]).reduce((acc: number, val: any) => acc + (val?.totalVentas || 0), 0);
       } else if (reportData.rows) {
         recordsCount = reportData.rows.length;
       }
