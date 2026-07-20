@@ -1,0 +1,28 @@
+════════════════════════════════════════════════════════════
+  FOTOS DE LA PORTADA (HERO) — DreamTeam Landing
+════════════════════════════════════════════════════════════
+
+Coloca aquí las fotos de los asesores que rotarán en la
+tarjeta principal de la portada (cada 8 segundos, con fundido).
+
+FORMATO:     JPG (recomendado) o WebP
+ASPECTO:     4:5 vertical (retrato, como post de Instagram)
+RESOLUCIÓN:  1080 × 1350 px  (mínimo 800 × 1000)
+PESO:        menos de 400 KB por foto (tinypng.com)
+
+Luego abre  js/hero-config.js  y escribe los nombres:
+
+    images: [
+      'asesor-1.jpg',
+      'asesor-2.jpg',
+      'asesor-3.jpg',
+    ],
+
+Guarda y recarga la landing. Las fotos giran en bucle en el
+orden de la lista. Si la lista queda vacía, se muestra la
+foto original.
+
+TIP: usa fotos con la persona AL CENTRO, de la cintura hacia
+arriba, todas con el mismo encuadre para que el fundido se
+vea uniforme y profesional.
+════════════════════════════════════════════════════════════

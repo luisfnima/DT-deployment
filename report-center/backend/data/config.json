@@ -1,0 +1,11 @@
+{
+  "scheduler": "running",
+  "evolutionApi": "connected",
+  "crmApi": "connected",
+  "averageExecutionTimeMs": 22094,
+  "sentToday": 4,
+  "failedToday": 8,
+  "lastSendErrorAt": "2026-07-17T09:27:05.001Z",
+  "lastSendErrorMsg": "Sin ventas hoy (2026-07-17) para reporte BO.",
+  "lastSendSuccessAt": "2026-07-17T09:29:24.851Z"
+}

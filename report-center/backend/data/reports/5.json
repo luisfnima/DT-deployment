@@ -1,0 +1,22 @@
+{
+  "id": "5",
+  "name": "Proceso Hoy",
+  "description": "Reporte general de ventas que continúan en proceso de validación o espera.",
+  "status": "active",
+  "time": "21:19, 21:21",
+  "frequency": "daily",
+  "channel": "whatsapp",
+  "recipientIds": [
+    "3",
+    "4"
+  ],
+  "timezone": "America/Lima",
+  "retryCount": 3,
+  "template": "default",
+  "createdAt": "2026-07-07T22:08:00.867Z",
+  "nextExecutionAt": "2026-07-22T02:19:00.000Z",
+  "daysOfWeek": [
+    2
+  ],
+  "lastExecutedAt": "2026-07-08T02:21:19.637Z"
+}

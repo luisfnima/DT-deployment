@@ -1,0 +1,28 @@
+{
+  "id": "1",
+  "name": "PDT Instalar",
+  "description": "Reporte diario matutino de ventas en estado PDT DE INSTALAR con fecha de instalación pendiente.",
+  "status": "active",
+  "time": "08:00",
+  "frequency": "daily",
+  "channel": "whatsapp",
+  "recipientIds": [
+    "2",
+    "3"
+  ],
+  "timezone": "America/Lima",
+  "retryCount": 3,
+  "template": "default",
+  "createdAt": "2026-07-07T22:08:00.865Z",
+  "nextExecutionAt": "2026-07-17T13:00:00.000Z",
+  "lastExecutedAt": "2026-07-17T09:29:24.863Z",
+  "daysOfWeek": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
+}

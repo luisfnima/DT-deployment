@@ -1,0 +1,18 @@
+{
+  "id": "4",
+  "name": "Canceladas Hoy",
+  "description": "Reporte diario de bajas y cancelaciones de ventas registradas en el CRM.",
+  "status": "inactive",
+  "time": "19:00",
+  "frequency": "daily",
+  "channel": "whatsapp",
+  "recipientIds": [
+    "3",
+    "4"
+  ],
+  "timezone": "America/Lima",
+  "retryCount": 3,
+  "template": "default",
+  "createdAt": "2026-07-07T22:08:00.866Z",
+  "lastExecutedAt": "2026-07-08T01:44:07.168Z"
+}

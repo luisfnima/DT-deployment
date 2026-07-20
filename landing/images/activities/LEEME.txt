@@ -1,0 +1,33 @@
+════════════════════════════════════════════════════════════
+  FOTOS DE ACTIVIDADES — DreamTeam Landing
+════════════════════════════════════════════════════════════
+
+Coloca aquí las fotos de las publicaciones de la sección
+"Nuestras Actividades".
+
+FORMATO:     JPG (recomendado) o WebP.
+             PNG solo para diseños/gráficos con texto.
+
+ASPECTO:     4:5 vertical (formato post de Instagram)
+             es el ideal para las tarjetas del grid.
+
+RESOLUCIÓN:  · Tarjeta normal    → 1080 × 1350 px
+             · Tarjeta destacada → 1350 × 1500 px
+             (mínimo 800 px de ancho)
+
+PESO:        menos de 500 KB por imagen.
+             Comprime gratis en tinypng.com o squoosh.app
+
+CÓMO SE MUESTRAN:
+· EN EL GRID: la tarjeta recorta la foto automáticamente
+  (centrado) para mantener el diseño tipo revista. Deja el
+  sujeto principal AL CENTRO y evita texto importante en
+  los bordes.
+· EN EL MODAL (al hacer click): la foto se muestra SIEMPRE
+  COMPLETA, sin recortes, con un fondo difuminado que
+  rellena el espacio sobrante. Aquí cualquier formato
+  (horizontal, cuadrado, vertical) se ve bien.
+
+Después de subir la foto, regístrala en:
+  js/activities-config.js   (campo  image: 'mi-foto.jpg')
+════════════════════════════════════════════════════════════

@@ -1,0 +1,96 @@
+[
+  {
+    "id": "1",
+    "name": "Pruebas Generales",
+    "description": "Destinatario de pruebas por defecto",
+    "channel": "whatsapp",
+    "value": "51939290435",
+    "status": "active",
+    "priority": 1,
+    "tags": [
+      "pruebas",
+      "dev"
+    ],
+    "allowedWindow": {
+      "start": "08:00",
+      "end": "22:00"
+    },
+    "observations": "Número de prueba inicial para el MVP",
+    "createdAt": "2026-07-07T22:08:00.863Z",
+    "lastDeliveryAt": "2026-07-07T23:18:23.464Z",
+    "reportIds": []
+  },
+  {
+    "name": "prueba",
+    "description": "prueba",
+    "channel": "whatsapp",
+    "value": "51927781733",
+    "status": "inactive",
+    "priority": 1,
+    "tags": [
+      "norte"
+    ],
+    "observations": "",
+    "id": "2",
+    "createdAt": "2026-07-07T23:10:29.755Z",
+    "allowedWindow": {
+      "start": "08:00",
+      "end": "14:22"
+    },
+    "reportIds": [
+      "2",
+      "1",
+      "3"
+    ],
+    "lastDeliveryAt": "2026-07-08T00:33:30.885Z"
+  },
+  {
+    "name": "Dev",
+    "description": "",
+    "channel": "whatsapp",
+    "value": "51929459788",
+    "status": "active",
+    "priority": 1,
+    "tags": [],
+    "allowedWindow": null,
+    "observations": "",
+    "id": "3",
+    "createdAt": "2026-07-08T01:27:03.499Z",
+    "lastDeliveryAt": "2026-07-17T09:29:24.805Z",
+    "reportIds": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
+  },
+  {
+    "name": "Jair Dev",
+    "description": "",
+    "channel": "whatsapp",
+    "value": "51952395679",
+    "status": "active",
+    "priority": 1,
+    "tags": [],
+    "observations": "",
+    "id": "4",
+    "createdAt": "2026-07-09T17:15:00.571Z",
+    "lastDeliveryAt": "2026-07-16T23:30:22.482Z"
+  },
+  {
+    "name": "Angel Avalos",
+    "description": "",
+    "channel": "whatsapp",
+    "value": "51995261923",
+    "status": "active",
+    "priority": 1,
+    "tags": [
+      "gerencia"
+    ],
+    "observations": "",
+    "id": "5",
+    "createdAt": "2026-07-11T02:47:23.586Z",
+    "lastDeliveryAt": "2026-07-11T02:49:54.968Z"
+  }
+]

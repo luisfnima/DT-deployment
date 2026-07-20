@@ -1,0 +1,433 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-ui), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-price), monospace;
+  --font-heading: var(--font-display), var(--font-ui), sans-serif;
+  --font-ui: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  --font-price: var(--font-price), monospace;
+  --font-display: var(--font-display), sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(0.95 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.985 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.6 0.25 25);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.93 0 0);
+  --secondary-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.93 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.93 0 0);
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.6 0.25 25 / 50%);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.6 0.25 25);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.93 0 0);
+  --sidebar-accent-foreground: oklch(0.145 0 0);
+  --sidebar-border: oklch(0.88 0 0);
+  --sidebar-ring: oklch(0.6 0.25 25 / 50%);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.13 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.13 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.6 0.25 25);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.2 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.2 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(0.18 0 0);
+  --input: oklch(0.18 0 0);
+  --ring: oklch(0.6 0.25 25 / 50%);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.6 0.25 25);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.2 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.18 0 0);
+  --sidebar-ring: oklch(0.6 0.25 25 / 50%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  }
+  html {
+    font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+/* Operator wordmark styling */
+.operator-wordmark {
+  font-family: var(--font-ui);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: inherit !important;
+}
+
+.operator-wordmark-yoigo {
+  font-family: var(--font-ui);
+  font-weight: 900;
+  text-transform: lowercase;
+  letter-spacing: -0.04em;
+  color: inherit !important;
+}
+
+.operator-wordmark-orange {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  color: inherit !important;
+}
+
+.operator-wordmark-vodafone {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  text-transform: lowercase;
+  letter-spacing: -0.03em;
+  color: inherit !important;
+}
+
+.operator-wordmark-lowi {
+  font-family: var(--font-ui);
+  font-weight: 900;
+  text-transform: lowercase;
+  letter-spacing: -0.04em;
+  color: inherit !important;
+}
+
+/* Price & UI specific helper classes */
+.price-main {
+  font-family: var(--font-price), monospace;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-suffix {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ui-title {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.ui-label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Clean Dark Mode Styling (Standard Slate/Zinc, non-neon, elegant dark theme)
+   ========================================================================== */
+.dark body, 
+.dark .bg-\[\#F4F7FB\] {
+  background-color: #0b0f19 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark aside,
+.dark header,
+.dark .bg-white,
+.dark .bg-card {
+  background-color: #131b2e !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+.dark header {
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.dark aside {
+  border-right: 1px solid #1e293b !important;
+}
+
+.dark .text-\[\#0F172A\],
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-905,
+.dark .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-505,
+.dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-200\/80,
+.dark .border-slate-100,
+.dark .border-slate-200\/60,
+.dark .border-slate-200\/50,
+.dark .border-slate-300 {
+  border-color: #1e293b !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100\/50,
+.dark .bg-slate-50\/80 {
+  background-color: #1e293b !important;
+}
+
+/* Select controls and inputs */
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+.dark input::placeholder, 
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+.dark input:focus, 
+.dark select:focus {
+  border-color: #4f46e5 !important;
+  outline: none;
+}
+
+/* Buttons in dark mode */
+.dark button.border-slate-200,
+.dark .button-outline,
+.dark button[variant="outline"] {
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark button.border-slate-200:hover,
+.dark button:hover {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-red-50 {
+  background-color: rgba(254, 0, 2, 0.15) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(254, 0, 2, 0.3) !important;
+}
+
+/* Badges and tags */
+.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+  color: #34d399 !important;
+}
+
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+.dark .bg-purple-50 {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
+  color: #c084fc !important;
+}
+
+.dark .bg-pink-50 {
+  background-color: rgba(236, 72, 153, 0.1) !important;
+  border-color: rgba(236, 72, 153, 0.2) !important;
+  color: #f472b6 !important;
+}
+
+.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.1) !important;
+  border-color: rgba(244, 63, 94, 0.2) !important;
+  color: #fb7185 !important;
+}
+
+/* Sidebar navigation buttons */
+.dark aside button.text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+.dark aside button.text-slate-500:hover {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+.dark aside button.bg-slate-100 {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+.dark aside button span {
+  color: #94a3b8 !important;
+}
+
+/* Modals and Canvas preview overlays */
+.dark .bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.dark .border-dashed {
+  border-style: dashed !important;
+}
+
+/* Sticker / Scotch Tape Animation for New Rates */
+@keyframes scotchTapeFloat {
+  0% {
+    transform: rotate(-4deg) translateY(0) translateX(0);
+  }
+  25% {
+    transform: rotate(-1deg) translateY(-5px) translateX(1.5px);
+  }
+  50% {
+    transform: rotate(3deg) translateY(-1px) translateX(-1px);
+  }
+  75% {
+    transform: rotate(-2deg) translateY(-6px) translateX(0.5px);
+  }
+  100% {
+    transform: rotate(-4deg) translateY(0) translateX(0);
+  }
+}
+
+@keyframes scotchTapeWiggle {
+  0% { transform: rotate(-3deg) scale(1.1) translateY(-2px); }
+  25% { transform: rotate(-8deg) scale(1.1) translateY(-4px); }
+  50% { transform: rotate(5deg) scale(1.1) translateY(-2px); }
+  75% { transform: rotate(-7deg) scale(1.1) translateY(-4px); }
+  100% { transform: rotate(-3deg) scale(1.1) translateY(-2px); }
+}
+
+.animate-scotch-tape {
+  animation: scotchTapeFloat 4s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.group:hover .animate-scotch-tape {
+  animation: scotchTapeWiggle 0.6s ease-in-out infinite;
+  background: rgba(253, 224, 71, 1) !important; /* brighter yellow on hover */
+  color: #422006 !important;
+  box-shadow: 0 8px 16px rgba(234, 179, 8, 0.35), inset 0 0 6px rgba(255, 255, 255, 1);
+}
+
+/* Light yellowish semi-translucent scotch tape texture and shadow */
+.scotch-tape-sticker {
+  background: rgba(254, 240, 138, 0.92); /* yellow-200 with slight transparency */
+  color: #713f12; /* yellow-900 */
+  font-family: var(--font-heading);
+  text-shadow: 0.5px 0.5px 0px rgba(254, 249, 195, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 0 4px rgba(255, 255, 255, 0.6);
+  border-left: 2px dashed rgba(161, 98, 7, 0.35);
+  border-right: 2px dashed rgba(161, 98, 7, 0.35);
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 25;
+  padding: 3px 12px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  transform: rotate(-3deg);
+  pointer-events: none;
+  backdrop-filter: blur(1px);
+}
+
+.dark .scotch-tape-sticker {
+  background: rgba(253, 224, 71, 0.95); /* yellow-300 */
+  color: #422006; /* yellow-950 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 0 4px rgba(255, 255, 255, 0.7);
+}

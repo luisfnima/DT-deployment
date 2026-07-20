@@ -1,0 +1,2 @@
+Admin / Supervisor	admin	DT2026ADMIN
+Asesor Comercial	asesor	dreamteam2026

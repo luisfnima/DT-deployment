@@ -1,0 +1,22 @@
+════════════════════════════════════════════════════════════
+  CARPETA DE MÚSICA — DreamTeam Landing
+════════════════════════════════════════════════════════════
+
+1. Coloca aquí tu canción de fondo.
+
+2. Formato recomendado:  MP3  (también sirve .m4a o .ogg)
+   Calidad: 128 - 192 kbps  ·  Peso ideal: menos de 8 MB
+   Evita .wav (pesa demasiado).
+
+3. Abre el archivo  js/music-config.js  y escribe el nombre
+   de tu archivo en el campo  file:
+
+      file: 'music/mi-cancion.mp3',
+
+4. Guarda y recarga la landing. ¡Listo!
+
+NOTA: los navegadores bloquean el sonido automático, así que
+la música empezará a sonar con el primer click o tap del
+visitante en la página. El botón rojo flotante (abajo a la
+izquierda) permite encenderla o apagarla en cualquier momento.
+════════════════════════════════════════════════════════════
