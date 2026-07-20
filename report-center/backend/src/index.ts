@@ -1,5 +1,6 @@
 import app from './server';
 import { env } from './config/env';
+import cors from 'cors';
 import { ReportRepository } from './repositories/ReportRepository';
 
 const port = env.PORT;
