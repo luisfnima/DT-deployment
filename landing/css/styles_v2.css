@@ -601,6 +601,19 @@ p[style*="opacity: 0.5"] {
   opacity: 0.9 !important;
 }
 
+/* Fix global para Modo Claro en la estructura de React */
+[data-theme="light"] body,
+[data-theme="light"] #root,
+[data-theme="light"] main {
+  background-color: var(--bg-color) !important;
+  color: var(--text-main) !important;
+}
+
+[data-theme="light"] #root div[class*="bg-"],
+[data-theme="light"] #root section {
+  border-color: var(--border-color);
+}
+
 [data-theme="dark"] div[style*="opacity: 0.55"],
 [data-theme="dark"] p[style*="opacity: 0.5"] {
   color: #e5e7eb !important;
