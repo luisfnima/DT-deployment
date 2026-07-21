@@ -592,29 +592,22 @@ p[style*="opacity: 0.5"] {
   opacity: 1 !important;
 }
 
-/* Corrección de contraste y opacidad para textos en Modo Oscuro */
-[data-theme="dark"] .hero-desc-text,
-[data-theme="dark"] #inicio p,
-[data-theme="dark"] .fade-up-3,
-[data-theme="dark"] html body section#inicio > div > div p {
-  color: #e5e7eb !important; /* Blanco/gris claro legible */
-  opacity: 0.9 !important;
-}
 
-/* Fix definitivo para Modo Claro */
-[data-theme="light"] nav,
-[data-theme="light"] header {
-  background: rgba(255, 255, 255, 0.95) !important;
-}
-[data-theme="light"] nav a,
 [data-theme="light"] header a,
-[data-theme="light"] nav button {
-  color: #111827 !important;
+[data-theme="light"] nav a {
+  color: var(--text-muted) !important;
 }
-[data-theme="light"] #root {
-  background-color: #F9FAFB !important;
+[data-theme="light"] header a:hover,
+[data-theme="light"] nav a:hover {
+  color: var(--text-main) !important;
 }
-[data-theme="light"] #root p,
-[data-theme="light"] #root span:not([class*="text-red"]) {
-  color: #374151 !important;
+[data-theme="light"] #inicio p,
+[data-theme="light"] .hero-desc {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] #inicio p,
+[data-theme="dark"] .hero-desc {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
 }
