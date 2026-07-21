@@ -493,7 +493,7 @@
         // Unlock reports card for admin
         if (reportsCard) {
           reportsCard.classList.remove('card-locked');
-          reportsCard.href = 'http://localhost:3002/';
+          reportsCard.href = 'https://tarifario.dreamteam.com.pe/';
           reportsCard.setAttribute('target', '_blank');
           reportsCard.setAttribute('rel', 'noopener noreferrer');
         }
@@ -523,7 +523,7 @@
       // SSO parameter forwarding for Tarifario
       const tarifarioLink = document.getElementById('tarifario-link');
       if (tarifarioLink) {
-        tarifarioLink.href = 'http://localhost:3000/?role=' + activeRole;
+        tarifarioLink.href = 'https://tarifario.dreamteam.com.pe/?role=' + activeRole;
       }
     }
 
