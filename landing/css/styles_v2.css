@@ -523,6 +523,10 @@ body {
   background-color: var(--bg-card);
 }
 
+ destruction {
+  display: grid;
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr;
@@ -581,33 +585,15 @@ body {
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
-/* Corrección de contraste y opacidad para textos en Modo Claro */
-.hero-desc-text,
-#inicio p,
-.fade-up-3,
-html body section#inicio > div > div p,
-div[style*="opacity: 0.55"],
-p[style*="opacity: 0.5"] {
-  color: #1f2937 !important; /* Gris oscuro legible */
-  opacity: 1 !important;
-}
-
-
+/* Integración limpia usando variables de la paleta oficial */
 [data-theme="light"] header a,
 [data-theme="light"] nav a {
   color: var(--text-muted) !important;
 }
+
 [data-theme="light"] header a:hover,
-[data-theme="light"] nav a:hover {
+[data-theme="light"] nav a:hover,
+[data-theme="light"] header a.active,
+[data-theme="light"] nav a.active {
   color: var(--text-main) !important;
-}
-[data-theme="light"] #inicio p,
-[data-theme="light"] .hero-desc {
-  color: var(--text-muted) !important;
-  opacity: 1 !important;
-}
-[data-theme="dark"] #inicio p,
-[data-theme="dark"] .hero-desc {
-  color: var(--text-muted) !important;
-  opacity: 1 !important;
 }
