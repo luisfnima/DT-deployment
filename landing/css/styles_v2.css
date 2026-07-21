@@ -523,10 +523,6 @@ body {
   background-color: var(--bg-card);
 }
 
- destruction {
-  display: grid;
-}
-
 .footer-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr;
@@ -596,4 +592,17 @@ body {
 [data-theme="light"] header a.active,
 [data-theme="light"] nav a.active {
   color: var(--text-main) !important;
+}
+
+/* Hero Section adaptación al modo claro */
+[data-theme="light"] .hero,
+[data-theme="light"] section#inicio,
+[data-theme="light"] #inicio {
+  background-color: var(--bg-color) !important;
+  color: var(--text-main) !important;
+}
+
+[data-theme="light"] #inicio p,
+[data-theme="light"] .hero-desc {
+  color: var(--text-muted) !important;
 }
