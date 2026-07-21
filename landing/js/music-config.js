@@ -50,7 +50,7 @@ window.MUSIC_CONFIG = {
 
   file:     'music/Mask.mp3',   // ← tu canción (carpeta music/)
 
-  volume:   0.005,                     // ← volumen (0.0 a 1.0)
+  volume:   0.008,                     // ← volumen (0.0 a 1.0)
 
   loop:     true,                     // ← repetir en bucle
 
