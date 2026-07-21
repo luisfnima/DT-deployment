@@ -606,3 +606,22 @@ body {
 [data-theme="light"] .hero-desc {
   color: var(--text-muted) !important;
 }
+
+/* Fix específico para título Hero y botón WhatsApp en Modo Claro */
+[data-theme="light"] #inicio h1,
+[data-theme="light"] .hero-title,
+[data-theme="light"] html body section#inicio h1 {
+  color: var(--text-main) !important;
+}
+
+[data-theme="light"] #inicio h1 span,
+[data-theme="light"] .hero-title span {
+  color: var(--brand-red) !important;
+}
+
+[data-theme="light"] #inicio a[href*="wa.me"],
+[data-theme="light"] .btn-secondary {
+  color: var(--text-main) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: var(--bg-card) !important;
+}
