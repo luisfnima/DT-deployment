@@ -85,6 +85,35 @@ span.tri {
   display: none !important;
 }
 
+/* ==========================================================================
+   FORZAR FONDO BLANCO Y TEXTOS NEGROS EN HERO (#inicio) EN MODO CLARO
+   ========================================================================== */
+[data-theme="light"] #inicio,
+[data-theme="light"] #inicio.bg-black,
+[data-theme="light"] section[id="inicio"],
+[data-theme="light"] .p5-hero {
+  background-color: #F9FAFB !important;
+  background: #F9FAFB !important;
+  color: #111827 !important;
+}
+
+[data-theme="light"] #inicio h1,
+[data-theme="light"] #inicio h1 span:not([style*="color"]),
+[data-theme="light"] #inicio .hero-desc-text,
+[data-theme="light"] #inicio div,
+[data-theme="light"] #inicio p {
+  color: #111827 !important;
+}
+
+[data-theme="light"] #inicio .hero-desc-text {
+  color: #374151 !important;
+}
+
+[data-theme="light"] #inicio h1 span[style*="#FE0002"],
+[data-theme="light"] #inicio h1 span[style*="primary"] {
+  color: #FE0002 !important;
+}
+
 /* FIX: FORZAR CADA LLAMADA ES UNA OPORTUNIDAD EN NEGRO (MODO CLARO) */
 [data-theme="light"] .intro-black-text,
 [data-theme="light"] #sobre-nosotros .intro-black-text,
