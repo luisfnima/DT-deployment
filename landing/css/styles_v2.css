@@ -78,7 +78,7 @@ body {
 }
 
 /* ==========================================================================
-   BLINDAJE TOTAL CONTRA OVERRIDES DE SCRIPTS EXTERNOS (!important)
+   CORRECCIONES DEFINITIVAS DE ALTO CONTRASTE CON !important
    ========================================================================== */
 
 /* 1. HERO / INICIO EN MODO CLARO */
@@ -92,8 +92,7 @@ body {
 
 [data-theme="light"] #inicio h1,
 [data-theme="light"] #inicio h2,
-[data-theme="light"] #inicio p,
-[data-theme="light"] #inicio div:not([class*="avatar"]) {
+[data-theme="light"] #inicio p {
   color: #111827 !important;
 }
 
@@ -101,45 +100,45 @@ body {
   color: #374151 !important;
 }
 
-[data-theme="light"] #inicio span:not([style*="color: rgb(254"]):not([style*="color:#FE0002"]):not([class*="red"]) {
-  color: #111827 !important;
-}
-
-/* 2. SOBRE NOSOTROS */
-[data-theme="light"] #sobre-nosotros .intro-black-text,
-[data-theme="light"] #sobre-nosotros h2 span.intro-black-text {
-  color: #111827 !important;
-}
-
-/* Badges rojas con texto blanco */
-div[style*="background: #FE0002"] span,
-div[style*="background:#FE0002"] span,
-div[style*="background: var(--brand-red)"] span,
+/* 2. BARRA ROJA "ÚNETE AL EQUIPO" (EN AMBOS MODOS DEBE SER ROJA CON TEXTO BLANCO) */
+.up5-eyebrow,
 .up5-eyebrow span,
-[class*="eyebrow"] span {
+[class*="up5-eyebrow"],
+div[class*="eyebrow"] {
+  background-color: #FE0002 !important;
+  color: #FFFFFF !important;
+  display: inline-block !important;
+  padding: 6px 16px !important;
+}
+
+.up5-eyebrow span,
+div[class*="eyebrow"] span {
   color: #FFFFFF !important;
 }
 
-/* 3. ÚNETE AL EQUIPO (FORMULARIO P5) */
-[data-theme="light"] #unete,
-[data-theme="light"] section[id="unete"],
-[data-theme="light"] .up5-copy,
-[data-theme="light"] div[class*="up5"] {
-  background-color: #F9FAFB !important;
-  color: #111827 !important;
-}
-
+/* 3. TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" EN MODO CLARO Y OSCURO */
 [data-theme="light"] #unete h2,
 [data-theme="light"] #unete .up5-title,
 [data-theme="light"] section[id="unete"] h2 {
   color: #111827 !important;
 }
 
-[data-theme="light"] #unete p,
-[data-theme="light"] #unete .up5-copy p {
-  color: #374151 !important;
+[data-theme="light"] #unete h2 span,
+[data-theme="light"] #unete .up5-title span {
+  color: #FE0002 !important;
 }
 
+[data-theme="dark"] #unete h2,
+[data-theme="dark"] #unete .up5-title {
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] #unete h2 span,
+[data-theme="dark"] #unete .up5-title span {
+  color: #FE0002 !important;
+}
+
+/* 4. FORMULARIO EN MODO CLARO */
 [data-theme="light"] #unete input,
 [data-theme="light"] #unete textarea,
 [data-theme="light"] #unete div[style*="border: 1px dashed"] {
@@ -152,23 +151,7 @@ div[style*="background: var(--brand-red)"] span,
   color: #6B7280 !important;
 }
 
-/* Modo Oscuro Únete */
-[data-theme="dark"] #unete h2,
-[data-theme="dark"] #unete .up5-title {
-  color: #FFFFFF !important;
-}
-
-[data-theme="dark"] #unete p {
-  color: #D1D5DB !important;
-}
-
-[data-theme="dark"] #unete input {
-  background-color: #111111 !important;
-  color: #FFFFFF !important;
-  border-color: #333333 !important;
-}
-
-/* 4. FOOTER */
+/* 5. FOOTER */
 footer, [data-anim="footer-col"] {
   color: var(--text-main) !important;
 }
@@ -183,16 +166,4 @@ footer, [data-anim="footer-col"] {
 [data-theme="dark"] [data-anim="footer-col"] a {
   color: #FFFFFF !important;
   opacity: 0.9 !important;
-}
-
-[data-theme="light"] footer p,
-[data-theme="light"] footer span,
-[data-theme="light"] footer div {
-  color: #374151 !important;
-}
-
-[data-theme="dark"] footer p,
-[data-theme="dark"] footer span,
-[data-theme="dark"] footer div {
-  color: #E5E7EB !important;
 }
