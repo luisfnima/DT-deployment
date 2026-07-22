@@ -56,6 +56,7 @@ html, body {
   scroll-behavior: smooth;
   overflow-x: hidden !important;
   max-width: 100vw !important;
+  width: 100% !important;
 }
 
 body {
@@ -163,9 +164,33 @@ span.tri {
   color: #6B7280 !important;
 }
 
-/* FOOTER */
-footer, [data-anim="footer-col"] {
-  color: var(--text-main) !important;
+/* FOOTER CORRECCIÓN DE ALINEACIÓN */
+footer {
+  width: 100% !important;
+  background: var(--bg-card) !important;
+  border-top: 1px solid var(--border-color) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+footer .footer-container {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 48px 40px 0 !important;
+}
+
+footer .footer-bottom {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  border-top: 1px solid var(--border-color) !important;
+  padding: 24px 40px 28px 70px !important; /* Espacio para el reproductor flotante */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
 }
 
 [data-theme="light"] footer a,
