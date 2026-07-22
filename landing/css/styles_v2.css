@@ -86,6 +86,20 @@ span.tri {
   display: none !important;
 }
 
+/* MARQUESINA (TICKER) EN GRIS OSCURO */
+[data-anim="ticker"],
+.marquee-track-container,
+div[data-anim="ticker"] {
+  background-color: #1F2937 !important;
+  background: #1F2937 !important;
+}
+
+/* TAKE YOUR HEART EN BLANCO Y ROJO */
+.badge-take-your,
+[class*="take-your"] span:not(.red) {
+  color: #FFFFFF !important;
+}
+
 /* ==========================================================================
    FORZAR FONDO BLANCO Y TEXTOS NEGROS EN HERO (#inicio) EN MODO CLARO
    ========================================================================== */
@@ -185,7 +199,7 @@ footer .footer-bottom {
   margin: 0 auto !important;
   width: 100% !important;
   border-top: 1px solid var(--border-color) !important;
-  padding: 24px 40px 28px 70px !important; /* Espacio para el reproductor flotante */
+  padding: 24px 40px 28px 70px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
