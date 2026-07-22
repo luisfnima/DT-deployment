@@ -104,6 +104,8 @@ div[data-anim="ticker"] {
 /* TAKE YOUR HEART EN BLANCO Y ROJO (FORZAR BLANCO EN 'TAKE YOUR' EN AMBOS TEMAS) */
 .badge-take-your,
 .take-your-badge,
+.p5-badge-tyh,
+.p5-badge-tyh span,
 [class*="take-your"],
 [class*="take-your"] span:not(.red),
 .p5-hero-badge,
@@ -126,7 +128,7 @@ div[data-anim="ticker"] {
 [data-theme="light"] #inicio h1,
 [data-theme="light"] #inicio h1 span:not([style*="color"]),
 [data-theme="light"] #inicio .hero-desc-text,
-[data-theme="light"] #inicio div,
+[data-theme="light"] #inicio div:not(.p5-badge-tyh):not(.p5-badge-tyh *),
 [data-theme="light"] #inicio p {
   color: #111827 !important;
 }
