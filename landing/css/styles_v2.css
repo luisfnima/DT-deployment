@@ -17,16 +17,16 @@
   --bg-color: #F9FAFB;
   --bg-card: #FFFFFF;
   --bg-card-hover: #F3F4F6;
-  --bg-navbar: rgba(249, 250, 251, 0.85);
+  --bg-navbar: rgba(249, 250, 251, 0.95);
   --text-main: #111827;
   --text-muted: #4B5563;
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(254, 0, 2, 0.25);
-  --shadow-main: 0 12px 40px rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 24px 60px rgba(254, 0, 2, 0.08);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --border-hover: rgba(254, 0, 2, 0.35);
+  --shadow-main: 0 12px 40px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 24px 60px rgba(254, 0, 2, 0.12);
   --input-bg: #F3F4F6;
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="dark"] {
@@ -179,9 +179,11 @@ body {
 }
 
 /* ==========================================================================
-   FORZADO GLOBAL ROBUSTO DE MODO CLARO PARA ELEMENTOS REACT/TAILWIND INLINE
+   ANULACIÓN ABSOLUTA DE MODO CLARO PARA TAILWIND HARDCODEADO
    ========================================================================== */
 
+html[data-theme="light"],
+body[data-theme="light"],
 [data-theme="light"] {
   background-color: #F9FAFB !important;
   color: #111827 !important;
@@ -190,14 +192,15 @@ body {
 [data-theme="light"] body,
 [data-theme="light"] main,
 [data-theme="light"] section,
-[data-theme="light"] #root > div {
+[data-theme="light"] #root > div,
+[data-theme="light"] div[class*="min-h-screen"] {
   background-color: #F9FAFB !important;
   color: #111827 !important;
 }
 
-/* 1. Anular color de texto blanco hardcodeado de Tailwind (salvo fondos rojos o tarjetas rojas) */
-[data-theme="light"] .text-white:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]):not(.hero-kicker),
-[data-theme="light"] [class*="text-white"]:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]):not(.hero-kicker) {
+/* 1. Anular color de texto blanco hardcodeado de Tailwind (salvo botones rojos) */
+[data-theme="light"] .text-white:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]),
+[data-theme="light"] [class*="text-white"]:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]) {
   color: #111827 !important;
 }
 
@@ -245,13 +248,14 @@ body {
   background-color: #FFFFFF !important;
   color: #111827 !important;
   border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
 }
 
 [data-theme="light"] a[href*="wa.me"] *,
 [data-theme="light"] a[href*="whatsapp"] * {
   color: #111827 !important;
   fill: #111827 !important;
+  stroke: #111827 !important;
 }
 
 /* 5. TARJETAS OSCURAS TAILWIND -> TARJETAS BLANCAS EN MODO CLARO */
@@ -263,8 +267,8 @@ body {
 [data-theme="light"] .bg-black\/60,
 [data-theme="light"] .bg-black\/80 {
   background-color: #FFFFFF !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* 6. BORDES TAILWIND */
