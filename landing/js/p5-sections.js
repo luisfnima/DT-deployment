@@ -129,7 +129,7 @@
     /* badge "TAKE YOUR HEART" */
     .p5-badge-tyh {
       position: absolute; bottom: 12px; left: -2px; z-index: 6;
-      background: #000; color: #fff !important;
+      background: #000; color: #ffffff !important;
       font-family: 'Anton','Impact',sans-serif; font-size: 19px;
       text-transform: uppercase; line-height: .95;
       padding: 14px 18px;
@@ -349,7 +349,7 @@
 
     var badge = document.createElement('div');
     badge.className = 'p5-badge-tyh';
-    badge.innerHTML = 'TAKE<br>YOUR <i>HEART</i>';
+    badge.innerHTML = '<span style="color:#ffffff !important;">TAKE<br>YOUR</span> <i style="color:#e60013 !important;">HEART</i>';
 
     var s1 = document.createElement('div');
     s1.className = 'p5-star-deco p5-star-s1';
