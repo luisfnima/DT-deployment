@@ -77,54 +77,46 @@ body {
   backdrop-filter: blur(16px);
 }
 
-/* ==========================================================================
-   CORRECCIONES DEFINITIVAS DE ALTO CONTRASTE CON !important
-   ========================================================================== */
-
-/* 1. HERO / INICIO EN MODO CLARO */
-[data-theme="light"] #inicio,
-[data-theme="light"] section[id="inicio"],
-[data-theme="light"] .hero-section,
-[data-theme="light"] div[class*="hero"] {
-  background-color: #F9FAFB !important;
-  color: #111827 !important;
+/* Ocultar el triangulito blanco feo a la izquierda de la barra */
+.tri,
+.up5-eyebrow .tri,
+span.tri {
+  display: none !important;
 }
 
-[data-theme="light"] #inicio h1,
-[data-theme="light"] #inicio h2,
-[data-theme="light"] #inicio p {
-  color: #111827 !important;
-}
-
-[data-theme="light"] #inicio p {
-  color: #374151 !important;
-}
-
-/* 2. BARRA ROJA "ÚNETE AL EQUIPO" (EN AMBOS MODOS DEBE SER ROJA CON TEXTO BLANCO) */
+/* BARRA ROJA "ÚNETE AL EQUIPO" */
 .up5-eyebrow,
 .up5-eyebrow span,
-[class*="up5-eyebrow"],
-div[class*="eyebrow"] {
+[class*="up5-eyebrow"] {
   background-color: #FE0002 !important;
   color: #FFFFFF !important;
   display: inline-block !important;
   padding: 6px 16px !important;
 }
 
-.up5-eyebrow span,
-div[class*="eyebrow"] span {
-  color: #FFFFFF !important;
+/* DESCRIPCIÓN "Déjanos tus datos..." EN MODO CLARO Y OSCURO */
+[data-theme="light"] #unete p,
+[data-theme="light"] #unete .p5-rv,
+[data-theme="light"] .up5-copy p {
+  color: #374151 !important;
+  opacity: 1 !important;
 }
 
-/* 3. TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" EN MODO CLARO Y OSCURO */
+[data-theme="dark"] #unete p,
+[data-theme="dark"] #unete .p5-rv,
+[data-theme="dark"] .up5-copy p {
+  color: #D1D5DB !important;
+  opacity: 1 !important;
+}
+
+/* TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" */
 [data-theme="light"] #unete h2,
-[data-theme="light"] #unete .up5-title,
-[data-theme="light"] section[id="unete"] h2 {
+[data-theme="light"] #unete .up5-title {
   color: #111827 !important;
 }
 
-[data-theme="light"] #unete h2 span,
-[data-theme="light"] #unete .up5-title span {
+[data-theme="light"] #unete h2 span.red,
+[data-theme="light"] #unete .up5-title span.red {
   color: #FE0002 !important;
 }
 
@@ -133,12 +125,12 @@ div[class*="eyebrow"] span {
   color: #FFFFFF !important;
 }
 
-[data-theme="dark"] #unete h2 span,
-[data-theme="dark"] #unete .up5-title span {
+[data-theme="dark"] #unete h2 span.red,
+[data-theme="dark"] #unete .up5-title span.red {
   color: #FE0002 !important;
 }
 
-/* 4. FORMULARIO EN MODO CLARO */
+/* INPUTS FORMULARIO */
 [data-theme="light"] #unete input,
 [data-theme="light"] #unete textarea,
 [data-theme="light"] #unete div[style*="border: 1px dashed"] {
@@ -151,7 +143,7 @@ div[class*="eyebrow"] span {
   color: #6B7280 !important;
 }
 
-/* 5. FOOTER */
+/* FOOTER */
 footer, [data-anim="footer-col"] {
   color: var(--text-main) !important;
 }
