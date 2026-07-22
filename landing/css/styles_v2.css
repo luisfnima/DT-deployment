@@ -19,7 +19,7 @@
   --bg-card-hover: #F3F4F6;
   --bg-navbar: rgba(249, 250, 251, 0.95);
   --text-main: #111827;
-  --text-muted: #4B5563;
+  --text-muted: #374151;
   --border-color: rgba(0, 0, 0, 0.12);
   --border-hover: rgba(254, 0, 2, 0.35);
   --shadow-main: 0 12px 40px rgba(0, 0, 0, 0.04);
@@ -35,7 +35,7 @@
   --bg-card-hover: #121212;
   --bg-navbar: rgba(0, 0, 0, 0.85);
   --text-main: #F9FAFB;
-  --text-muted: #9CA3AF;
+  --text-muted: #D1D5DB;
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(254, 0, 2, 0.45);
   --shadow-main: 0 16px 50px rgba(0, 0, 0, 0.9);
@@ -78,113 +78,56 @@ body {
 }
 
 /* ==========================================================================
-   REGLAS ESPECÍFICAS PARA MODO CLARO ([data-theme="light"])
+   REGLAS ESPECÍFICAS DE ALTO CONTRASTE (MODO CLARO Y OSCURO)
    ========================================================================== */
 
-/* 1. HERO (Fondo claro limpio) */
-[data-theme="light"] #inicio,
-[data-theme="light"] section[id="inicio"] {
-  background-color: #F9FAFB !important;
+/* 1. FRASE "Cada llamada es una oportunidad." -> NEGRO PLANO EN MODO CLARO */
+[data-theme="light"] #sobre-nosotros .intro-black-text,
+[data-theme="light"] #sobre-nosotros h2 span.intro-black-text {
   color: #111827 !important;
 }
 
-[data-theme="light"] #inicio h1,
-[data-theme="light"] #inicio p,
-[data-theme="light"] #inicio span:not([class*="red"]):not([style*="color: rgb(254"]) {
-  color: #111827 !important;
-}
-
-[data-theme="light"] #inicio .hero-desc-text {
-  color: #4B5563 !important;
-}
-
-/* 2. SOBRE NOSOTROS (Ajustes de la tarjeta principal) */
-[data-theme="light"] #sobre-nosotros h2 {
-  color: #111827 !important;
-}
-
-[data-theme="light"] #sobre-nosotros h2 span {
-  color: #FE0002 !important;
-}
-
-/* Badge roja "SOBRE NOSOTROS" arriba del grid */
+/* 2. ETIQUETA ROJA "SOBRE NOSOTROS" -> TEXTO BLANCO SIEMPRE */
 .section-badge-red,
-[class*="nosotros-label"],
-[class*="section-badge"],
 .badge-red,
-div[class*="bg-red"] span,
-div[style*="background: rgb(254"] span {
-  color: #FFFFFF !important;
-}
-
-/* Label "SOBRE NOSOTROS" con fondo rojo */
 div[style*="background: #FE0002"] span,
 div[style*="background:#FE0002"] span,
 div[style*="background: var(--brand-red)"] span {
   color: #FFFFFF !important;
 }
 
-/* 3. PESTAÑAS ACTIVIDADES INACTIVAS */
-[data-theme="light"] .act-tab-btn:not(.active),
-[data-theme="light"] button[class*="act-tab"]:not(.active),
-[data-theme="light"] .activities-tab-item:not(.active) {
-  background-color: #FFFFFF !important;
+/* 3. FOOTER Y LINKS DE NAVEGACIÓN (ALTO CONTRASTE EN AMBOS MODOS) */
+footer,
+[data-anim="footer-col"] {
+  color: var(--text-main) !important;
+}
+
+footer a,
+[data-anim="footer-col"] a {
+  color: var(--text-main) !important;
+  opacity: 0.9 !important;
+}
+
+[data-theme="light"] footer a,
+[data-theme="light"] [data-anim="footer-col"] a {
   color: #111827 !important;
-  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  opacity: 1 !important;
 }
 
-[data-theme="light"] .act-tab-btn:not(.active) *,
-[data-theme="light"] button[class*="act-tab"]:not(.active) * {
-  color: #111827 !important;
-}
-
-/* 4. CÓMO TRABAJAMOS (Mantener fondo oscuro, pero "Cómo" y títulos en blanco) */
-#como-trabajamos,
-section[id="como-trabajamos"] {
-  background-color: #0A0A0A !important;
-}
-
-#como-trabajamos h2 {
+[data-theme="dark"] footer a,
+[data-theme="dark"] [data-anim="footer-col"] a {
   color: #FFFFFF !important;
+  opacity: 0.9 !important;
 }
 
-#como-trabajamos h2 span[style*="color: primary"],
-#como-trabajamos h2 span[class*="red"] {
-  color: #FE0002 !important;
+[data-theme="light"] footer p,
+[data-theme="light"] footer span,
+[data-theme="light"] footer div {
+  color: #374151 !important;
 }
 
-#como-trabajamos [class*="step"],
-#como-trabajamos div[style*="background"] {
-  color: #FFFFFF !important;
-}
-
-#como-trabajamos p {
-  color: rgba(255, 255, 255, 0.75) !important;
-}
-
-/* 5. ÚNETE AL EQUIPO (FORMULARIO) EN MODO CLARO */
-[data-theme="light"] #unete,
-[data-theme="light"] section[id="unete"] {
-  background-color: #F9FAFB !important;
-}
-
-[data-theme="light"] #unete .up5-copy {
-  background-color: #FFFFFF !important;
-}
-
-[data-theme="light"] #unete h2,
-[data-theme="light"] #unete p,
-[data-theme="light"] #unete span {
-  color: #111827 !important;
-}
-
-[data-theme="light"] #unete form input,
-[data-theme="light"] #unete form textarea {
-  background-color: #FFFFFF !important;
-  color: #111827 !important;
-  border: 1px solid #D1D5DB !important;
-}
-
-[data-theme="light"] #unete form input::placeholder {
-  color: #6B7280 !important;
+[data-theme="dark"] footer p,
+[data-theme="dark"] footer span,
+[data-theme="dark"] footer div {
+  color: #E5E7EB !important;
 }
