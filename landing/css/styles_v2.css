@@ -24,7 +24,7 @@
   --border-hover: rgba(254, 0, 2, 0.35);
   --shadow-main: 0 12px 40px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 24px 60px rgba(254, 0, 2, 0.12);
-  --input-bg: #F3F4F6;
+  --input-bg: #FFFFFF;
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(0, 0, 0, 0.08);
 }
@@ -45,7 +45,7 @@
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* Base resets */
+/* Resets */
 * {
   margin: 0;
   padding: 0;
@@ -65,7 +65,7 @@ body {
   line-height: 1.6;
 }
 
-/* Header & Glassmorphism Navbar */
+/* Header Navbar */
 .header {
   position: fixed;
   top: 0;
@@ -75,150 +75,60 @@ body {
   background-color: var(--bg-navbar);
   border-bottom: 1px solid var(--border-color);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all var(--transition-normal);
-}
-
-.nav-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 80px;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.logo img {
-  height: 38px;
-  width: auto;
-  display: block;
-}
-
-.nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  list-style: none;
-}
-
-.nav-link {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14.5px;
-  transition: color var(--transition-normal);
-}
-
-.nav-link:hover, .nav-link.active {
-  color: var(--text-main);
-}
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* Theme switch button */
-.theme-toggle-btn {
-  background: none;
-  border: 1px solid var(--border-color);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-main);
-  transition: all var(--transition-normal);
-}
-
-.theme-toggle-btn:hover {
-  background-color: var(--border-color);
-}
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 28px;
-  border-radius: 100px;
-  font-weight: 600;
-  font-family: var(--font-heading);
-  text-decoration: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-}
-
-.btn-primary {
-  background-color: var(--brand-red);
-  color: #FFFFFF !important;
-  border: none;
-  box-shadow: 0 6px 20px rgba(254, 0, 2, 0.2);
-}
-
-.btn-primary:hover {
-  background-color: var(--brand-red-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(254, 0, 2, 0.35);
-}
-
-.btn-secondary {
-  background: none;
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-}
-
-.btn-secondary:hover {
-  background-color: var(--border-color);
-  transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   AJUSTES FINOS DE ALTO CONTRASTE PARA MODO CLARO
+   REGLAS ESPECÍFICAS PARA MODO CLARO ([data-theme="light"])
    ========================================================================== */
 
-[data-theme="light"] {
+/* 1. HERO (Fondo claro limpio) */
+[data-theme="light"] #inicio,
+[data-theme="light"] section[id="inicio"] {
   background-color: #F9FAFB !important;
   color: #111827 !important;
 }
 
-[data-theme="light"] body {
-  background-color: #F9FAFB !important;
+[data-theme="light"] #inicio h1,
+[data-theme="light"] #inicio p,
+[data-theme="light"] #inicio span:not([class*="red"]):not([style*="color: rgb(254"]) {
   color: #111827 !important;
 }
 
-/* 1. ACTIVIDADES: Pestañas de Filtro inactivas */
-[data-theme="light"] .act-filter-btn:not(.active),
-[data-theme="light"] button[class*="act-filter"]:not(.active),
-[data-theme="light"] [class*="filter-btn"]:not(.active) {
+[data-theme="light"] #inicio .hero-desc-text {
+  color: #4B5563 !important;
+}
+
+/* 2. PESTAÑAS ACTIVIDADES INACTIVAS */
+[data-theme="light"] .act-tab-btn:not(.active),
+[data-theme="light"] button[class*="act-tab"]:not(.active),
+[data-theme="light"] .activities-tab-item:not(.active) {
   background-color: #FFFFFF !important;
   color: #111827 !important;
   border: 1px solid rgba(0, 0, 0, 0.15) !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
 }
 
-[data-theme="light"] .act-filter-btn:not(.active) *,
-[data-theme="light"] button[class*="act-filter"]:not(.active) * {
+[data-theme="light"] .act-tab-btn:not(.active) *,
+[data-theme="light"] button[class*="act-tab"]:not(.active) * {
   color: #111827 !important;
-  fill: #111827 !important;
 }
 
-/* 2. CÓMO TRABAJAMOS (Sección oscura fija con texto blanco) */
+/* 3. CÓMO TRABAJAMOS (Mantener fondo oscuro, pero "Cómo" y títulos en blanco) */
 #como-trabajamos,
 section[id="como-trabajamos"] {
   background-color: #0A0A0A !important;
+}
+
+#como-trabajamos h2 {
   color: #FFFFFF !important;
 }
 
-#como-trabajamos h2,
-#como-trabajamos h3,
-#como-trabajamos p,
-#como-trabajamos div {
+#como-trabajamos h2 span[style*="color: primary"],
+#como-trabajamos h2 span[class*="red"] {
+  color: #FE0002 !important;
+}
+
+#como-trabajamos [class*="step"],
+#como-trabajamos div[style*="background"] {
   color: #FFFFFF !important;
 }
 
@@ -226,26 +136,29 @@ section[id="como-trabajamos"] {
   color: rgba(255, 255, 255, 0.75) !important;
 }
 
-/* 3. MARQUEE / TICKER (Banda negra elegante con letras blancas nítidas) */
-[data-anim="ticker"] {
-  background-color: #0A0A0A !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+/* 4. ÚNETE AL EQUIPO (FORMULARIO) EN MODO CLARO */
+[data-theme="light"] #unete,
+[data-theme="light"] section[id="unete"] {
+  background-color: #F9FAFB !important;
 }
 
-[data-anim="ticker"] span {
-  color: #FFFFFF !important;
+[data-theme="light"] #unete .up5-copy {
+  background-color: #FFFFFF !important;
 }
 
-/* 4. FORMULARIO ÚNETE AL EQUIPO */
-[data-theme="light"] #unete input,
-[data-theme="light"] #unete textarea,
-[data-theme="light"] #unete select {
+[data-theme="light"] #unete h2,
+[data-theme="light"] #unete p,
+[data-theme="light"] #unete span {
+  color: #111827 !important;
+}
+
+[data-theme="light"] #unete form input,
+[data-theme="light"] #unete form textarea {
   background-color: #FFFFFF !important;
   color: #111827 !important;
   border: 1px solid #D1D5DB !important;
 }
 
-[data-theme="light"] #unete input::placeholder {
+[data-theme="light"] #unete form input::placeholder {
   color: #6B7280 !important;
 }
