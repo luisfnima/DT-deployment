@@ -84,41 +84,22 @@ span.tri {
   display: none !important;
 }
 
-/* ==========================================================================
-   CORRECCIONES DEFINITIVAS DE ALTO CONTRASTE CON !important
-   ========================================================================== */
-
-/* 1. HERO / INICIO EN MODO CLARO */
-[data-theme="light"] #inicio,
-[data-theme="light"] section[id="inicio"],
-[data-theme="light"] .hero-section,
-[data-theme="light"] div[class*="hero"] {
-  background-color: #F9FAFB !important;
-  color: #111827 !important;
-}
-
-[data-theme="light"] #inicio h1,
-[data-theme="light"] #inicio h2,
-[data-theme="light"] #inicio p {
-  color: #111827 !important;
-}
-
-[data-theme="light"] #inicio p {
-  color: #374151 !important;
-}
-
-/* 2. SOBRE NOSOTROS */
+/* FIX: FORZAR CADA LLAMADA ES UNA OPORTUNIDAD EN NEGRO (MODO CLARO) */
+[data-theme="light"] .intro-black-text,
 [data-theme="light"] #sobre-nosotros .intro-black-text,
 [data-theme="light"] #sobre-nosotros h2 span.intro-black-text {
   color: #111827 !important;
 }
 
-[data-theme="dark"] #sobre-nosotros .intro-black-text,
-[data-theme="dark"] #sobre-nosotros h2 span.intro-black-text {
-  color: #FFFFFF !important;
+/* FIX: FORZAR PÁRRAFO DE ÚNETE AL EQUIPO EN GRIS OSCURO (MODO CLARO) */
+[data-theme="light"] #unete p,
+[data-theme="light"] #unete .p5-rv,
+[data-theme="light"] .up5-copy p {
+  color: #374151 !important;
+  opacity: 1 !important;
 }
 
-/* 3. BARRA ROJA "ÚNETE AL EQUIPO" */
+/* BARRA ROJA "ÚNETE AL EQUIPO" */
 .up5-eyebrow,
 .up5-eyebrow span,
 [class*="up5-eyebrow"] {
@@ -128,22 +109,7 @@ span.tri {
   padding: 6px 16px !important;
 }
 
-/* 4. DESCRIPCIÓN "Déjanos tus datos..." EN MODO CLARO Y OSCURO */
-[data-theme="light"] #unete p,
-[data-theme="light"] #unete .p5-rv,
-[data-theme="light"] .up5-copy p {
-  color: #374151 !important;
-  opacity: 1 !important;
-}
-
-[data-theme="dark"] #unete p,
-[data-theme="dark"] #unete .p5-rv,
-[data-theme="dark"] .up5-copy p {
-  color: #D1D5DB !important;
-  opacity: 1 !important;
-}
-
-/* 5. TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" */
+/* TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" */
 [data-theme="light"] #unete h2,
 [data-theme="light"] #unete .up5-title {
   color: #111827 !important;
@@ -154,17 +120,7 @@ span.tri {
   color: #FE0002 !important;
 }
 
-[data-theme="dark"] #unete h2,
-[data-theme="dark"] #unete .up5-title {
-  color: #FFFFFF !important;
-}
-
-[data-theme="dark"] #unete h2 span.red,
-[data-theme="dark"] #unete .up5-title span.red {
-  color: #FE0002 !important;
-}
-
-/* 6. INPUTS FORMULARIO */
+/* INPUTS FORMULARIO */
 [data-theme="light"] #unete input,
 [data-theme="light"] #unete textarea,
 [data-theme="light"] #unete div[style*="border: 1px dashed"] {
@@ -177,7 +133,7 @@ span.tri {
   color: #6B7280 !important;
 }
 
-/* 7. FOOTER */
+/* FOOTER */
 footer, [data-anim="footer-col"] {
   color: var(--text-main) !important;
 }
