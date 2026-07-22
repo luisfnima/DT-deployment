@@ -101,9 +101,13 @@ div[data-anim="ticker"] {
   background: #1F2937 !important;
 }
 
-/* TAKE YOUR HEART EN BLANCO Y ROJO */
+/* TAKE YOUR HEART EN BLANCO Y ROJO (FORZAR BLANCO EN 'TAKE YOUR' EN AMBOS TEMAS) */
 .badge-take-your,
-[class*="take-your"] span:not(.red) {
+.take-your-badge,
+[class*="take-your"],
+[class*="take-your"] span:not(.red),
+.p5-hero-badge,
+.p5-hero-badge span:not(.red) {
   color: #FFFFFF !important;
 }
 
