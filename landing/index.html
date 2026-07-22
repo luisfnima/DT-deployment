@@ -175,7 +175,7 @@
 
   <script type="text/babel" src="js/asset_29e2844a.jsx"></script>
   <script src="js/animation.js?v=10007"></script>
-  <link rel="stylesheet" href="css/styles_v2.css?v=9999999999999999">
+  <link rel="stylesheet" href="css/styles_v2.css?v=99999999999999999">
   <script src="js/theme.js?v=10007"></script>
 
   <!-- GSAP + ScrollTrigger -->
@@ -1254,21 +1254,29 @@ function App() {
                 display: 'inline-flex', alignItems: 'center', gap: 14
               }}>
               Ideal
-              <span style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justify: 'center',
-                width: 36, height: 36,
-                borderRadius: '50%',
-                background: 'rgba(254, 0, 2, 0.1)',
-                border: '1px solid rgba(254, 0, 2, 0.25)',
-                animation: 'spin-slow 8s linear infinite',
-                marginLeft: 4
+              <div className="hero-ring" id="p5-ring-canvas" style={{
+                display: 'inline-block',
+                position: 'relative',
+                width: '42px',
+                height: '42px',
+                verticalAlign: 'middle',
+                marginLeft: '8px'
               }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" fill={primary} />
-                </svg>
-              </span>
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  border: `3px solid ${primary}`,
+                  background: 'rgba(254,0,2,0.15)',
+                  boxShadow: `0 0 16px ${primary}88`,
+                  animation: 'spin-slow 6s linear infinite',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justify: 'center'
+                }}>
+                  <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: primary }} />
+                </div>
+              </div>
             </span>
           </h1>
 
