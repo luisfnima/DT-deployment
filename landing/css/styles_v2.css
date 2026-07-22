@@ -594,10 +594,11 @@ body {
   color: var(--text-main) !important;
 }
 
-/* Hero Section adaptación al modo claro */
+/* Adaptación completa de secciones al Modo Claro */
 [data-theme="light"] .hero,
-[data-theme="light"] section#inicio,
-[data-theme="light"] #inicio {
+[data-theme="light"] section,
+[data-theme="light"] #inicio,
+[data-theme="light"] #root > div {
   background-color: var(--bg-color) !important;
   color: var(--text-main) !important;
 }
@@ -607,7 +608,6 @@ body {
   color: var(--text-muted) !important;
 }
 
-/* Fix específico para título Hero y botón WhatsApp en Modo Claro */
 [data-theme="light"] #inicio h1,
 [data-theme="light"] .hero-title,
 [data-theme="light"] html body section#inicio h1 {
@@ -619,14 +619,17 @@ body {
   color: var(--brand-red) !important;
 }
 
-[data-theme="light"] #inicio a[href*="wa.me"],
-[data-theme="light"] .btn-secondary {
+/* Botón secundario de WhatsApp en Modo Claro */
+[data-theme="light"] .btn-secondary,
+[data-theme="light"] a[href*="wa.me"],
+[data-theme="light"] button[class*="border"] {
   color: var(--text-main) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-  background-color: var(--bg-card) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Fix de legibilidad completa para contadores y kicker en Modo Claro */
+/* Fix de legibilidad para kicker y contadores en Modo Claro */
 [data-theme="light"] .hero-kicker {
   background-color: rgba(254, 0, 2, 0.12) !important;
   color: var(--brand-red) !important;
