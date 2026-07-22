@@ -603,39 +603,70 @@ body {
   color: var(--text-main) !important;
 }
 
-[data-theme="light"] #inicio p,
-[data-theme="light"] .hero-desc {
-  color: var(--text-muted) !important;
-}
-
-[data-theme="light"] #inicio h1,
-[data-theme="light"] .hero-title,
-[data-theme="light"] html body section#inicio h1 {
+/* Títulos principales y en cursiva en Modo Claro ("NUESTRAS", "Cada llamada es una oportunidad", etc) */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] .bento-card-title,
+[data-theme="light"] [class*="title"],
+[data-theme="light"] [class*="heading"] {
   color: var(--text-main) !important;
 }
 
 [data-theme="light"] #inicio h1 span,
-[data-theme="light"] .hero-title span {
+[data-theme="light"] .hero-title span,
+[data-theme="light"] h2 span[class*="red"],
+[data-theme="light"] h3 span[class*="red"] {
   color: var(--brand-red) !important;
+}
+
+[data-theme="light"] section h2 span:not([class*="red"]),
+[data-theme="light"] section h3 span:not([class*="red"]) {
+  color: var(--text-main) !important;
+}
+
+/* Pestañas de Filtro de Actividades en Modo Claro */
+[data-theme="light"] #actividades button:not([class*="bg-red"]),
+[data-theme="light"] button[class*="border"] {
+  background-color: #FFFFFF !important;
+  color: var(--text-main) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="light"] #actividades button:not([class*="bg-red"]):hover {
+  background-color: var(--bg-card-hover) !important;
+}
+
+/* Tarjetas Bento y Disponibilidad 24/7 en Modo Claro */
+[data-theme="light"] .bento-card,
+[data-theme="light"] div[class*="bento"] {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="light"] .bento-card *,
+[data-theme="light"] div[class*="bento"] * {
+  color: var(--text-main);
+}
+
+[data-theme="light"] .bento-card p,
+[data-theme="light"] div[class*="bento"] p,
+[data-theme="light"] .hero-desc {
+  color: var(--text-muted) !important;
 }
 
 /* Botón secundario de WhatsApp en Modo Claro */
 [data-theme="light"] .btn-secondary,
-[data-theme="light"] a[href*="wa.me"],
-[data-theme="light"] button[class*="border"] {
+[data-theme="light"] a[href*="wa.me"] {
   color: var(--text-main) !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
   background-color: #FFFFFF !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Fix de legibilidad para kicker y contadores en Modo Claro */
 [data-theme="light"] .hero-kicker {
   background-color: rgba(254, 0, 2, 0.12) !important;
   color: var(--brand-red) !important;
-}
-
-[data-theme="light"] #inicio div,
-[data-theme="light"] #inicio span:not([class*="red"]) {
-  color: var(--text-main);
 }
