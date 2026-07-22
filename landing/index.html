@@ -192,7 +192,6 @@
       overflow-x: hidden;
     }
 
-
     /* ── Marquee ── */
     @keyframes marquee-left {
       from { transform: translateX(0); }
@@ -259,7 +258,7 @@ const { useState, useEffect, useRef } = React;
 /* ── Tweaks defaults ── */
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "primaryColor": "#FE0002",
-  "secondaryColor": "var(--text-main)",
+  "secondaryColor": "#111827",
   "bgColor": "var(--bg-color)",
   "headingFont": "Sora",
   "heroLayout": "split",
@@ -472,17 +471,17 @@ function Ticker({ secondary }) {
 
   return (
     <div data-anim="ticker" style={{
-      background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', overflow: 'hidden',
+      background: '#0A0A0A', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', overflow: 'hidden',
       padding: '20px 0', userSelect: 'none',
       transform: 'rotate(-2deg) scaleX(1.04)',
       margin: '0 -20px',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.08)'
+      boxShadow: '0 8px 32px rgba(0,0,0,0.18)'
     }}>
       <div className="marquee-track">
         {items.map((item, i) =>
         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 20, paddingRight: 20 }}>
             <span style={{
-            color: 'var(--text-main)', fontFamily: 'Sora', fontWeight: 700,
+            color: '#FFFFFF', fontFamily: 'Sora', fontWeight: 700,
             fontSize: 13, letterSpacing: '2.5px', textTransform: 'uppercase',
             whiteSpace: 'nowrap'
           }}>{item}</span>
@@ -767,9 +766,9 @@ function ComoTrabajamos({ primary, secondary, bg }) {
 
   return (
     <section style={{
-      background: 'var(--bg-card)',
-      borderTop: '1px solid var(--border-color)',
-      borderBottom: '1px solid var(--border-color)',
+      background: '#0A0A0A',
+      borderTop: '1px solid rgba(255,255,255,0.1)',
+      borderBottom: '1px solid rgba(255,255,255,0.1)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -785,7 +784,7 @@ function ComoTrabajamos({ primary, secondary, bg }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: primary }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--text-muted)', fontFamily: 'DM Sans' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', fontFamily: 'DM Sans' }}>
               Proceso
             </span>
           </div>
@@ -793,7 +792,7 @@ function ComoTrabajamos({ primary, secondary, bg }) {
               fontFamily: 'Sora', fontWeight: 800,
               fontSize: 'clamp(36px, 4.5vw, 56px)',
               lineHeight: 1.0, letterSpacing: '-2px',
-              color: 'var(--text-main)'
+              color: '#FFFFFF'
             }}>
             Cómo<br />
             <span style={{ color: primary }}>trabajamos.</span>
@@ -801,7 +800,7 @@ function ComoTrabajamos({ primary, secondary, bg }) {
         </div>
         <p style={{
             fontSize: 15, lineHeight: 1.7,
-            color: 'var(--text-muted)',
+            color: 'rgba(255,255,255,0.7)',
             maxWidth: 340, fontFamily: 'DM Sans'
           }}>
           Un proceso diseñado para minimizar fricciones y maximizar resultados desde el primer día.
@@ -817,8 +816,8 @@ function ComoTrabajamos({ primary, secondary, bg }) {
         {steps.map((s, i) =>
           <div key={i}
           style={{
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border-color)',
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 24,
             padding: '48px 36px 40px',
             position: 'relative',
@@ -835,13 +834,13 @@ function ComoTrabajamos({ primary, secondary, bg }) {
               </div>
             </div>
 
-            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 22, color: 'var(--text-main)', marginBottom: 8, letterSpacing: '-0.5px' }}>
+            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 22, color: '#FFFFFF', marginBottom: 8, letterSpacing: '-0.5px' }}>
               {s.title}
             </div>
             <div style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: 13, color: primary, marginBottom: 16, letterSpacing: '-0.2px' }}>
               {s.sub}
             </div>
-            <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
               {s.desc}
             </p>
           </div>
