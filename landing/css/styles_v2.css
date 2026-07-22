@@ -78,34 +78,99 @@ body {
 }
 
 /* ==========================================================================
-   REGLAS ESPECÍFICAS DE ALTO CONTRASTE (MODO CLARO Y OSCURO)
+   BLINDAJE TOTAL CONTRA OVERRIDES DE SCRIPTS EXTERNOS (!important)
    ========================================================================== */
 
-/* 1. FRASE "Cada llamada es una oportunidad." -> NEGRO PLANO EN MODO CLARO */
+/* 1. HERO / INICIO EN MODO CLARO */
+[data-theme="light"] #inicio,
+[data-theme="light"] section[id="inicio"],
+[data-theme="light"] .hero-section,
+[data-theme="light"] div[class*="hero"] {
+  background-color: #F9FAFB !important;
+  color: #111827 !important;
+}
+
+[data-theme="light"] #inicio h1,
+[data-theme="light"] #inicio h2,
+[data-theme="light"] #inicio p,
+[data-theme="light"] #inicio div:not([class*="avatar"]) {
+  color: #111827 !important;
+}
+
+[data-theme="light"] #inicio p {
+  color: #374151 !important;
+}
+
+[data-theme="light"] #inicio span:not([style*="color: rgb(254"]):not([style*="color:#FE0002"]):not([class*="red"]) {
+  color: #111827 !important;
+}
+
+/* 2. SOBRE NOSOTROS */
 [data-theme="light"] #sobre-nosotros .intro-black-text,
 [data-theme="light"] #sobre-nosotros h2 span.intro-black-text {
   color: #111827 !important;
 }
 
-/* 2. ETIQUETA ROJA "SOBRE NOSOTROS" -> TEXTO BLANCO SIEMPRE */
-.section-badge-red,
-.badge-red,
+/* Badges rojas con texto blanco */
 div[style*="background: #FE0002"] span,
 div[style*="background:#FE0002"] span,
-div[style*="background: var(--brand-red)"] span {
+div[style*="background: var(--brand-red)"] span,
+.up5-eyebrow span,
+[class*="eyebrow"] span {
   color: #FFFFFF !important;
 }
 
-/* 3. FOOTER Y LINKS DE NAVEGACIÓN (ALTO CONTRASTE EN AMBOS MODOS) */
-footer,
-[data-anim="footer-col"] {
-  color: var(--text-main) !important;
+/* 3. ÚNETE AL EQUIPO (FORMULARIO P5) */
+[data-theme="light"] #unete,
+[data-theme="light"] section[id="unete"],
+[data-theme="light"] .up5-copy,
+[data-theme="light"] div[class*="up5"] {
+  background-color: #F9FAFB !important;
+  color: #111827 !important;
 }
 
-footer a,
-[data-anim="footer-col"] a {
+[data-theme="light"] #unete h2,
+[data-theme="light"] #unete .up5-title,
+[data-theme="light"] section[id="unete"] h2 {
+  color: #111827 !important;
+}
+
+[data-theme="light"] #unete p,
+[data-theme="light"] #unete .up5-copy p {
+  color: #374151 !important;
+}
+
+[data-theme="light"] #unete input,
+[data-theme="light"] #unete textarea,
+[data-theme="light"] #unete div[style*="border: 1px dashed"] {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  border-color: #D1D5DB !important;
+}
+
+[data-theme="light"] #unete input::placeholder {
+  color: #6B7280 !important;
+}
+
+/* Modo Oscuro Únete */
+[data-theme="dark"] #unete h2,
+[data-theme="dark"] #unete .up5-title {
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] #unete p {
+  color: #D1D5DB !important;
+}
+
+[data-theme="dark"] #unete input {
+  background-color: #111111 !important;
+  color: #FFFFFF !important;
+  border-color: #333333 !important;
+}
+
+/* 4. FOOTER */
+footer, [data-anim="footer-col"] {
   color: var(--text-main) !important;
-  opacity: 0.9 !important;
 }
 
 [data-theme="light"] footer a,
