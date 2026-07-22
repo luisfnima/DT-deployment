@@ -98,7 +98,33 @@ body {
   color: #4B5563 !important;
 }
 
-/* 2. PESTAÑAS ACTIVIDADES INACTIVAS */
+/* 2. SOBRE NOSOTROS (Ajustes de la tarjeta principal) */
+[data-theme="light"] #sobre-nosotros h2 {
+  color: #111827 !important;
+}
+
+[data-theme="light"] #sobre-nosotros h2 span {
+  color: #FE0002 !important;
+}
+
+/* Badge roja "SOBRE NOSOTROS" arriba del grid */
+.section-badge-red,
+[class*="nosotros-label"],
+[class*="section-badge"],
+.badge-red,
+div[class*="bg-red"] span,
+div[style*="background: rgb(254"] span {
+  color: #FFFFFF !important;
+}
+
+/* Label "SOBRE NOSOTROS" con fondo rojo */
+div[style*="background: #FE0002"] span,
+div[style*="background:#FE0002"] span,
+div[style*="background: var(--brand-red)"] span {
+  color: #FFFFFF !important;
+}
+
+/* 3. PESTAÑAS ACTIVIDADES INACTIVAS */
 [data-theme="light"] .act-tab-btn:not(.active),
 [data-theme="light"] button[class*="act-tab"]:not(.active),
 [data-theme="light"] .activities-tab-item:not(.active) {
@@ -112,7 +138,7 @@ body {
   color: #111827 !important;
 }
 
-/* 3. CÓMO TRABAJAMOS (Mantener fondo oscuro, pero "Cómo" y títulos en blanco) */
+/* 4. CÓMO TRABAJAMOS (Mantener fondo oscuro, pero "Cómo" y títulos en blanco) */
 #como-trabajamos,
 section[id="como-trabajamos"] {
   background-color: #0A0A0A !important;
@@ -136,7 +162,7 @@ section[id="como-trabajamos"] {
   color: rgba(255, 255, 255, 0.75) !important;
 }
 
-/* 4. ÚNETE AL EQUIPO (FORMULARIO) EN MODO CLARO */
+/* 5. ÚNETE AL EQUIPO (FORMULARIO) EN MODO CLARO */
 [data-theme="light"] #unete,
 [data-theme="light"] section[id="unete"] {
   background-color: #F9FAFB !important;
