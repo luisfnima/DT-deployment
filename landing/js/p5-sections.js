@@ -129,7 +129,7 @@
     /* badge "TAKE YOUR HEART" */
     .p5-badge-tyh {
       position: absolute; bottom: 12px; left: -2px; z-index: 6;
-      background: #000; color: #fff;
+      background: #000; color: #fff !important;
       font-family: 'Anton','Impact',sans-serif; font-size: 19px;
       text-transform: uppercase; line-height: .95;
       padding: 14px 18px;
@@ -137,7 +137,8 @@
       box-shadow: 6px 6px 0 ${RED};
       pointer-events: none;
     }
-    .p5-badge-tyh i { color: ${RED}; font-style: normal; }
+    .p5-badge-tyh span, .p5-badge-tyh { color: #ffffff !important; }
+    .p5-badge-tyh i { color: ${RED} !important; font-style: normal; }
     /* destellos P5 (sparkle de 4 puntas) con parpadeo animado */
     .p5-star-deco {
       position: absolute; z-index: 1; pointer-events: none;
@@ -387,52 +388,6 @@
   ═══════════════════════════════════════════════════════════════ */
   function buildUnete() {
     return true; // Disabled duplicate P5 layout replacement to allow React CV Form to display
-    var old = document.getElementById('unete');
-    if (!old || old.dataset.p5built === '1') return !!document.querySelector('#unete .up5-grid');
-    if (old.querySelector('.up5-grid')) return true;
-
-    /* recuperar la imagen de fondo del CTA original */
-    var oldImg = old.querySelector('img');
-    var photoSrc = oldImg ? oldImg.src :
-      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1600&q=80&fit=crop&crop=center';
-
-    /* ocultar el original y ceder el ancla #unete a la nueva sección */
-    old.dataset.p5built = '1';
-    old.id = 'unete-legacy';
-    old.style.display = 'none';
-
-    var sec = document.createElement('section');
-    sec.id = 'unete';
-    sec.innerHTML = `
-      <div class="up5-grid">
-        <div class="up5-photo p5-rv-l">
-          <img src="${photoSrc}" alt="Equipo DreamTeam trabajando">
-          <div class="up5-half"></div>
-          <div class="up5-clip"></div>
-        </div>
-        <div class="up5-copy">
-          <div class="p5-star-deco"></div>
-          <div class="up5-eyebrow p5-rv"><span><span class="tri"></span>Únete al Equipo</span></div>
-          <h2 class="up5-title p5-rv">¿Buscas crecer <span class="red">de verdad?</span></h2>
-          <p class="p5-rv">En DreamTeam no fichamos empleados: incorporamos talento que quiere marcar la diferencia. Si tienes hambre de crecer, este es tu sitio.</p>
-          <div class="up5-perks p5-rv">
-            <div class="up5-perk"><span><i>↑</i>Crecimiento profesional</span></div>
-            <div class="up5-perk"><span><i>◈</i>Equipo diverso</span></div>
-            <div class="up5-perk"><span><i>✦</i>Beneficios competitivos</span></div>
-          </div>
-          <a class="up5-btn p5-rv" href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener"><span>Quiero unirme →</span></a>
-        </div>
-      </div>`;
-
-    old.parentNode.insertBefore(sec, old);
-
-    /* stagger para los elementos del copy */
-    var rvs = sec.querySelectorAll('.p5-rv');
-    Array.prototype.forEach.call(rvs, function (el, i) {
-      el.style.transitionDelay = (i * 0.1) + 's';
-    });
-
-    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -502,9 +457,6 @@
 
   /* ═══════════════════════════════════════════════════════════════
      4. ESTRELLAS ACOMPAÑANTES
-     Dos estrellas P5 fijas en pantalla que giran lentamente y
-     "acompañan" el scroll: se mueven con un retardo elástico
-     (lerp) y derivan en trayectorias suaves según cuánto bajas.
   ═══════════════════════════════════════════════════════════════ */
   function initCompanions() {
     if (document.getElementById('p5-comp-1')) return;
@@ -525,13 +477,12 @@
     var c1 = makeStar('p5-comp-1');
     var c2 = makeStar('p5-comp-2');
 
-    var cur = 0;   // scroll suavizado (persigue al scroll real con retardo)
+    var cur = 0;   // scroll suavizado
 
     function loop() {
       var target = window.scrollY || document.documentElement.scrollTop || 0;
-      cur += (target - cur) * 0.06;          // lerp → efecto de arrastre elástico
+      cur += (target - cur) * 0.06;
 
-      /* trayectorias onduladas dependientes del scroll suavizado */
       var x1 = Math.sin(cur * 0.0016) * 22;
       var y1 = Math.sin(cur * 0.0024) * 30 + (target - cur) * 0.18;
       var x2 = Math.sin(cur * 0.0012 + 2.1) * 26;
@@ -546,17 +497,12 @@
     requestAnimationFrame(loop);
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     INIT — con reintentos para el contenido que React/otros scripts
-     renderizan tarde (hero, actividades)
-  ═══════════════════════════════════════════════════════════════ */
   var attempts = 0;
 
   function tick() {
     var heroOk  = styleHero();
     var uneteOk = buildUnete();
     scanReveals();
-    /* re-escanear hasta que todo exista (máx ~12 s) */
     if ((!heroOk || !uneteOk || attempts < 6) && attempts < 24) {
       attempts++;
       setTimeout(tick, 500);
