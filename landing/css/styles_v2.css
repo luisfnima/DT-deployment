@@ -179,101 +179,73 @@ body {
 }
 
 /* ==========================================================================
-   ANULACIÓN ABSOLUTA DE MODO CLARO PARA TAILWIND HARDCODEADO
+   AJUSTES FINOS DE ALTO CONTRASTE PARA MODO CLARO
    ========================================================================== */
 
-html[data-theme="light"],
-body[data-theme="light"],
 [data-theme="light"] {
   background-color: #F9FAFB !important;
   color: #111827 !important;
 }
 
-[data-theme="light"] body,
-[data-theme="light"] main,
-[data-theme="light"] section,
-[data-theme="light"] #root > div,
-[data-theme="light"] div[class*="min-h-screen"] {
+[data-theme="light"] body {
   background-color: #F9FAFB !important;
   color: #111827 !important;
 }
 
-/* 1. Anular color de texto blanco hardcodeado de Tailwind (salvo botones rojos) */
-[data-theme="light"] .text-white:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]),
-[data-theme="light"] [class*="text-white"]:not(.btn-primary):not([class*="bg-red"]):not([class*="bg-[#fe0002]"]):not([class*="bg-[#FE0002]"]):not([class*="bg-brand"]) {
-  color: #111827 !important;
-}
-
-/* 2. Textos muted / tenues de Tailwind */
-[data-theme="light"] .text-white\/10,
-[data-theme="light"] .text-white\/20,
-[data-theme="light"] .text-white\/30,
-[data-theme="light"] .text-white\/40,
-[data-theme="light"] .text-white\/50,
-[data-theme="light"] .text-white\/60,
-[data-theme="light"] .text-white\/70,
-[data-theme="light"] .text-white\/80,
-[data-theme="light"] .text-white\/90,
-[data-theme="light"] .text-gray-300,
-[data-theme="light"] .text-gray-400,
-[data-theme="light"] .text-gray-500 {
-  color: #4B5563 !important;
-}
-
-/* 3. Títulos y spans de Hero ("CONSTRUYE", "EQUIPO", "Cada llamada es una oportunidad") */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4,
-[data-theme="light"] .hero-title,
-[data-theme="light"] [class*="title"],
-[data-theme="light"] [class*="heading"] {
-  color: #111827 !important;
-}
-
-/* Preservar solo la palabra TU o partes destacadas en ROJO */
-[data-theme="light"] .text-brand,
-[data-theme="light"] .text-\[\#fe0002\],
-[data-theme="light"] .text-\[\#FE0002\],
-[data-theme="light"] [class*="text-[#fe0002]"],
-[data-theme="light"] [class*="text-[#FE0002]"] {
-  color: #FE0002 !important;
-}
-
-/* 4. BOTÓN WHATSAPP */
-[data-theme="light"] a[href*="wa.me"],
-[data-theme="light"] a[href*="whatsapp"],
-[data-theme="light"] .border-white\/20,
-[data-theme="light"] [class*="border-white"] {
+/* 1. ACTIVIDADES: Pestañas de Filtro inactivas */
+[data-theme="light"] .act-filter-btn:not(.active),
+[data-theme="light"] button[class*="act-filter"]:not(.active),
+[data-theme="light"] [class*="filter-btn"]:not(.active) {
   background-color: #FFFFFF !important;
   color: #111827 !important;
-  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
 }
 
-[data-theme="light"] a[href*="wa.me"] *,
-[data-theme="light"] a[href*="whatsapp"] * {
+[data-theme="light"] .act-filter-btn:not(.active) *,
+[data-theme="light"] button[class*="act-filter"]:not(.active) * {
   color: #111827 !important;
   fill: #111827 !important;
-  stroke: #111827 !important;
 }
 
-/* 5. TARJETAS OSCURAS TAILWIND -> TARJETAS BLANCAS EN MODO CLARO */
-[data-theme="light"] .bg-\[\#0a0a0a\],
-[data-theme="light"] .bg-\[\#0A0A0A\],
-[data-theme="light"] [class*="bg-\[\#0a0a0a\]"],
-[data-theme="light"] [class*="bg-\[\#0A0A0A\]"],
-[data-theme="light"] .bg-black\/50,
-[data-theme="light"] .bg-black\/60,
-[data-theme="light"] .bg-black\/80 {
+/* 2. CÓMO TRABAJAMOS (Sección oscura fija con texto blanco) */
+#como-trabajamos,
+section[id="como-trabajamos"] {
+  background-color: #0A0A0A !important;
+  color: #FFFFFF !important;
+}
+
+#como-trabajamos h2,
+#como-trabajamos h3,
+#como-trabajamos p,
+#como-trabajamos div {
+  color: #FFFFFF !important;
+}
+
+#como-trabajamos p {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* 3. MARQUEE / TICKER (Banda negra elegante con letras blancas nítidas) */
+[data-anim="ticker"] {
+  background-color: #0A0A0A !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-anim="ticker"] span {
+  color: #FFFFFF !important;
+}
+
+/* 4. FORMULARIO ÚNETE AL EQUIPO */
+[data-theme="light"] #unete input,
+[data-theme="light"] #unete textarea,
+[data-theme="light"] #unete select {
   background-color: #FFFFFF !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
 }
 
-/* 6. BORDES TAILWIND */
-[data-theme="light"] .border-white\/10,
-[data-theme="light"] .border-white\/20,
-[data-theme="light"] [class*="border-white\/"] {
-  border-color: rgba(0, 0, 0, 0.12) !important;
+[data-theme="light"] #unete input::placeholder {
+  color: #6B7280 !important;
 }
