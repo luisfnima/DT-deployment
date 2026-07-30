@@ -4,12 +4,8 @@
  *  1. HERO estilo P5: marco polaroid rojo inclinado con sombra dura,
  *     etiqueta "// TALENTO REAL", badge "TAKE YOUR HEART", estrellas,
  *     kicker con línea roja, H1 Anton gigante, stats Anton rojas.
- *  2. Sección final "¿Buscas crecer de verdad?" — split foto duotono
- *     + copy P5 (reemplaza el CTA original manteniendo el ancla #unete).
- *  3. Animaciones de entrada al hacer scroll (IntersectionObserver)
- *     para todas las secciones de la página.
- *
- *  Compatible con hero-slideshow.js (las fotos rotan dentro del marco).
+ *  2. Fondo de oficina desaturado + ola roja con corona inferior.
+ *  3. Animaciones de entrada al hacer scroll (IntersectionObserver).
  */
 (function () {
   'use strict';
@@ -17,9 +13,6 @@
   var RED   = '#e60013';
   var PAPER = '#f3efe6';
 
-  /* ═══════════════════════════════════════════════════════════════
-     CSS GLOBAL DEL MÓDULO
-  ═══════════════════════════════════════════════════════════════ */
   var CSS = `
     /* ────────── HERO: texto ────────── */
     section#inicio h1 {
@@ -110,11 +103,9 @@
     }
     .p5-hero-hidden { display: none !important; }
 
-    /* zona de la foto del hero agrandada 45% (misma posición: el
-       scale no altera el layout, solo el tamaño visual) */
-    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.28); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.12); } }
+    .p5-photo-zone { transform: scale(1.35); transform-origin: center center; position: relative; }
+    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.2); } }
+    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.05); } }
 
     /* etiqueta "// TALENTO REAL" */
     .p5-tag2 {
@@ -139,7 +130,8 @@
     }
     .p5-badge-tyh span, .p5-badge-tyh { color: #ffffff !important; }
     .p5-badge-tyh i { color: ${RED} !important; font-style: normal; }
-    /* destellos P5 (sparkle de 4 puntas) con parpadeo animado */
+
+    /* destellos P5 con parpadeo animado */
     .p5-star-deco {
       position: absolute; z-index: 1; pointer-events: none;
       clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
@@ -153,33 +145,7 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
-    .p5-companion {
-      position: fixed; z-index: 640; pointer-events: none;
-      will-change: transform;
-    }
-    .p5-companion .shape {
-      display: block; width: 100%; height: 100%;
-      background: ${RED};
-      clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-      animation: p5CompSpin 16s linear infinite;
-      filter: drop-shadow(3px 3px 0 rgba(0,0,0,.5));
-    }
-    #p5-comp-2 .shape {
-      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
-      animation-duration: 9s; animation-direction: reverse;
-    }
-    @keyframes p5CompSpin { to { transform: rotate(360deg); } }
-    #p5-comp-1 { width: 44px; height: 44px; top: 22vh; left: 3vw;  opacity: .48; }
-    #p5-comp-2 { width: 26px; height: 26px; top: 64vh; right: 3.5vw; opacity: .38; }
-    @media (max-width: 768px) {
-      #p5-comp-1 { width: 30px; height: 30px; opacity: .3; }
-      #p5-comp-2 { display: none; }
-    }
-
-    /* ────────── REVEAL ON SCROLL (con rebote) ──────────
-       cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
-       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
+    /* ────────── REVEAL ON SCROLL (con rebote) ────────── */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -202,95 +168,6 @@
       opacity: 1 !important;
       transform: none !important;
     }
-
-    /* ────────── SECCIÓN ÚNETE (P5) ────────── */
-    #unete { background: #0a0a0a; position: relative; overflow: hidden; }
-    #unete .up5-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
-    #unete .up5-photo { position: relative; overflow: hidden; }
-    #unete .up5-photo img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      filter: grayscale(1) contrast(1.25) brightness(.85);
-    }
-    #unete .up5-photo::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(120deg, rgba(230,0,19,.55), rgba(10,10,10,.2) 60%);
-      mix-blend-mode: multiply;
-    }
-    #unete .up5-half {
-      position: absolute; inset: 0; z-index: 2; pointer-events: none;
-      background-image: radial-gradient(circle, rgba(255,255,255,.9) 1px, transparent 1.5px);
-      background-size: 8px 8px; opacity: .14;
-    }
-    #unete .up5-clip {
-      position: absolute; inset: 0; z-index: 3; pointer-events: none;
-      background: #0a0a0a;
-      clip-path: polygon(78% 0, 100% 0, 100% 100%, 92% 100%);
-    }
-    #unete .up5-copy {
-      padding: 90px 64px; position: relative;
-      display: flex; flex-direction: column; justify-content: center;
-      align-items: flex-start;
-    }
-    #unete .up5-copy .p5-star-deco { width: 56px; height: 56px; top: 44px; right: 52px; background: ${RED}; opacity: .9; }
-    #unete .up5-eyebrow {
-      display: block; width: 100%;
-      background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
-      letter-spacing: 4px; text-transform: uppercase;
-      padding: 9px 16px 9px 14px;
-      transform: skewX(-8deg);
-      box-shadow: 5px 5px 0 #000;
-      margin-bottom: 30px;
-    }
-    #unete .up5-eyebrow > span { display: inline-flex; align-items: center; gap: 10px; transform: skewX(8deg); }
-    #unete .up5-eyebrow .tri { width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
-    #unete h2.up5-title {
-      font-family: 'Anton','Impact',sans-serif; font-weight: 400;
-      text-transform: uppercase;
-      font-size: clamp(42px, 5.2vw, 78px); line-height: .9;
-      color: #fff; margin: 0 0 8px;
-    }
-    #unete h2.up5-title .red { color: ${RED}; font-style: italic; }
-    #unete .up5-copy p {
-      font-family: 'Barlow Semi Condensed','DM Sans',sans-serif;
-      font-size: 19px; font-weight: 500; color: #c9c3b5;
-      max-width: 46ch; margin: 16px 0 30px; line-height: 1.55;
-    }
-    #unete .up5-perks { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
-    #unete .up5-perk {
-      font-family: 'Oswald', sans-serif; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
-      color: #fff; border: 2px solid #3a3a3a; padding: 9px 15px;
-      transform: skewX(-8deg); transition: border-color .2s;
-    }
-    #unete .up5-perk:hover { border-color: ${RED}; }
-    #unete .up5-perk > span { display: inline-block; transform: skewX(8deg); }
-    #unete .up5-perk i { color: ${RED}; font-style: normal; margin-right: 7px; }
-    #unete .up5-btn {
-      display: inline-block; text-decoration: none;
-      background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
-      letter-spacing: 2px; text-transform: uppercase;
-      padding: 18px 38px;
-      transform: skewX(-10deg);
-      box-shadow: 6px 6px 0 #000;
-      transition: transform .12s, box-shadow .12s;
-    }
-    #unete .up5-btn:hover {
-      transform: skewX(-10deg) translate(-2px,-2px);
-      box-shadow: 9px 9px 0 #000;
-    }
-    #unete .up5-btn > span { display: inline-block; transform: skewX(10deg); }
-
-    @media (max-width: 900px) {
-      #unete .up5-grid { grid-template-columns: 1fr; }
-      #unete .up5-photo { min-height: 340px; position: relative; }
-      #unete .up5-photo img { position: absolute; }
-      #unete .up5-clip { clip-path: polygon(0 82%, 100% 96%, 100% 100%, 0 100%); }
-      #unete .up5-copy { padding: 56px 24px 70px; }
-      #unete .up5-copy .p5-star-deco { top: 24px; right: 22px; width: 40px; height: 40px; }
-    }
   `;
 
   function injectCSS() {
@@ -301,14 +178,40 @@
     document.head.appendChild(s);
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     1. HERO — marco polaroid + decoraciones + stats
-  ═══════════════════════════════════════════════════════════════ */
+  function injectOfficeBgAndWave() {
+    var sec = document.querySelector('section#inicio');
+    if (!sec) return;
+
+    if (!sec.querySelector('.hero-office-bg')) {
+      var bg = document.createElement('div');
+      bg.className = 'hero-office-bg';
+      sec.insertBefore(bg, sec.firstChild);
+    }
+
+    if (!sec.querySelector('.p5-red-wave-corner')) {
+      var wave = document.createElement('div');
+      wave.className = 'p5-red-wave-corner';
+      wave.innerHTML = `
+        <svg viewBox="0 0 350 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 200V80C60 140 160 210 350 160V200H0Z" fill="#FE0002"/>
+          <g transform="translate(30, 140) scale(0.85)">
+            <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="8" cy="10" r="2" fill="white"/>
+            <circle cx="24" cy="3" r="2" fill="white"/>
+            <circle cx="40" cy="10" r="2" fill="white"/>
+          </g>
+        </svg>
+      `;
+      sec.appendChild(wave);
+    }
+  }
+
   function styleHero() {
     var sec = document.querySelector('section#inicio');
     if (!sec) return false;
 
-    /* encontrar la foto principal (no avatares) */
+    injectOfficeBgAndWave();
+
     var mainImg = null;
     var imgs = sec.querySelectorAll('img');
     for (var i = 0; i < imgs.length; i++) {
@@ -319,16 +222,14 @@
     }
     if (!mainImg) return false;
 
-    var mainCard  = mainImg.parentElement;          // tarjeta con rotate(-4deg)
-    var container = mainCard.parentElement;         // contenedor flex 400×500
+    var mainCard  = mainImg.parentElement;          
+    var container = mainCard.parentElement;         
     if (container.dataset.p5hero === '1') return true;
     container.dataset.p5hero = '1';
 
-    /* marco P5 + zona agrandada 45% */
     mainCard.classList.add('p5-frame');
     container.classList.add('p5-photo-zone');
 
-    /* ocultar las "hojas" rojas apiladas detrás (diseño anterior) */
     Array.prototype.forEach.call(container.children, function (ch) {
       if (ch === mainCard) return;
       var st = ch.getAttribute('style') || '';
@@ -337,12 +238,10 @@
       }
     });
 
-    /* halftone rojo sobre la foto */
     var dots = document.createElement('div');
     dots.className = 'p5-frame-dots';
     mainCard.appendChild(dots);
 
-    /* decoraciones alrededor del marco */
     var tag = document.createElement('div');
     tag.className = 'p5-tag2';
     tag.textContent = '// Talento Real';
@@ -356,13 +255,38 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    /* estrellas detrás del marco, etiquetas por encima */
+    // ── AGREGAR LA BURBUJA DOODLE Y LA NOTITA DE BENEFICIOS ──
+    var bubble = document.createElement('div');
+    bubble.className = 'p5-doodle-bubble';
+    bubble.id = 'hero-doodle-bubble';
+    bubble.innerHTML = `
+      <span class="bubble-text" id="hero-bubble-text">¡Un gran lugar para trabajar!</span>
+      <svg class="arrow-doodle" viewBox="0 0 50 50" fill="none">
+        <path d="M5 40C15 35 30 25 40 10M40 10H25M40 10V25" stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    var note = document.createElement('div');
+    note.className = 'p5-doodle-note';
+    note.id = 'hero-doodle-note';
+    note.innerHTML = `
+      <svg class="heart-icon" viewBox="0 0 24 24" fill="#FE0002" stroke="#111827" stroke-width="1.5">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <ul id="hero-note-list">
+        <li>Buen ambiente</li>
+        <li>Grandes beneficios</li>
+        <li>Crecimiento profesional</li>
+      </ul>
+    `;
+
     container.insertBefore(s1, mainCard);
     container.insertBefore(s2, mainCard);
     container.appendChild(tag);
     container.appendChild(badge);
+    container.appendChild(bubble);
+    container.appendChild(note);
 
-    /* stats "10+ / 24/7 / ∞" → Anton rojo */
     var nodes = sec.querySelectorAll('div, span');
     Array.prototype.forEach.call(nodes, function (el) {
       if (el.childElementCount > 1) return;
@@ -372,7 +296,6 @@
       var fs = parseFloat(getComputedStyle(el).fontSize);
       if (fs >= 26 && fs <= 64) {
         el.classList.add('p5-hstat');
-        /* la etiqueta pequeña que acompaña al número */
         var sib = el.nextElementSibling;
         if (sib && (sib.textContent || '').trim().length > 4) {
           sib.classList.add('p5-hstat-label');
@@ -383,16 +306,6 @@
     return true;
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     2. SECCIÓN ÚNETE — split foto duotono + copy P5
-  ═══════════════════════════════════════════════════════════════ */
-  function buildUnete() {
-    return true; // Disabled duplicate P5 layout replacement to allow React CV Form to display
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     3. REVEAL ON SCROLL
-  ═══════════════════════════════════════════════════════════════ */
   var observer = null;
 
   function getObserver() {
@@ -408,19 +321,14 @@
     return observer;
   }
 
-  /* Selectores de elementos que se animan al entrar en pantalla */
   var RV_SELECTORS = [
-    /* Nosotros: tarjetas bento + encabezado */
     'section#sobre-nosotros [style*="grid-column"]',
-    /* Cómo trabajamos: pasos */
     '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
-    /* Actividades */
     '#actividades .act-eyebrow',
     '#actividades .act-main-title',
     '#actividades .act-subtitle',
     '#actividades .act-filters',
     '#actividades .p5-card',
-    /* Footer: columnas */
     'footer [style*="grid-template-columns"] > div',
   ];
 
@@ -435,7 +343,6 @@
         if (el.dataset.p5rv === '1') return;
         el.dataset.p5rv = '1';
 
-        /* si ya está visible en pantalla, no ocultarlo (evita parpadeo) */
         var r = el.getBoundingClientRect();
         var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
 
@@ -446,64 +353,14 @@
         }
       });
     });
-
-    /* elementos .p5-rv añadidos por buildUnete */
-    var manual = document.querySelectorAll('.p5-rv:not([data-p5rv]), .p5-rv-l:not([data-p5rv]), .p5-rv-r:not([data-p5rv])');
-    Array.prototype.forEach.call(manual, function (el) {
-      el.dataset.p5rv = '1';
-      obs.observe(el);
-    });
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     4. ESTRELLAS ACOMPAÑANTES
-  ═══════════════════════════════════════════════════════════════ */
-  function initCompanions() {
-    if (document.getElementById('p5-comp-1')) return;
-    try {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    } catch (e) {}
-
-    function makeStar(id) {
-      var el = document.createElement('div');
-      el.className = 'p5-companion';
-      el.id = id;
-      var shape = document.createElement('span');
-      shape.className = 'shape';
-      el.appendChild(shape);
-      document.body.appendChild(el);
-      return el;
-    }
-    var c1 = makeStar('p5-comp-1');
-    var c2 = makeStar('p5-comp-2');
-
-    var cur = 0;   // scroll suavizado
-
-    function loop() {
-      var target = window.scrollY || document.documentElement.scrollTop || 0;
-      cur += (target - cur) * 0.06;
-
-      var x1 = Math.sin(cur * 0.0016) * 22;
-      var y1 = Math.sin(cur * 0.0024) * 30 + (target - cur) * 0.18;
-      var x2 = Math.sin(cur * 0.0012 + 2.1) * 26;
-      var y2 = Math.cos(cur * 0.0019) * 38 + (target - cur) * 0.26;
-      var rot = (cur * 0.04) % 360;
-
-      c1.style.transform = 'translate(' + x1.toFixed(1) + 'px,' + y1.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
-      c2.style.transform = 'translate(' + x2.toFixed(1) + 'px,' + y2.toFixed(1) + 'px) rotate(' + (-rot * 0.7).toFixed(1) + 'deg)';
-
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
   }
 
   var attempts = 0;
 
   function tick() {
-    var heroOk  = styleHero();
-    var uneteOk = buildUnete();
+    var heroOk = styleHero();
     scanReveals();
-    if ((!heroOk || !uneteOk || attempts < 6) && attempts < 24) {
+    if (!heroOk && attempts < 24) {
       attempts++;
       setTimeout(tick, 500);
     }
@@ -511,7 +368,6 @@
 
   function init() {
     injectCSS();
-    initCompanions();
     setTimeout(tick, 250);
   }
 
