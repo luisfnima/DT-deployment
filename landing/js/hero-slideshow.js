@@ -17,23 +17,23 @@
   var HOLD = Math.max(2, Number(cfg.duration) || 8) * 1000;   
   var FADE = Math.max(0.3, Number(cfg.transition) || 1.4);    
 
-  // ── TESTIMONIOS Y NOTAS ASOCIADAS A CADA FOTO ──
+  // ── TESTIMONIOS Y NOTAS ENRIQUECIDAS (Estudio/Trabajo, Pagos Puntuales, etc.) ──
   var DOODLE_DATA = [
     {
-      bubble: "¡Un gran lugar para trabajar!",
-      notes: ["Buen ambiente", "Grandes beneficios", "Crecimiento profesional"]
+      bubble: "¡Estudio y trabajo en DreamTeam con horarios flexibles!",
+      notes: ["Pagos puntuales", "Buen ambiente", "Grandes beneficios", "Crecimiento profesional"]
     },
     {
-      bubble: "¡Crecimiento real desde el día 1!",
-      notes: ["Capacitación constante", "Línea de carrera", "Excelentes comisiones"]
+      bubble: "¡Terminé mi carrera mientras trabajaba aquí!",
+      notes: ["Capacitación constante", "Línea de carrera", "Comisiones sin techo", "Excelente clima laboral"]
     },
     {
-      bubble: "¡El mejor equipo de televentas!",
-      notes: ["Horarios flexibles", "Soporte 24/7", "Incentivos semanales"]
+      bubble: "¡Un gran lugar para trabajar y desarrollarte!",
+      notes: ["Pagos puntuales", "Soporte 24/7", "Incentivos semanales", "Ambiente 100% motivador"]
     },
     {
-      bubble: "¡Orgullosos de ser DreamTeam!",
-      notes: ["Clima laboral 10/10", "Premios y bonos", "Innovación continua"]
+      bubble: "¡Orgullosos de ser parte del equipo DreamTeam!",
+      notes: ["Flexibilidad universitaria", "Premios y bonos", "Innovación continua", "Respeto y comunidad"]
     }
   ];
 
@@ -90,11 +90,11 @@
 
       if (bubbleEl) {
         bubbleEl.style.opacity = '1';
-        bubbleEl.style.transform = 'rotate(-4deg) scale(1)';
+        bubbleEl.style.transform = 'rotate(-5deg) scale(1)';
       }
       if (noteEl) {
         noteEl.style.opacity = '1';
-        noteEl.style.transform = 'rotate(3deg) scale(1)';
+        noteEl.style.transform = 'rotate(4deg) scale(1)';
       }
     }, 300);
   }
