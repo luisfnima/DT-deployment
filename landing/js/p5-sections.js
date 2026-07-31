@@ -1,19 +1,69 @@
-/* p5-sections.js - DreamTeam P5 dynamic elements */
-(function() {
+/**
+ * p5-sections.js — DreamTeam Persona 5
+ * ----------------------------------------------------------------
+ *  1. HERO estilo P5: marco polaroid rojo inclinado con sombra dura,
+ *     etiqueta "// TALENTO REAL", badge "TAKE YOUR HEART", estrellas,
+ *     kicker con línea roja, H1 Anton gigante, stats Anton rojas.
+ *  2. Fondo de oficina desaturado + ola roja con corona inferior.
+ *  3. Animaciones de entrada al hacer scroll (IntersectionObserver).
+ */
+(function () {
   'use strict';
 
-  var RED = '#FE0002';
-  var PAPER = '#FAF8F5';
-  var DARK = '#111827';
+  var RED   = '#e60013';
+  var PAPER = '#f3efe6';
 
   var CSS = `
+    /* ────────── HERO: texto ────────── */
+    section#inicio h1 {
+      font-family: 'Anton','Impact',sans-serif !important;
+      font-weight: 400 !important;
+      font-style: normal !important;
+      font-size: clamp(50px, 6.5vw, 104px) !important;
+      line-height: 0.88 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+      color: #ffffff !important;
+    }
+    /* Kicker "Líderes en Televentas" → línea roja + texto Oswald rojo */
+    section#inicio .fade-up-1 {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      backdrop-filter: none !important;
+    }
+    section#inicio .fade-up-1::before {
+      content: '';
+      display: inline-block;
+      width: 44px; height: 3px;
+      background: ${RED};
+      margin-right: 12px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    section#inicio .fade-up-1 > div { display: none !important; }
+    section#inicio .fade-up-1,
+    section#inicio .fade-up-1 span {
+      color: ${RED} !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: 3px !important;
+      text-transform: uppercase !important;
+      font-size: 15px !important;
+    }
+    /* Párrafo lead */
+    section#inicio > div > div p {
+      color: #cfc9ba !important;
+      font-weight: 500 !important;
+    }
     /* Avatares con aro rojo */
     section#inicio img[alt="avatar"] {
       border: 2.5px solid ${RED} !important;
       background: #111 !important;
     }
 
-    /* stats Anton */
+    /* stats Anton (aplicado por JS con .p5-hstat) */
     .p5-hstat {
       font-family: 'Anton','Impact',sans-serif !important;
       font-style: normal !important;
@@ -95,7 +145,7 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── REVEAL ON SCROLL ────────── */
+    /* ────────── REVEAL ON SCROLL (con rebote) ────────── */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -143,14 +193,7 @@
       wave.className = 'p5-red-wave-corner';
       wave.innerHTML = `
         <svg viewBox="0 0 650 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="redWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#FE0002" stop-opacity="1"/>
-              <stop offset="70%" stop-color="#FE0002" stop-opacity="0.95"/>
-              <stop offset="100%" stop-color="#FE0002" stop-opacity="0.85"/>
-            </linearGradient>
-          </defs>
-          <path d="M0 260V90 C 140 150, 320 260, 650 160 V 260 H 0 Z" fill="url(#redWaveGrad)"/>
+          <path d="M0 260V90 C 140 150, 320 260, 650 160 V 260 H 0 Z" fill="#FE0002"/>
           <g transform="translate(45, 160) scale(1.6)">
             <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="8" cy="10" r="2" fill="white"/>
@@ -219,8 +262,10 @@
     bubble.innerHTML = `
       <span class="bubble-text" id="hero-bubble-text">¡Un gran lugar para trabajar!</span>
       <svg class="arrow-doodle" viewBox="0 0 100 80" fill="none">
-        <path d="M10 50 Q 40 10, 85 45" stroke="#111827" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <path d="M70 30 L85 45 L80 60" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 55 Q 45 15, 85 45" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M70 30 L85 45 L78 60" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 55 Q 45 15, 85 45" stroke="#111827" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <path d="M70 30 L85 45 L78 60" stroke="#111827" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#FE0002" style="position:absolute; bottom:-8px; right:20px;">
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -241,46 +286,95 @@
       </ul>
     `;
 
+    container.insertBefore(s1, mainCard);
+    container.insertBefore(s2, mainCard);
     container.appendChild(tag);
     container.appendChild(badge);
-    container.appendChild(s1);
-    container.appendChild(s2);
     container.appendChild(bubble);
     container.appendChild(note);
+
+    var nodes = sec.querySelectorAll('div, span');
+    Array.prototype.forEach.call(nodes, function (el) {
+      if (el.childElementCount > 1) return;
+      var txt = (el.textContent || '').trim();
+      if (!txt || txt.length > 6) return;
+      if (!/[0-9∞]/.test(txt)) return;
+      var fs = parseFloat(getComputedStyle(el).fontSize);
+      if (fs >= 26 && fs <= 64) {
+        el.classList.add('p5-hstat');
+        var sib = el.nextElementSibling;
+        if (sib && (sib.textContent || '').trim().length > 4) {
+          sib.classList.add('p5-hstat-label');
+        }
+      }
+    });
 
     return true;
   }
 
-  function styleH1() {
-    var h1 = document.querySelector('section#inicio h1');
-    if (!h1 || h1.dataset.p5 === '1') return;
-    h1.dataset.p5 = '1';
+  var observer = null;
 
-    h1.style.fontFamily = "'Anton','Impact',sans-serif";
-    h1.style.fontSize = 'clamp(46px, 6.2vw, 84px)';
-    h1.style.lineHeight = '.95';
-    h1.style.letterSpacing = '1px';
+  function getObserver() {
+    if (observer) return observer;
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('p5-in');
+          observer.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    return observer;
+  }
 
-    var html = h1.innerHTML;
-    html = html.replace(/<span[^>]*>(.*?)<\/span>/gi, function(match, inner) {
-      if (inner.indexOf('EQUIPO') >= 0 || inner.indexOf('TU') >= 0) {
-        return '<span style="color:' + RED + ' !important; font-style:italic;">' + inner + '</span>';
-      }
-      return match;
+  var RV_SELECTORS = [
+    'section#sobre-nosotros [style*="grid-column"]',
+    '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
+    '#actividades .act-eyebrow',
+    '#actividades .act-main-title',
+    '#actividades .act-subtitle',
+    '#actividades .act-filters',
+    '#actividades .p5-card',
+    'footer [style*="grid-template-columns"] > div',
+  ];
+
+  function scanReveals() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    var obs = getObserver();
+
+    RV_SELECTORS.forEach(function (sel) {
+      var els;
+      try { els = document.querySelectorAll(sel); } catch (e) { return; }
+      Array.prototype.forEach.call(els, function (el, i) {
+        if (el.dataset.p5rv === '1') return;
+        el.dataset.p5rv = '1';
+
+        var r = el.getBoundingClientRect();
+        var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
+
+        if (!inView) {
+          el.classList.add('p5-rv');
+          el.style.transitionDelay = ((i % 6) * 0.08) + 's';
+          obs.observe(el);
+        }
+      });
     });
-    h1.innerHTML = html;
+  }
+
+  var attempts = 0;
+
+  function tick() {
+    var heroOk = styleHero();
+    scanReveals();
+    if (!heroOk && attempts < 24) {
+      attempts++;
+      setTimeout(tick, 500);
+    }
   }
 
   function init() {
     injectCSS();
-    styleH1();
-    if (!styleHero()) {
-      var tries = 0;
-      var timer = setInterval(function() {
-        tries++;
-        if (styleHero() || tries > 30) clearInterval(timer);
-      }, 250);
-    }
+    setTimeout(tick, 250);
   }
 
   if (document.readyState !== 'loading') {
