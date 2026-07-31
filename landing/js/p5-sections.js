@@ -193,15 +193,8 @@
       wave.className = 'p5-red-wave-corner';
       wave.innerHTML = `
         <svg viewBox="0 0 650 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="redWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#FE0002" stop-opacity="1"/>
-              <stop offset="75%" stop-color="#FE0002" stop-opacity="0.95"/>
-              <stop offset="100%" stop-color="#FE0002" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <path d="M0 260V120C140 180 320 260 650 180V260H0Z" fill="url(#redWaveGrad)"/>
-          <g transform="translate(35, 160) scale(1.4)">
+          <path d="M0 260V100C160 170 340 260 650 160V260H0Z" fill="#FE0002"/>
+          <g transform="translate(35, 155) scale(1.4)">
             <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="8" cy="10" r="2" fill="white"/>
             <circle cx="24" cy="3" r="2" fill="white"/>
@@ -262,15 +255,15 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    // ── BURBUJA REUBICADA exacto como la maqueta de referencia ──
+    // ── BURBUJA + FLECHA APUNTANDO DIRECTAMENTE AL MARCO DE LA FOTO ──
     var bubble = document.createElement('div');
     bubble.className = 'p5-doodle-bubble';
     bubble.id = 'hero-doodle-bubble';
     bubble.innerHTML = `
       <span class="bubble-text" id="hero-bubble-text">¡Un gran lugar para trabajar!</span>
-      <svg class="arrow-doodle" viewBox="0 0 100 100" fill="none">
-        <path d="M10 85 C35 70, 75 80, 55 40 C45 20, 70 25, 88 15" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M72 18 L88 15 L82 30" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg class="arrow-doodle" viewBox="0 0 100 80" fill="none">
+        <path d="M10 50 Q 40 10, 85 45" stroke="#111827" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M70 30 L85 45 L80 60" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#FE0002" style="position:absolute; bottom:-8px; right:20px;">
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
