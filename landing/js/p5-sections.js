@@ -103,9 +103,9 @@
     }
     .p5-hero-hidden { display: none !important; }
 
-    .p5-photo-zone { transform: scale(1.35); transform-origin: center center; position: relative; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.2); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.05); } }
+    .p5-photo-zone { transform: translateX(-60px) scale(1.35); transform-origin: center center; position: relative; }
+    @media (max-width: 1280px) { .p5-photo-zone { transform: translateX(-40px) scale(1.2); } }
+    @media (max-width: 1080px) { .p5-photo-zone { transform: translateX(-20px) scale(1.05); } }
 
     /* etiqueta "// TALENTO REAL" */
     .p5-tag2 {
