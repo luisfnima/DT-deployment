@@ -216,8 +216,8 @@ body {
 
 /* EXPANSIÓN DEL ANCHO DE CONTENEDORES PRINCIPALES Y COLUMNA IZQUIERDA DEL HERO */
 section#inicio > div > div:first-child {
-  max-width: 640px !important;
-  flex: 1 1 600px !important;
+  max-width: 560px !important;
+  flex: 1 1 520px !important;
 }
 
 .section-inner,
