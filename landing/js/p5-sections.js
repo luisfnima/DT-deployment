@@ -192,16 +192,16 @@
       var wave = document.createElement('div');
       wave.className = 'p5-red-wave-corner';
       wave.innerHTML = `
-        <svg viewBox="0 0 650 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 650 260" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="redWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#FE0002" stop-opacity="1"/>
-              <stop offset="70%" stop-color="#FE0002" stop-opacity="0.95"/>
+              <stop offset="75%" stop-color="#FE0002" stop-opacity="0.95"/>
               <stop offset="100%" stop-color="#FE0002" stop-opacity="0"/>
             </linearGradient>
           </defs>
-          <path d="M0 320V70C140 160 320 320 650 200V320H0Z" fill="url(#redWaveGrad)"/>
-          <g transform="translate(45, 180) scale(1.75)">
+          <path d="M0 260V120C140 180 320 260 650 180V260H0Z" fill="url(#redWaveGrad)"/>
+          <g transform="translate(35, 160) scale(1.4)">
             <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="8" cy="10" r="2" fill="white"/>
             <circle cx="24" cy="3" r="2" fill="white"/>
@@ -262,7 +262,7 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    // ── BURBUJA ABAJO A LA IZQUIERDA DE LA FOTO + FLECHA CURVA LARGA CON LOOP Y CORAZÓN ROJO ──
+    // ── BURBUJA REUBICADA exacto como la maqueta de referencia ──
     var bubble = document.createElement('div');
     bubble.className = 'p5-doodle-bubble';
     bubble.id = 'hero-doodle-bubble';
