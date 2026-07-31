@@ -43,7 +43,8 @@
       flex-shrink: 0;
     }
     section#inicio .fade-up-1 > div { display: none !important; }
-    section#inicio .fade-up-1,\n    section#inicio .fade-up-1 span {
+    section#inicio .fade-up-1,
+    section#inicio .fade-up-1 span {
       color: ${RED} !important;
       font-family: 'Oswald', sans-serif !important;
       font-weight: 700 !important;
@@ -191,9 +192,9 @@
       var wave = document.createElement('div');
       wave.className = 'p5-red-wave-corner';
       wave.innerHTML = `
-        <svg viewBox="0 0 420 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 190V60C70 120 170 210 420 150V190H0Z" fill="#FE0002"/>
-          <g transform="translate(30, 125) scale(1.1)">
+        <svg viewBox="0 0 580 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 260V50C100 140 280 280 580 180V260H0Z" fill="#FE0002"/>
+          <g transform="translate(45, 140) scale(1.6)">
             <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="8" cy="10" r="2" fill="white"/>
             <circle cx="24" cy="3" r="2" fill="white"/>
@@ -254,21 +255,16 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    // ── BURBUJA ABAJO DE LOS BOTONES DE LA COLUMNA IZQUIERDA Y NOTITA PEGADA AL LADO DERECHO ──
-    var leftCopy = sec.querySelector('.fade-up-5') ? sec.querySelector('.fade-up-5').parentElement : null;
-    
-    if (leftCopy && !document.getElementById('hero-doodle-bubble')) {
-      var bubble = document.createElement('div');
-      bubble.className = 'p5-doodle-bubble';
-      bubble.id = 'hero-doodle-bubble';
-      bubble.innerHTML = `
-        <span class="bubble-text" id="hero-bubble-text">¡Estudio y trabajo en DreamTeam con horarios flexibles!</span>
-        <svg class="arrow-doodle" viewBox="0 0 80 80" fill="none">
-          <path d="M15 60 C30 50, 50 35, 65 15 M65 15 C55 18, 48 22, 42 25 M65 15 C60 25, 56 35, 54 42" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      `;
-      leftCopy.appendChild(bubble);
-    }
+    // ── BURBUJA ABAJO A LA IZQUIERDA DE LA FOTO (SEGUIMIENTO FIEL A LA MAQUETA ORIGINAL) ──
+    var bubble = document.createElement('div');
+    bubble.className = 'p5-doodle-bubble';
+    bubble.id = 'hero-doodle-bubble';
+    bubble.innerHTML = `
+      <span class="bubble-text" id="hero-bubble-text">¡Estudio y trabajo en DreamTeam con horarios flexibles!</span>
+      <svg class="arrow-doodle" viewBox="0 0 80 80" fill="none">
+        <path d="M15 60 C30 50, 50 35, 65 15 M65 15 C55 18, 48 22, 42 25 M65 15 C60 25, 56 35, 54 42" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
 
     var note = document.createElement('div');
     note.className = 'p5-doodle-note';
@@ -289,6 +285,7 @@
     container.insertBefore(s2, mainCard);
     container.appendChild(tag);
     container.appendChild(badge);
+    container.appendChild(bubble);
     container.appendChild(note);
 
     var nodes = sec.querySelectorAll('div, span');
