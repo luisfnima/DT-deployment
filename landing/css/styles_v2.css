@@ -68,17 +68,14 @@ body {
   line-height: 1.6;
 }
 
-/* ── FONDO DE OFICINA CUBRIENDO EL 100% DE LA SECCIÓN HERO ── */
+/* ── FONDO DE OFICINA CUBRIENDO 100% DEL HERO SIN TAPAR NADA ABAJO ── */
 .hero-office-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80&fit=crop');
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1600&q=80&fit=crop');
   background-size: cover;
-  background-position: center center;
-  opacity: 0.12;
+  background-position: center bottom;
+  opacity: 0.1;
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 0;
@@ -90,27 +87,27 @@ body {
   filter: invert(1);
 }
 
-/* ── BUBBLE & NOTE DOODLE STYLES (REUBICADOS ABAJO DEL BOTÓN DE WHATSAPP PARA LIBERAR LA FOTO) ── */
+/* ── BUBBLE & NOTE DOODLE STYLES (REUBICADOS SEGÚN LA MAQUETA ORIGINAL) ── */
 .p5-doodle-bubble {
-  position: relative;
-  margin-top: 24px;
-  margin-left: 10px;
+  position: absolute;
+  bottom: 80px;
+  left: -210px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
   border-radius: 40px 40px 35px 35px;
   padding: 14px 22px;
   box-shadow: 5px 7px 0px #111827;
-  transform: rotate(-3deg);
+  transform: rotate(-4deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  max-width: 360px;
-  display: inline-block;
+  width: 220px;
+  text-align: center;
 }
 
 .p5-doodle-bubble .bubble-text {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: #111827;
   line-height: 1.15;
@@ -118,17 +115,16 @@ body {
 
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  right: -42px;
-  top: -24px;
-  width: 55px;
-  height: 55px;
+  right: -45px;
+  top: -30px;
+  width: 65px;
+  height: 65px;
 }
 
-/* NOTITA DERECHA PEGADA AL BORDE DERECHO DE LA PANTALLA SIN TAPAR LA FOTO */
 .p5-doodle-note {
   position: absolute;
-  top: 18%;
-  right: -80px;
+  top: 15%;
+  right: -175px;
   z-index: 10;
   background: #FFFFFF;
   border: 2.5px solid #111827;
@@ -138,15 +134,15 @@ body {
   transform: rotate(5deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 175px;
+  width: 185px;
 }
 
 .p5-doodle-note .heart-icon {
   position: absolute;
   top: -18px;
   right: 14px;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 }
 
 .p5-doodle-note ul {
@@ -173,13 +169,13 @@ body {
   font-weight: 900;
 }
 
-/* ── OLA ROJA INFERIOR CORREGIDA (AJUSTADA AL BORDES SIN DEJAR ESPACIO EN BLANCO) ── */
+/* ── OLA ROJA MUCHO MÁS GRANDE Y ANCHA CON CORONA MÁS ALTA ── */
 .p5-red-wave-corner {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 420px;
-  height: 190px;
+  width: 580px;
+  height: 260px;
   pointer-events: none;
   z-index: 2;
 }
@@ -191,11 +187,12 @@ body {
 }
 
 @media (max-width: 1350px) {
-  .p5-doodle-note { right: -20px; scale: 0.85; }
+  .p5-doodle-bubble { left: -100px; bottom: 50px; scale: 0.85; }
+  .p5-doodle-note { right: -90px; top: 10%; scale: 0.85; }
 }
 
 @media (max-width: 1000px) {
-  .p5-doodle-note { display: none !important; }
+  .p5-doodle-bubble, .p5-doodle-note { display: none !important; }
 }
 
 /* EXPANSIÓN DEL ANCHO DE CONTENEDORES PRINCIPALES */
