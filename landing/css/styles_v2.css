@@ -89,65 +89,65 @@ body {
   filter: invert(1);
 }
 
-/* ── BUBBLE & NOTE DOODLE STYLES (IGUALES A LA MAQUETA EXACTA) ── */
+/* ── BUBBLE & NOTE DOODLE STYLES (EXACTO A LA MAQUETA DE REFERENCIA) ── */
 .p5-doodle-bubble {
   position: absolute;
-  bottom: 60px;
-  left: -180px;
+  bottom: 85px;
+  left: -130px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
-  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
-  padding: 16px 24px;
+  border-radius: 48% 52% 46% 54% / 54% 46% 54% 46%;
+  padding: 14px 22px;
   box-shadow: 4px 6px 0px #111827;
-  transform: rotate(-5deg);
+  transform: rotate(-6deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 210px;
+  width: 195px;
   text-align: center;
 }
 
 .p5-doodle-bubble .bubble-text {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: #111827;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
-/* FLECHA LARGA Y CURVA DE DOODLE CON LOOP/VUELTA COMO LA MAQUETA */
+/* FLECHA LARGA CON VUELTA/LOOP TAL COMO EN LA MAQUETA */
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  left: -40px;
-  top: -65px;
-  width: 105px;
-  height: 95px;
-  transform: rotate(-10deg);
+  right: -58px;
+  top: 15px;
+  width: 85px;
+  height: 75px;
+  transform: rotate(5deg);
 }
 
-/* NOTITA DERECHA SOBREPUESTA EN EL BORDE DE LA FOTO (TAL COMO LA MAQUETA) */
+/* NOTITA DERECHA SOBREPUESTA EN EL BORDE SUPERIOR DERECHO DE LA FOTO (EXACTO A LA MAQUETA) */
 .p5-doodle-note {
   position: absolute;
-  top: 15%;
-  right: -55px;
+  top: 8%;
+  right: -50px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  padding: 22px 20px;
+  padding: 20px 18px;
   box-shadow: 5px 7px 0px #111827;
-  transform: rotate(4deg);
+  transform: rotate(5deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 180px;
+  width: 175px;
 }
 
 .p5-doodle-note .heart-icon {
   position: absolute;
-  top: -20px;
-  right: 18px;
-  width: 32px;
-  height: 32px;
+  top: -22px;
+  right: 15px;
+  width: 34px;
+  height: 34px;
 }
 
 .p5-doodle-note ul {
@@ -158,10 +158,10 @@ body {
 
 .p5-doodle-note li {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 20px;
+  font-size: 19.5px;
   font-weight: 700;
   color: #111827;
-  line-height: 1.35;
+  line-height: 1.3;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -174,13 +174,13 @@ body {
   font-weight: 900;
 }
 
-/* ── OLA ROJA EN FLUIDO ORGÁNICO CON DESVANECIMIENTO SUAVE Y CORONA DESTACADA ── */
+/* ── OLA ROJA EN FLUIDO ORGÁNICO CON CORONA EN LA ESQUINA INFERIOR ── */
 .p5-red-wave-corner {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 650px;
-  height: 320px;
+  width: 520px;
+  height: 220px;
   pointer-events: none;
   z-index: 2;
 }
@@ -192,8 +192,8 @@ body {
 }
 
 @media (max-width: 1350px) {
-  .p5-doodle-bubble { left: -100px; bottom: 40px; scale: 0.85; }
-  .p5-doodle-note { right: -30px; top: 10%; scale: 0.85; }
+  .p5-doodle-bubble { left: -80px; bottom: 60px; scale: 0.85; }
+  .p5-doodle-note { right: -30px; top: 5%; scale: 0.85; }
 }
 
 @media (max-width: 1000px) {
@@ -219,14 +219,12 @@ div[style*="maxWidth: 1280"] {
   backdrop-filter: blur(16px);
 }
 
-/* Ocultar el triangulito blanco feo a la izquierda de la barra */
 .tri,
 .up5-eyebrow .tri,
 span.tri {
   display: none !important;
 }
 
-/* MARQUESINA (TICKER) EN GRIS OSCURO */
 [data-anim="ticker"],
 .marquee-track-container,
 div[data-anim="ticker"] {
@@ -234,7 +232,6 @@ div[data-anim="ticker"] {
   background: #1F2937 !important;
 }
 
-/* TAKE YOUR HEART EN BLANCO Y ROJO (FORZAR BLANCO EN 'TAKE YOUR' EN AMBOS TEMAS) */
 .badge-take-your,
 .take-your-badge,
 .p5-badge-tyh,
@@ -246,9 +243,6 @@ div[data-anim="ticker"] {
   color: #FFFFFF !important;
 }
 
-/* ==========================================================================
-   FORZAR FONDO BLANCO Y TEXTOS NEGROS EN HERO (#inicio) EN MODO CLARO
-   ========================================================================== */
 [data-theme="light"] #inicio,
 [data-theme="light"] #inicio.bg-black,
 [data-theme="light"] section[id="inicio"],
@@ -275,14 +269,12 @@ div[data-anim="ticker"] {
   color: #FE0002 !important;
 }
 
-/* FIX: FORZAR CADA LLAMADA ES UNA OPORTUNIDAD EN NEGRO (MODO CLARO) */
 [data-theme="light"] .intro-black-text,
 [data-theme="light"] #sobre-nosotros .intro-black-text,
 [data-theme="light"] #sobre-nosotros h2 span.intro-black-text {
   color: #111827 !important;
 }
 
-/* FIX: FORZAR PÁRRAFO DE ÚNETE AL EQUIPO EN GRIS OSCURO (MODO CLARO) */
 [data-theme="light"] #unete p,
 [data-theme="light"] #unete .p5-rv,
 [data-theme="light"] .up5-copy p {
@@ -290,7 +282,6 @@ div[data-anim="ticker"] {
   opacity: 1 !important;
 }
 
-/* BARRA ROJA "ÚNETE AL EQUIPO" */
 .up5-eyebrow,
 .up5-eyebrow span,
 [class*="up5-eyebrow"] {
@@ -300,7 +291,6 @@ div[data-anim="ticker"] {
   padding: 6px 16px !important;
 }
 
-/* TÍTULO "¿QUIERES TRABAJAR CON NOSOTROS?" */
 [data-theme="light"] #unete h2,
 [data-theme="light"] #unete .up5-title {
   color: #111827 !important;
@@ -311,7 +301,6 @@ div[data-anim="ticker"] {
   color: #FE0002 !important;
 }
 
-/* INPUTS FORMULARIO */
 [data-theme="light"] #unete input,
 [data-theme="light"] #unete textarea,
 [data-theme="light"] #unete div[style*="border: 1px dashed"] {
@@ -324,7 +313,6 @@ div[data-anim="ticker"] {
   color: #6B7280 !important;
 }
 
-/* FOOTER CORRECCIÓN DE ALINEACIÓN FLUIDA */
 footer {
   width: 100% !important;
   background: var(--bg-card) !important;
