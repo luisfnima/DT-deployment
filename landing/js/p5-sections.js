@@ -216,10 +216,11 @@
     var imgs = sec.querySelectorAll('img');
     for (var i = 0; i < imgs.length; i++) {
       var alt = (imgs[i].getAttribute('alt') || '').toLowerCase();
+      var src = (imgs[i].getAttribute('src') || '').toLowerCase();
       if (alt === 'avatar') continue;
-      var r = imgs[i].getBoundingClientRect();
-      if (r.width > 150 && r.height > 150) { mainImg = imgs[i]; break; }
+      if (src.indexOf('herophoto') >= 0 || src.indexOf('empleado') >= 0 || imgs[i].width > 100 || imgs[i].height > 100 || imgs[i].naturalWidth > 100) { mainImg = imgs[i]; break; }
     }
+    if (!mainImg && imgs.length > 0) mainImg = imgs[0];
     if (!mainImg) return false;
 
     var mainCard  = mainImg.parentElement;          
@@ -346,7 +347,7 @@
       var els;
       try { els = document.querySelectorAll(sel); } catch (e) { return; }
       Array.prototype.forEach.call(els, function (el, i) {
-        if (el.dataset.p5rv === '1') return;
+        if (el.dataset.p5rv = '1') return;
         el.dataset.p5rv = '1';
 
         var r = el.getBoundingClientRect();
