@@ -93,7 +93,7 @@ body {
 .p5-doodle-bubble {
   position: absolute;
   bottom: 110px;
-  left: -110px;
+  left: -140px;
   z-index: 10;
   background: #FFFFFF;
   border: 3.5px solid #111827;
@@ -115,13 +115,13 @@ body {
   line-height: 1.15;
 }
 
-/* Flecha curva limpia conectada a la burbuja que se mueve en bloque con ella */
+/* Flecha curva limpia ubicada en la parte superior derecha de la burbuja hacia la foto */
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  right: -48px;
-  bottom: 10px;
-  width: 75px;
-  height: 65px;
+  right: -52px;
+  top: -25px;
+  width: 80px;
+  height: 70px;
   transform: rotate(5deg);
   filter: drop-shadow(0px 2px 0px #FFFFFF);
 }
