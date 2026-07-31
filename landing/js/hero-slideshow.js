@@ -4,8 +4,8 @@
  * Slideshow con fundido (crossfade) para la foto principal de la
  * portada. Lee la lista desde window.HERO_SLIDES (js/hero-config.js).
  *
- * Sincroniza el cambio de foto con el cambio animado de la burbuja
- * y notitas doodle estilo Persona 5 / Maqueta.
+ * Sincroniza el cambio de foto con la animación de resorte/pop
+ * de la burbuja y notita doodle.
  */
 (function () {
   'use strict';
@@ -17,7 +17,7 @@
   var HOLD = Math.max(2, Number(cfg.duration) || 8) * 1000;   
   var FADE = Math.max(0.3, Number(cfg.transition) || 1.4);    
 
-  // ── TESTIMONIOS Y NOTAS ENRIQUECIDAS (Estudio/Trabajo, Pagos Puntuales, etc.) ──
+  // ── TESTIMONIOS Y NOTAS ENRIQUECIDAS CON ANIMACIÓN EN RESORTE ──
   var DOODLE_DATA = [
     {
       bubble: "¡Estudio y trabajo en DreamTeam con horarios flexibles!",
@@ -71,13 +71,14 @@
     var bubbleEl = document.getElementById('hero-doodle-bubble');
     var noteEl = document.getElementById('hero-doodle-note');
 
+    // ANIMACIÓN EN RESORTE (Spring / Bounce overshoot cubic-bezier)
     if (bubbleEl) {
       bubbleEl.style.opacity = '0';
-      bubbleEl.style.transform = 'scale(0.8) rotate(-8deg)';
+      bubbleEl.style.transform = 'translateY(25px) scale(0.7) rotate(-12deg)';
     }
     if (noteEl) {
       noteEl.style.opacity = '0';
-      noteEl.style.transform = 'scale(0.8) rotate(8deg)';
+      noteEl.style.transform = 'translateY(-25px) scale(0.7) rotate(12deg)';
     }
 
     setTimeout(function () {
@@ -90,13 +91,13 @@
 
       if (bubbleEl) {
         bubbleEl.style.opacity = '1';
-        bubbleEl.style.transform = 'rotate(-5deg) scale(1)';
+        bubbleEl.style.transform = 'translateY(0) scale(1) rotate(-6deg)';
       }
       if (noteEl) {
         noteEl.style.opacity = '1';
-        noteEl.style.transform = 'rotate(4deg) scale(1)';
+        noteEl.style.transform = 'translateY(0) scale(1) rotate(5deg)';
       }
-    }, 300);
+    }, 350);
   }
 
   function init() {
