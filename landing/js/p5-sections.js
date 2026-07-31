@@ -192,9 +192,9 @@
       var wave = document.createElement('div');
       wave.className = 'p5-red-wave-corner';
       wave.innerHTML = `
-        <svg viewBox="0 0 500 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 280V80C100 170 240 290 500 210V280H0Z" fill="#FE0002"/>
-          <g transform="translate(45, 185) scale(1.4)">
+        <svg viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 220V70C80 130 180 230 400 170V220H0Z" fill="#FE0002"/>
+          <g transform="translate(35, 145) scale(1.1)">
             <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
             <circle cx="8" cy="10" r="2" fill="white"/>
             <circle cx="24" cy="3" r="2" fill="white"/>
@@ -255,15 +255,14 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    // ── BURBUJA CON FLECHA DOODLE SÚPER CURVA Y NOTITA GRANDE CON CORAZÓN Y 4 BENEFICIOS ──
+    // ── BURBUJA Y NOTITA REUBICADAS PARA QUE NUNCA TAPEN A LA ASESORA ──
     var bubble = document.createElement('div');
     bubble.className = 'p5-doodle-bubble';
     bubble.id = 'hero-doodle-bubble';
     bubble.innerHTML = `
       <span class="bubble-text" id="hero-bubble-text">¡Estudio y trabajo en DreamTeam con horarios flexibles!</span>
       <svg class="arrow-doodle" viewBox="0 0 80 80" fill="none">
-        <path d="M10 65 C25 60, 45 45, 65 20 C55 22, 45 25, 40 28 M65 20 C62 30, 58 42, 56 50" stroke="#111827" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 67 C27 62, 47 47, 67 22" stroke="#FE0002" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <path d="M15 60 C30 50, 50 35, 65 15 M65 15 C55 18, 48 22, 42 25 M65 15 C60 25, 56 35, 54 42" stroke="#111827" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     `;
 
