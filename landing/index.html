@@ -799,266 +799,245 @@ function ComoTrabajamos({ primary, secondary, bg }) {
       background: '#0A0A0A',
       borderTop: '1px solid rgba(255,255,255,0.1)',
       borderBottom: '1px solid rgba(255,255,255,0.1)',
-      position: 'relative',
-      overflow: 'hidden'
+      position: 'relative', overflow: 'hidden'
     }}>
       <div style={{
         maxWidth: 1536, margin: '0 auto', width: '100%',
-        padding: 'clamp(64px, 8vw, 112px) clamp(24px, 4vw, 80px)',
-        position: 'relative'
+        padding: 'clamp(64px, 8vw, 112px) clamp(24px, 4vw, 80px)'
       }}>
       <div style={{
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-          marginBottom: 72, flexWrap: 'wrap', gap: 24
+          display: 'flex', flexDirection: 'column', gap: 16,
+          marginBottom: 'clamp(48px, 6vw, 72px)', maxWidth: 640
         }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: primary }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', fontFamily: 'DM Sans' }}>
-              Proceso
-            </span>
-          </div>
-          <h2 style={{
-              fontFamily: 'Sora', fontWeight: 800,
-              fontSize: 'clamp(36px, 4.5vw, 56px)',
-              lineHeight: 1.0, letterSpacing: '-2px',
-              color: '#FFFFFF'
-            }}>
-            Cómo<br />
-            <span style={{ color: primary }}>trabajamos.</span>
-          </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: primary }} />
+          <span style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: '3px',
+              textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)',
+              fontFamily: 'DM Sans'
+            }}>Nuestro Proceso</span>
         </div>
-        <p style={{
-            fontSize: 15, lineHeight: 1.7,
-            color: 'rgba(255,255,255,0.7)',
-            maxWidth: 340, fontFamily: 'DM Sans'
+        <h2 style={{
+            fontFamily: 'Sora', fontWeight: 800,
+            fontSize: 'clamp(32px, 4vw, 56px)',
+            lineHeight: 1.08, letterSpacing: '-2px', color: '#FFFFFF'
           }}>
-          Un proceso diseñado para minimizar fricciones y maximizar resultados desde el primer día.
+          Metodología probada.<br />
+          <span style={{ color: primary }}>Resultados previsibles.</span>
+        </h2>
+        <p style={{ fontSize: 16, lineHeight: 1.7, color: 'rgba(255,255,255,0.7)' }}>
+          Cuatro pasos estructurados para llevar tu operación de ventas de cero a escala.
         </p>
       </div>
 
       <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 16,
-          borderRadius: 28
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: 20
         }}>
         {steps.map((s, i) =>
-          <div key={i}
-          style={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 24,
-            padding: '48px 36px 40px',
-            position: 'relative',
-            overflow: 'hidden'
+        <div key={s.num} style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 24, padding: '36px 30px',
+            display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+            minHeight: 280, position: 'relative', overflow: 'hidden',
+            transition: 'border-color 0.3s, transform 0.3s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = primary;
+            e.currentTarget.style.transform = 'translateY(-4px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+            e.currentTarget.style.transform = 'none';
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 36 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{
+                fontFamily: 'Sora', fontWeight: 800, fontSize: 36,
+                color: primary, opacity: 0.9, letterSpacing: '-1px'
+              }}>{s.num}</span>
               <div style={{
-                width: 36, height: 36, borderRadius: 12,
-                background: primary,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0
+                width: 32, height: 32, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.06)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
-                <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: 13, color: 'white' }}>{s.num}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
             </div>
 
-            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 22, color: '#FFFFFF', marginBottom: 8, letterSpacing: '-0.5px' }}>
-              {s.title}
+            <div>
+              <div style={{
+                fontFamily: 'Sora', fontWeight: 700, fontSize: 20,
+                color: '#FFFFFF', marginBottom: 4
+              }}>{s.title}</div>
+              <div style={{
+                fontSize: 12, fontWeight: 600, color: primary,
+                letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 12
+              }}>{s.sub}</div>
+              <p style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65 }}>
+                {s.desc}
+              </p>
             </div>
-            <div style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: 13, color: primary, marginBottom: 16, letterSpacing: '-0.2px' }}>
-              {s.sub}
-            </div>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>
-              {s.desc}
-            </p>
           </div>
-          )}
+        )}
       </div>
       </div>
     </section>);
 }
 
-/* ── CTA Join ── */
-function CTAJoin({ primary, secondary }) {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', cv: null });
-  const [submitted, setSubmitted] = useState(false);
-  const [fileName, setFileName] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('email', formData.email);
-    data.append('phone', formData.phone);
-    if (formData.cv) {
-      data.append('cv', formData.cv);
-    }
-
-    fetch('https://formspree.io/f/wrosario@dreamteam.pe', {
-      method: 'POST',
-      body: data,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).catch((err) => {
-      console.error('Error submitting form:', err);
-    });
-  };
-
-  const photoSrc = window.__resources && window.__resources.ctaBg || "images/ctaBg.jpg";
+/* ── Brands Carousel ── */
+function BrandsCarousel({ secondary }) {
+  const brands = [
+    { name: 'Vodafone', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Vodafone_icon.svg' },
+    { name: 'Movistar', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Movistar_Logo.svg' },
+    { name: 'Orange', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg' },
+    { name: 'Yoigo', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Yoigo_logo.svg' },
+    { name: 'MásMóvil', logo: 'https://upload.wikimedia.org/wikipedia/commons/d/df/MasMovil_logo.svg' },
+    { name: 'Digi', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Digi_logo.svg' }
+  ];
 
   return (
-    <section id="unete" style={{ background: 'var(--bg-color)', position: 'relative', overflow: 'hidden' }}>
-      <div className="up5-grid">
-        <div className="up5-photo p5-rv-l">
-          <img src={photoSrc} alt="Equipo DreamTeam trabajando" />
-          <div className="up5-clip" />
+    <section style={{
+      background: 'var(--bg-color)',
+      padding: '48px 0',
+      borderTop: '1px solid var(--border-color)',
+      borderBottom: '1px solid var(--border-color)',
+      overflow: 'hidden'
+    }}>
+      <div style={{ maxWidth: 1536, margin: '0 auto', width: '100%', padding: '0 48px', marginBottom: 24, textAlign: 'center' }}>
+        <span style={{
+          fontSize: 12, fontWeight: 700, letterSpacing: '2.5px',
+          textTransform: 'uppercase', color: 'var(--text-muted)',
+          fontFamily: 'DM Sans'
+        }}>Empresas que confían en nuestro potencial</span>
+      </div>
+
+      <div className="marquee-track-container" style={{ display: 'flex', overflow: 'hidden' }}>
+        <div className="marquee-track" style={{ display: 'flex', gap: 60, alignItems: 'center' }}>
+          {[...brands, ...brands, ...brands, ...brands].map((b, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, opacity: 0.65, filter: 'grayscale(100%)', transition: 'all 0.3s ease', cursor: 'pointer' }}
+                 onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.filter = 'none'; }}
+                 onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.65'; e.currentTarget.style.filter = 'grayscale(100%)'; }}>
+              <img src={b.logo} alt={b.name} style={{ height: 32, width: 'auto', objectFit: 'contain' }} />
+              <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 16, color: 'var(--text-main)' }}>{b.name}</span>
+            </div>
+          ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="up5-copy" style={{
-          padding: 'clamp(40px, 5vw, 72px) clamp(20px, 3.5vw, 56px)',
-          position: 'relative',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          alignItems: 'flex-start',
-          background: 'var(--bg-card)'
+/* ── CTA Join Section ── */
+function CTAJoin({ primary, secondary }) {
+  return (
+    <section id="unete" style={{
+      background: 'var(--bg-color)',
+      padding: 'clamp(64px, 8vw, 112px) clamp(24px, 4vw, 80px)',
+      position: 'relative', overflow: 'hidden'
+    }}>
+      <div style={{ maxWidth: 1536, margin: '0 auto', width: '100%' }}>
+        <div style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
+          borderRadius: 36,
+          padding: 'clamp(36px, 5vw, 72px)',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(12, 1fr)',
+          gap: 40,
+          alignItems: 'center',
+          boxShadow: 'var(--shadow-main)'
         }}>
-          <div className="up5-eyebrow p5-rv" style={{ background: '#FE0002', color: '#FFFFFF', padding: '6px 16px', display: 'inline-block' }}>
-            <span style={{ color: '#FFFFFF' }}>► ÚNETE AL EQUIPO</span>
-          </div>
-
-          <h2 className="up5-title p5-rv" style={{
-            fontFamily: "'Anton', 'Impact', sans-serif",
-            fontSize: 'clamp(28px, 3.5vw, 48px)',
-            fontStyle: 'italic',
-            lineHeight: 0.95,
-            letterSpacing: '1px',
-            textTransform: 'uppercase',
-            color: 'var(--text-main)',
-            margin: '16px 0 12px'
-          }}>
-            ¿Quieres trabajar <span className="red" style={{ color: primary }}>con nosotros?</span>
-          </h2>
-
-          <p className="p5-rv" style={{
-            fontSize: 14, lineHeight: 1.6,
-            color: 'var(--text-muted)',
-            opacity: 1,
-            marginBottom: 20,
-            maxWidth: 480
-          }}>
-            Déjanos tus datos y adjunta tu currículum. Evaluaremos tu perfil para nuestras vacantes comerciales en televentas.
-          </p>
-
-          <div style={{ width: '100%', maxWidth: '440px' }}>
-            {submitted ? (
-              <div style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 0,
-                padding: '40px 32px',
-                textAlign: 'center'
-              }}>
-                <h3 style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 22, color: 'var(--text-main)', marginBottom: 8 }}>
-                  ¡Candidatura Recibida!
-                </h3>
-                <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-                  Gracias por postularte. Nuestro departamento de Selección de Personal revisará tu perfil.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} style={{
-                background: 'var(--bg-card)',
-                border: `2px solid ${primary}`,
-                borderRadius: 0,
-                padding: '20px',
-                display: 'flex', flexDirection: 'column', gap: 12
-              }}>
-                <input
-                  type="text"
-                  placeholder="Nombre Completo"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={{
-                    background: 'var(--input-bg)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 0, padding: '8px 12px',
-                    color: 'var(--text-main)', fontSize: 13, fontFamily: 'DM Sans',
-                    outline: 'none'
-                  }}
-                />
-
-                <input
-                  type="email"
-                  placeholder="Email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  style={{
-                    background: 'var(--input-bg)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 0, padding: '8px 12px',
-                    color: 'var(--text-main)', fontSize: 13, fontFamily: 'DM Sans',
-                    outline: 'none'
-                  }}
-                />
-
-                <input
-                  type="tel"
-                  placeholder="Teléfono"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  style={{
-                    background: 'var(--input-bg)',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 0, padding: '8px 12px',
-                    color: 'var(--text-main)', fontSize: 13, fontFamily: 'DM Sans',
-                    outline: 'none'
-                  }}
-                />
-
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="file"
-                    id="cv-upload-new"
-                    accept=".pdf,.doc,.docx"
-                    required
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      setFormData({ ...formData, cv: file });
-                      setFileName(file ? file.name : '');
-                    }}
-                    style={{
-                      position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', zIndex: 2
-                    }}
-                  />
-                  <div style={{
-                    background: 'var(--input-bg)',
-                    border: `1px dashed ${primary}`,
-                    borderRadius: 0, padding: '10px',
-                    textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    gap: 8, color: 'var(--text-muted)', fontSize: 12
-                  }}>
-                    {fileName ? `Archivo: ${fileName}` : 'Seleccionar archivo CV (PDF, Word)'}
+          {/* Left Text */}
+          <div style={{ gridColumn: '1 / 7' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `${primary}15`, borderRadius: 100, padding: '6px 16px', marginBottom: 20 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: primary, textTransform: 'uppercase', letterSpacing: '1.5px' }}>Únete al equipo</span>
+            </div>
+            <h2 style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: 'clamp(32px, 3.8vw, 52px)', lineHeight: 1.1, color: 'var(--text-main)', marginBottom: 20, letterSpacing: '-1.5px' }}>
+              ¿Listo para dar el <span style={{ color: primary }}>siguiente paso</span> en tu carrera?
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--text-muted)', marginBottom: 32, maxWidth: 480 }}>
+              Buscamos personas motivadas, apasionadas por la comunicación y con ganas de crecer profesionalmente en un ambiente dinámico y competitivo.
+            </p>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {[
+                { title: 'Horarios Flexibles', desc: 'Turnos mañana y tarde adaptados a tus estudios' },
+                { title: 'Comisiones sin techo', desc: 'Tus ingresos crecen directamente con tus resultados' },
+                { title: 'Capacitación constante', desc: 'Formación continua en técnicas de venta de alto nivel' }
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: `${primary}20`, color: primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 12, flexShrink: 0, marginTop: 2 }}>✓</div>
+                  <div>
+                    <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 15, color: 'var(--text-main)' }}>{item.title}</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{item.desc}</div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <button type="submit" style={{
-                  background: primary, color: 'white', border: 'none',
-                  borderRadius: 0, padding: '10px',
-                  fontWeight: 700, cursor: 'pointer', fontFamily: 'Oswald',
-                  textTransform: 'uppercase', letterSpacing: '1.5px',
-                  fontSize: 13, marginTop: 2
-                }}>
-                  Enviar Candidatura
-                </button>
-              </form>
-            )}
+          {/* Right Form Card */}
+          <div style={{ gridColumn: '7 / 13' }}>
+            <form onSubmit={(e) => { e.preventDefault(); alert('¡Gracias por tu interés! Te contactaremos pronto.'); }} style={{
+              background: 'var(--bg-color)',
+              border: '1px solid var(--border-color)',
+              borderRadius: 28,
+              padding: '36px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 20
+            }}>
+              <h3 style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 22, color: 'var(--text-main)', marginBottom: 4 }}>Postula Aquí</h3>
+              
+              <div>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-main)', marginBottom: 8 }}>Nombre Completo</label>
+                <input type="text" required placeholder="Tu nombre" style={{
+                  width: '100%', padding: '12px 16px', borderRadius: 12,
+                  background: 'var(--input-bg)', border: '1px solid var(--border-color)',
+                  color: 'var(--text-main)', fontSize: 14, outline: 'none'
+                }} />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-main)', marginBottom: 8 }}>Teléfono / WhatsApp</label>
+                  <input type="tel" required placeholder="+51 900 000 000" style={{
+                    width: '100%', padding: '12px 16px', borderRadius: 12,
+                    background: 'var(--input-bg)', border: '1px solid var(--border-color)',
+                    color: 'var(--text-main)', fontSize: 14, outline: 'none'
+                  }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-main)', marginBottom: 8 }}>Correo Electrónico</label>
+                  <input type="email" required placeholder="tu@correo.com" style={{
+                    width: '100%', padding: '12px 16px', borderRadius: 12,
+                    background: 'var(--input-bg)', border: '1px solid var(--border-color)',
+                    color: 'var(--text-main)', fontSize: 14, outline: 'none'
+                  }} />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-main)', marginBottom: 8 }}>Experiencia en Ventas (Opcional)</label>
+                <textarea rows="3" placeholder="Cuéntanos brevemente si has trabajado en televentas o atención al cliente..." style={{
+                  width: '100%', padding: '12px 16px', borderRadius: 12,
+                  background: 'var(--input-bg)', border: '1px solid var(--border-color)',
+                  color: 'var(--text-main)', fontSize: 14, outline: 'none', resize: 'none'
+                }}></textarea>
+              </div>
+
+              <button type="submit" style={{
+                background: primary, color: 'white', border: 'none',
+                borderRadius: 14, padding: '14px 28px',
+                fontWeight: 700, fontSize: 15, fontFamily: 'Sora',
+                cursor: 'pointer', transition: 'all 0.2s ease',
+                boxShadow: `0 4px 20px ${primary}40`, marginTop: 8
+              }}>Enviar Postulación</button>
+            </form>
           </div>
         </div>
       </div>
@@ -1068,175 +1047,58 @@ function CTAJoin({ primary, secondary }) {
 
 /* ── Footer ── */
 function Footer({ primary, secondary }) {
-  const navLinks = [
-  { label: 'Inicio', href: '#inicio' },
-  { label: 'Sobre Nosotros', href: '#sobre-nosotros' },
-  { label: 'Proceso', href: '#como-trabajamos' },
-  { label: 'Actividades', href: '#actividades' },
-  { label: 'Únete al Equipo', href: '#unete' }];
-
   return (
-    <footer style={{
-      background: 'var(--bg-card)',
-      borderTop: '1px solid var(--border-color)',
-      position: 'relative', overflow: 'hidden'
-    }}>
-      <div className="footer-container">
-      <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1.4fr 1fr 1fr',
-            gap: 64,
-            marginBottom: 64
-          }}>
-
-        <div data-anim="footer-col">
-          <div style={{ marginBottom: 24 }}>
-            <img src={window.__resources && window.__resources.logoImg || "images/logoImg_nuevo.png"} alt="DreamTeam" style={{ height: 56, width: 'auto', objectFit: 'contain', display: 'block' }} />
+    <footer style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '64px 0 32px' }}>
+      <div style={{ maxWidth: 1536, margin: '0 auto', width: '100%', padding: '0 clamp(24px, 4vw, 80px)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 40, marginBottom: 48 }}>
+          <div style={{ gridColumn: '1 / 5' }}>
+            <img src={(window.__resources && window.__resources.logoImg || "images/logoImg_nuevo.png") + "?v=3"} alt="DreamTeam" style={{ height: 60, width: 'auto', marginBottom: 20 }} />
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: 320 }}>
+              Contact Center especializado en ventas telefónicas y soluciones de telecomunicaciones de alto rendimiento para España.
+            </p>
+          </div>
+          
+          <div style={{ gridColumn: '5 / 8' }}>
+            <h4 style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 15, color: 'var(--text-main)', marginBottom: 16 }}>Navegación</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
+              <li><a href="#inicio" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Inicio</a></li>
+              <li><a href="#sobre-nosotros" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Sobre Nosotros</a></li>
+              <li><a href="#como-trabajamos" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Proceso</a></li>
+              <li><a href="#unete" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Únete al Equipo</a></li>
+            </ul>
           </div>
 
-          <p style={{
-                fontSize: 14, lineHeight: 1.8,
-                color: 'var(--text-muted)',
-                fontFamily: 'DM Sans', maxWidth: 280, marginBottom: 32
-              }}>
-            Innovación y excelencia en telecomunicaciones. El aliado estratégico que convierte llamadas en resultados.
-          </p>
-        </div>
-
-        <div data-anim="footer-col">
-          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'var(--text-main)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
-            Navegación
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {navLinks.map((l) =>
-                <a key={l.label} href={l.href}
-                style={{
-                  fontFamily: 'DM Sans', fontSize: 14, fontWeight: 500,
-                  color: 'var(--text-main)', textDecoration: 'none',
-                  opacity: 0.9,
-                  transition: 'color 0.2s, opacity 0.2s'
-                }}>
-                  {l.label}</a>
-                )}
+          <div style={{ gridColumn: '8 / 13' }}>
+            <h4 style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 15, color: 'var(--text-main)', marginBottom: 16 }}>Contacto & Ubicación</h4>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 12 }}>
+              📍 Av. Principal #123, Lima, Perú<br />
+              📞 +51 920 133 394<br />
+              ✉️ contacto@dreamteam.com.pe
+            </p>
           </div>
         </div>
 
-        <div data-anim="footer-col">
-          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'var(--text-main)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
-            Contacto
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <a href="https://api.whatsapp.com/send?phone=51920133394&text=Hola%20DreamTeam" target="_blank" rel="noopener"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 10,
-                  background: primary, color: 'white',
-                  borderRadius: 100, padding: '11px 22px',
-                  fontSize: 13, fontWeight: 600, fontFamily: 'DM Sans',
-                  textDecoration: 'none', width: 'fit-content',
-                  boxShadow: `0 4px 18px ${primary}44`
-                }}>
-              Escríbenos
-            </a>
-
-            <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7, fontFamily: 'DM Sans' }}>
-              Perú · España<br />
-              Innovación y Excelencia<br />
-              en Telecomunicaciones
-            </div>
-          </div>
+        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, fontSize: 13, color: 'var(--text-muted)' }}>
+          <div>© {new Date().getFullYear()} DreamTeam Contact Center. Todos los derechos reservados.</div>
+          <div>Líderes en Televentas para España</div>
         </div>
       </div>
-
-      </div>
-      <div className="footer-bottom">
-        <span style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'DM Sans' }}>
-          © 2026 DreamTeam. Todos los derechos reservados.
-        </span>
-      </div>
-    </footer>);
-}
-
-/* ── Brands Carousel ── */
-function BrandsCarousel({ secondary }) {
-  const brands = [
-    { name: 'Pepephone', logo: 'images/pepephone.png' },
-    { name: 'DIGI', logo: 'images/digi.png' },
-    { name: 'Euskaltel', logo: 'images/Euskaltel.png' },
-    { name: 'R', logo: 'images/movil R.png' },
-    { name: 'Movistar', logo: 'images/movistar.png' },
-    { name: 'Yoigo', logo: 'images/yoigo.png' },
-    { name: 'Vodafone', logo: 'images/vodafone.png' },
-    { name: 'Jazztel', logo: 'images/Jazztel.png' }
-  ];
-
-  const allBrands = [...brands, ...brands];
-
-  return (
-    <div style={{
-      background: 'var(--bg-card)',
-      borderTop: '1px solid var(--border-color)',
-      borderBottom: '1px solid var(--border-color)',
-      padding: '56px 0',
-      overflow: 'hidden'
-    }}>
-      <p style={{
-        textAlign: 'center',
-        fontSize: 11, fontWeight: 700, letterSpacing: '3px',
-        textTransform: 'uppercase', color: 'var(--text-muted)', opacity: 0.75,
-        marginBottom: 32, fontFamily: 'DM Sans'
-      }}>Operadoras con las que trabajamos</p>
-
-      <div style={{ overflow: 'hidden', userSelect: 'none' }}>
-        <div style={{
-          display: 'flex',
-          width: 'max-content',
-          animation: 'marquee-left 36s linear infinite',
-          alignItems: 'center'
-        }}>
-          {allBrands.map((b, i) =>
-          <div key={i} style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16,
-            padding: '0 48px',
-            borderRight: '1px solid var(--border-color)',
-            flexShrink: 0,
-            opacity: 0.65,
-            transition: 'opacity 0.2s',
-            width: 260, height: 260
-          }}
-          onMouseEnter={(e) => {e.currentTarget.style.opacity = 1;e.currentTarget.parentNode.style.animationPlayState = 'paused';}}
-          onMouseLeave={(e) => {e.currentTarget.style.opacity = 0.65;e.currentTarget.parentNode.style.animationPlayState = 'running';}}>
-            
-              <img
-              src={b.logo}
-              alt={b.name}
-              style={{ height: 80, width: 'auto', maxWidth: 180, objectFit: 'contain', display: 'block' }} />
-              <span style={{
-              fontFamily: 'DM Sans', fontWeight: 600, fontSize: 13,
-              color: 'var(--text-main)', opacity: 0.65, whiteSpace: 'nowrap',
-              textAlign: 'center'
-            }}>{b.name}</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </footer>
   );
 }
 
-/* ── MAIN ── */
+/* ── App Main ── */
 function App() {
-  const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+  const [tweaks] = useState(TWEAK_DEFAULTS);
   const primary = tweaks.primaryColor;
-  const secondary = 'var(--text-main)';
-  const bg = 'var(--bg-color)';
-
+  const secondary = tweaks.secondaryColor;
+  const bg = tweaks.bgColor;
   const [pros, prosRef] = useCounter(80);
 
   return (
-    <div style={{ background: 'var(--bg-color)', minHeight: '100vh' }}>
+    <div style={{ background: bg, minHeight: '100vh', color: 'var(--text-main)' }}>
       <Nav primary={primary} secondary={secondary} bg={bg} />
 
-      {/* ── HERO ── */}
       <section id="inicio" style={{
         minHeight: '100vh',
         position: 'relative',
@@ -1257,12 +1119,12 @@ function App() {
             <div className="fade-up fade-up-1" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: `${primary}12`, border: `1px solid ${primary}28`,
-              borderRadius: 100, padding: '6px 14px 6px 8px',
+              borderRadius: 100, padding: '7px 16px 7px 10px',
               marginBottom: 28
             }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: primary, flexShrink: 0,
                 animation: 'shimmer 2s ease infinite' }} />
-              <span style={{ fontSize: 12, fontWeight: 600, color: primary, fontFamily: 'DM Sans', letterSpacing: '0.2px' }}>
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: primary, fontFamily: 'DM Sans', letterSpacing: '0.2px' }}>
                 Líderes en Televentas para España
               </span>
             </div>
@@ -1271,7 +1133,7 @@ function App() {
           <h1 className="fade-up fade-up-2" style={{
               fontFamily: tweaks.headingFont + ', sans-serif',
               fontWeight: 800,
-              fontSize: 'clamp(52px, 6vw, 80px)',
+              fontSize: 'clamp(58px, 6.5vw, 86px)',
               lineHeight: 1.02,
               letterSpacing: '-2.5px',
               color: 'var(--text-main)',
@@ -1295,7 +1157,7 @@ function App() {
 
           <p className="fade-up fade-up-3 hero-desc-text" style={{
               fontSize: 17, lineHeight: 1.7, color: 'var(--text-muted)',
-              maxWidth: 440, marginBottom: 36, fontWeight: 400
+              maxWidth: 520, marginBottom: 36, fontWeight: 400
             }}>Somos más que un contact center, somos tu aliado estratégico en ventas telefónicas y telecomunicaciones para el mercado español.
           </p>
 
@@ -1399,53 +1261,6 @@ function initScrollAnimations() {
       scrollTrigger: { trigger: '[data-anim="nosotros-grid"]', start: 'top 80%', once: true }
     }
   );
-
-  gsap.fromTo('[data-anim="como-header"]',
-    { opacity: 0, y: 36 },
-    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: '[data-anim="como-header"]', start: 'top 82%', once: true }
-    }
-  );
-  gsap.fromTo('[data-anim="step-card"]',
-    { opacity: 0, y: 50 },
-    { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
-      stagger: 0.12,
-      scrollTrigger: { trigger: '[data-anim="step-card"]', start: 'top 80%', once: true }
-    }
-  );
-
-  gsap.fromTo('[data-anim="brands"]',
-    { opacity: 0, y: 28 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
-      scrollTrigger: { trigger: '[data-anim="brands"]', start: 'top 88%', once: true }
-    }
-  );
-
-  gsap.fromTo('[data-anim="cta-content"] > *',
-    { opacity: 0, y: 44 },
-    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.13,
-      scrollTrigger: { trigger: '[data-anim="cta-content"]', start: 'top 75%', once: true }
-    }
-  );
-
-  gsap.fromTo('[data-anim="footer-col"]',
-    { opacity: 0, y: 32 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.1,
-      scrollTrigger: { trigger: '[data-anim="footer-col"]', start: 'top 88%', once: true }
-    }
-  );
 }
 </script>
-
-  <script src="js/p5-theme.js?v=10007"></script>
-  <script src="js/p5-sections.js?v=10007"></script>
-  <script src="js/responsive.js?v=10007"></script>
-  <script src="js/activities-config.js?v=10007"></script>
-  <script src="js/activities.js?v=10007"></script>
-  <script src="js/hero-config.js?v=10007"></script>
-  <script src="js/hero-slideshow.js?v=10007"></script>
-  <script src="js/music-config.js?v=99999933"></script>
-  <script src="js/music-player.js?v=99999933"></script>
-
-  <script src="js/colaboradores-modal.js?v=10007"></script>
 </body></html>
