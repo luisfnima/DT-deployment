@@ -90,57 +90,56 @@ body {
 }
 
 /* ── BUBBLE & NOTE DOODLE STYLES ── */
-/* Globo reubicado más a la derecha (bottom: 45px; left: -110px) apuntando de forma natural hacia el marco */
 .p5-doodle-bubble {
   position: absolute;
-  bottom: 45px;
-  left: -110px;
+  bottom: 20px;
+  left: -130px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
   border-radius: 48% 52% 46% 54% / 54% 46% 54% 46%;
-  padding: 14px 20px;
+  padding: 14px 22px;
   box-shadow: 4px 6px 0px #111827;
-  transform: rotate(-4deg);
+  transform: rotate(-3deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 195px;
+  width: 200px;
   text-align: center;
 }
 
 .p5-doodle-bubble .bubble-text {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 700;
   color: #111827;
   line-height: 1.15;
 }
 
-/* Flecha limpia que sale arriba a la derecha del globo y curva conectando directamente con la foto */
+/* Flecha curva limpia que apunta directamente a la foto */
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  right: -55px;
-  top: -20px;
-  width: 80px;
-  height: 70px;
-  transform: rotate(5deg);
+  right: -60px;
+  top: -25px;
+  width: 90px;
+  height: 75px;
+  transform: rotate(8deg);
 }
 
-/* Notita derecha con posición ajustada a la derecha de la tarjeta */
+/* Notita derecha exact en top-right fuera del marco */
 .p5-doodle-note {
   position: absolute;
-  top: 10%;
-  right: -100px;
+  top: 12%;
+  right: -135px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  padding: 18px 16px;
+  padding: 16px 18px;
   box-shadow: 5px 7px 0px #111827;
-  transform: rotate(5deg);
+  transform: rotate(6deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 165px;
+  width: 175px;
 }
 
 .p5-doodle-note .heart-icon {
