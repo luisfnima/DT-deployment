@@ -214,7 +214,10 @@ body {
   .p5-doodle-bubble, .p5-doodle-note { display: none !important; }
 }
 
-/* EXPANSIÓN DEL ANCHO DE CONTENEDORES PRINCIPALES */
+/* EXPANSIÓN DEL ANCHO DE CONTENEDORES PRINCIPALES Y COLUMNA IZQUIERDA DEL HERO */
+section#inicio > div > div:first-child {
+  max-width: 540px !important;
+}
 
 .section-inner,
 div[style*="max-width: 1280"],
