@@ -68,13 +68,15 @@ body {
   line-height: 1.6;
 }
 
-/* ── FONDO DE OFICINA CUBRIENDO 100% DEL HERO SIN TAPAR NADA ABAJO ── */
+/* ── FONDO DE OFICINA CON PATRÓN DE PUNTOS BLANCOS/GRISES Y SOMBRAS TENUES CUBRIENDO EL HERO ── */
 .hero-office-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1600&q=80&fit=crop');
-  background-size: cover;
-  background-position: center bottom;
+  background-image: 
+    radial-gradient(circle, rgba(0, 0, 0, 0.06) 1.5px, transparent 1.5px),
+    url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1600&q=80&fit=crop');
+  background-size: 14px 14px, cover;
+  background-position: center, center bottom;
   opacity: 0.1;
   mix-blend-mode: multiply;
   pointer-events: none;
@@ -87,62 +89,65 @@ body {
   filter: invert(1);
 }
 
-/* ── BUBBLE & NOTE DOODLE STYLES (REUBICADOS SEGÚN LA MAQUETA ORIGINAL) ── */
+/* ── BUBBLE & NOTE DOODLE STYLES (IGUALES A LA MAQUETA EXACTA) ── */
 .p5-doodle-bubble {
   position: absolute;
-  bottom: 80px;
-  left: -210px;
+  bottom: 60px;
+  left: -180px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
-  border-radius: 40px 40px 35px 35px;
-  padding: 14px 22px;
-  box-shadow: 5px 7px 0px #111827;
-  transform: rotate(-4deg);
+  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+  padding: 16px 24px;
+  box-shadow: 4px 6px 0px #111827;
+  transform: rotate(-5deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 220px;
+  width: 210px;
   text-align: center;
 }
 
 .p5-doodle-bubble .bubble-text {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 700;
   color: #111827;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
+/* FLECHA LARGA Y CURVA DE DOODLE CON LOOP/VUELTA COMO LA MAQUETA */
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  right: -45px;
-  top: -30px;
-  width: 65px;
-  height: 65px;
+  left: -40px;
+  top: -65px;
+  width: 105px;
+  height: 95px;
+  transform: rotate(-10deg);
 }
 
+/* NOTITA DERECHA SOBREPUESTA EN EL BORDE DE LA FOTO (TAL COMO LA MAQUETA) */
 .p5-doodle-note {
   position: absolute;
   top: 15%;
-  right: -175px;
+  right: -55px;
   z-index: 10;
   background: #FFFFFF;
-  border: 2.5px solid #111827;
-  border-radius: 20px 20px 25px 25px;
-  padding: 20px 18px;
-  box-shadow: 6px 8px 0px #111827;
-  transform: rotate(5deg);
+  border: 3px solid #111827;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  padding: 22px 20px;
+  box-shadow: 5px 7px 0px #111827;
+  transform: rotate(4deg);
   transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  width: 185px;
+  width: 180px;
 }
 
 .p5-doodle-note .heart-icon {
   position: absolute;
-  top: -18px;
-  right: 14px;
-  width: 30px;
-  height: 30px;
+  top: -20px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
 }
 
 .p5-doodle-note ul {
@@ -153,7 +158,7 @@ body {
 
 .p5-doodle-note li {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #111827;
   line-height: 1.35;
@@ -169,13 +174,13 @@ body {
   font-weight: 900;
 }
 
-/* ── OLA ROJA MUCHO MÁS GRANDE Y ANCHA CON CORONA MÁS ALTA ── */
+/* ── OLA ROJA EN FLUIDO ORGÁNICO CON DESVANECIMIENTO SUAVE Y CORONA DESTACADA ── */
 .p5-red-wave-corner {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 580px;
-  height: 260px;
+  width: 650px;
+  height: 320px;
   pointer-events: none;
   z-index: 2;
 }
@@ -187,8 +192,8 @@ body {
 }
 
 @media (max-width: 1350px) {
-  .p5-doodle-bubble { left: -100px; bottom: 50px; scale: 0.85; }
-  .p5-doodle-note { right: -90px; top: 10%; scale: 0.85; }
+  .p5-doodle-bubble { left: -100px; bottom: 40px; scale: 0.85; }
+  .p5-doodle-note { right: -30px; top: 10%; scale: 0.85; }
 }
 
 @media (max-width: 1000px) {
