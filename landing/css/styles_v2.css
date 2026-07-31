@@ -68,84 +68,83 @@ body {
   line-height: 1.6;
 }
 
-/* ── FONDO MULTI-IMAGEN DE OFICINA EN MARCA DE AGUA EN EL HERO ── */
+/* ── FONDO DE OFICINA EN MARCA DE AGUA EN EL HERO (ORIGINAL RECONSTRUIDO + MEJORADO) ── */
 .hero-office-bg {
   position: absolute;
   inset: 0;
-  background-image: 
-    radial-gradient(circle at 80% 20%, rgba(254, 0, 2, 0.04) 0%, transparent 40%),
-    url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80&fit=crop'),
-    url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80&fit=crop');
-  background-size: cover, cover, 50% auto;
-  background-position: center, center left, bottom right;
-  background-blend-mode: overlay, multiply, normal;
-  opacity: 0.15;
-  filter: contrast(1.1) grayscale(0.6);
+  background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80&fit=crop');
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 0;
 }
 
 [data-theme="dark"] .hero-office-bg {
-  opacity: 0.12;
-  filter: contrast(1.2) grayscale(0.8) invert(0.9);
+  opacity: 0.07;
+  mix-blend-mode: screen;
+  filter: invert(1);
 }
 
-/* ── BUBBLE & NOTE DOODLE STYLES (Más grandes y dinámicos) ── */
+/* ── BUBBLE & NOTE DOODLE STYLES (REUBICADOS FUERA DE LA FOTO + MÁS ANGOSTOS Y LARGOS) ── */
 .p5-doodle-bubble {
   position: absolute;
-  top: 38%;
-  left: -190px;
+  bottom: 25px;
+  left: -230px;
   z-index: 10;
   background: #FFFFFF;
   border: 3px solid #111827;
-  border-radius: 50% 50% 45% 55% / 55% 45% 55% 45%;
-  padding: 20px 30px;
-  box-shadow: 6px 8px 0px #111827;
-  transform: rotate(-5deg);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+  border-radius: 40px 40px 35px 35px;
+  padding: 16px 20px;
+  box-shadow: 5px 7px 0px #111827;
+  transform: rotate(-6deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  max-width: 260px;
+  width: 210px;
   text-align: center;
 }
 
 .p5-doodle-bubble .bubble-text {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 700;
   color: #111827;
   line-height: 1.15;
 }
 
+/* FLECHA DOODLE REUTILIZADA Y APUNTANDO DESDE AFUERA HACIA LA FOTO CON CURVA LARGA */
 .p5-doodle-bubble .arrow-doodle {
   position: absolute;
-  right: -50px;
-  top: -25px;
-  width: 75px;
-  height: 75px;
+  right: -45px;
+  top: -30px;
+  width: 65px;
+  height: 65px;
+  transform: rotate(15deg);
 }
 
 .p5-doodle-note {
   position: absolute;
-  top: 15%;
-  right: -195px;
+  top: 15px;
+  right: -210px;
   z-index: 10;
   background: #FFFFFF;
-  border: 3px solid #111827;
-  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-  padding: 24px 28px;
-  box-shadow: 7px 9px 0px #111827;
-  transform: rotate(4deg);
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+  border: 2.5px solid #111827;
+  border-radius: 20px 20px 25px 25px;
+  padding: 20px 18px;
+  box-shadow: 6px 8px 0px #111827;
+  transform: rotate(5deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.7, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  min-width: 220px;
+  width: 190px;
 }
 
 .p5-doodle-note .heart-icon {
   position: absolute;
-  top: -22px;
-  right: 22px;
-  width: 36px;
-  height: 36px;
+  top: -18px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
 }
 
 .p5-doodle-note ul {
@@ -156,13 +155,14 @@ body {
 
 .p5-doodle-note li {
   font-family: var(--font-doodle), 'Comic Sans MS', cursive, sans-serif;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 700;
   color: #111827;
-  line-height: 1.4;
+  line-height: 1.35;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 
 .p5-doodle-note li::before {
@@ -171,13 +171,13 @@ body {
   font-weight: 900;
 }
 
-/* ── OLA ROJA GRANDE E ÍCONO DE CORONA INFERIOR IZQUIERDA ── */
+/* ── OLA ROJA E ÍCONO DE CORONA INFERIOR IZQUIERDA (TAMAÑO EQUILIBRADO) ── */
 .p5-red-wave-corner {
   position: absolute;
-  bottom: -5px;
-  left: -5px;
-  width: 500px;
-  height: 280px;
+  bottom: -2px;
+  left: -2px;
+  width: 380px;
+  height: 210px;
   pointer-events: none;
   z-index: 2;
 }
@@ -189,11 +189,11 @@ body {
 }
 
 @media (max-width: 1350px) {
-  .p5-doodle-bubble { left: -90px; top: 48%; scale: 0.88; }
-  .p5-doodle-note { right: -90px; top: 10%; scale: 0.88; }
+  .p5-doodle-bubble { left: -110px; bottom: 10px; scale: 0.85; }
+  .p5-doodle-note { right: -110px; top: 10px; scale: 0.85; }
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1000px) {
   .p5-doodle-bubble, .p5-doodle-note { display: none !important; }
 }
 
