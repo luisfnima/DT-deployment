@@ -795,47 +795,89 @@ function Nosotros({ primary, secondary, bg }) {
             gridColumn: '1 / 13', gridRow: '3',
             background: 'var(--bg-card)',
             border: '1.5px solid var(--border-color)',
-            borderRadius: 28, padding: '40px 48px',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            flexWrap: 'wrap', gap: 32
+            borderRadius: 28,
+            overflow: 'hidden',
+            position: 'relative',
+            minHeight: 260
           }}>
-          <div style={{ maxWidth: 280 }}>
-            <span style={{
-                fontFamily: 'Sora', fontWeight: 700, fontSize: 11,
-                color: primary, letterSpacing: '2.5px', textTransform: 'uppercase'
-              }}>Nuestros Pilares</span>
-            <h3 style={{
-                fontFamily: 'Sora', fontWeight: 800, fontSize: 24,
-                color: 'var(--text-main)', letterSpacing: '-0.8px', marginTop: 6
-              }}>Lo que nos mueve cada día</h3>
-          </div>
+          {/* Subtle grid texture */}
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.04 }}
+            preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 260">
+            {Array.from({ length: 20 }).map((_, i) =>
+              <line key={'h' + i} x1="0" y1={i * 14} x2="1200" y2={i * 14} stroke="currentColor" strokeWidth="0.5" />
+              )}
+            {Array.from({ length: 86 }).map((_, i) =>
+              <line key={'v' + i} x1={i * 14} y1="0" x2={i * 14} y2="260" stroke="currentColor" strokeWidth="0.5" />
+              )}
+          </svg>
 
           <div style={{
-              display: 'flex', gap: 40, flexWrap: 'wrap', flex: 1,
-              justify'space-around'
+              position: 'relative',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              height: '100%'
             }}>
             {[
-              { title: 'Persistencia', desc: 'Cada NO es un paso más cerca del SÍ.' },
-              { title: 'Transparencia', desc: 'Métricas claras, reportes en tiempo real.' },
-              { title: 'Excelencia', desc: 'No vendemos por vender. Vendemos bien.' }
-            ].map((v, i) =>
-            <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', maxWidth: 220 }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: 12,
-                  background: `${primary}14`, color: primary,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Sora', fontWeight: 800, fontSize: 14, flexShrink: 0
-                }}>0{i + 1}</div>
-                <div>
-                  <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 15, color: 'var(--text-main)', marginBottom: 4 }}>
-                    {v.title}
-                  </div>
-                  <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                    {v.desc}
+              {
+                num: '01', title: 'Colaboración',
+                quote: 'Juntos más lejos.',
+                desc: 'El resultado de un equipo bien aligned supera cualquier logro individual.',
+                svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" opacity="0.7" /><circle cx="16" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" opacity="0.7" /><path d="M1 21c0-3.87 3.13-7 7-7h8c3.87 0 7 3.13 7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" /></svg>
+              },
+              {
+                num: '02', title: 'Integridad',
+                quote: 'Lo que decimos, lo hacemos.',
+                desc: 'La confianza se gana con hechos, no con palabras. Cada compromiso es sagrado.',
+                svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.5C16.5 22.15 20 17.25 20 12V6L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.7" /><path d="M8.5 12l2.5 2.5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              },
+              {
+                num: '03', title: 'Innovación',
+                quote: 'El status quo es el enemigo.',
+                desc: 'Cuestionamos cada proceso, adoptamos lo nuevo y encontramos soluciones donde otros ven obstáculos.',
+                svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7c0 3-1.8 5.4-4 6.5V17H9v-1.5C6.8 14.4 5 12 5 9a7 7 0 017-7z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.7" /><path d="M9 20h6M10 22h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+              },
+              {
+                num: '04', title: 'Excelencia',
+                quote: 'Bien no es suficiente.',
+                desc: 'Perseguimos el detalle, celebramos la mejora continua y ponemos el listón siempre un poco más alto.',
+                svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 17l-6.5 3.5 2-7L2 9h7L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.7" /></svg>
+              }].map((v, i) =>
+              <div key={i} style={{
+                padding: '40px 36px',
+                borderLeft: i > 0 ? '1px solid var(--border-color)' : 'none',
+                display: 'flex', flexDirection: 'column', gap: 16,
+                transition: 'background 0.25s',
+                cursor: 'default'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-card-hover)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+              
+                {/* Number + icon row */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{
+                    fontFamily: 'Sora', fontWeight: 800, fontSize: 13,
+                    color: primary, letterSpacing: '1px'
+                  }}>{v.num}</span>
+                  <div style={{ color: 'var(--text-muted)' }}>
+                    {v.svg}
                   </div>
                 </div>
+
+                <div>
+                  <h4 style={{
+                    fontFamily: 'Sora', fontWeight: 800, fontSize: 17,
+                    color: 'var(--text-main)', letterSpacing: '-0.3px', marginBottom: 4
+                  }}>{v.title}</h4>
+                  <p style={{
+                    fontFamily: 'Sora', fontWeight: 600, fontSize: 13,
+                    color: primary, opacity: 0.9, marginBottom: 8
+                  }}>"{v.quote}"</p>
+                  <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {v.desc}
+                  </p>
+                </div>
               </div>
-            )}
+              )}
           </div>
         </div>
 
