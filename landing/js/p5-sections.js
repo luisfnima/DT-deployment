@@ -163,72 +163,6 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── HERO SUBTLE OFFICE BG OVERLAY ────────── */
-    section#inicio {
-      position: relative !important;
-    }
-    section#inicio::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('images/ctaBg.jpg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.12;
-      filter: grayscale(0.5) contrast(1.1);
-      pointer-events: none;
-      z-index: 0;
-    }
-    section#inicio > div {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* ────────── BURBUJA CON NOTA Y FLECHA ────────── */
-    .hero-note-bubble {
-      position: absolute;
-      top: -30px;
-      left: -20px;
-      z-index: 20;
-      background: #ffffff;
-      color: #111827;
-      border: 2px solid var(--p5-red);
-      padding: 10px 16px;
-      border-radius: 16px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2), 4px 4px 0 #000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: bubbleFloat 3s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-    .hero-note-bubble::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 28px;
-      width: 0;
-      height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-top: 10px solid var(--p5-red);
-    }
-    @keyframes bubbleFloat {
-      from { transform: translateY(0) rotate(-2deg); }
-      to   { transform: translateY(-8px) rotate(1deg); }
-    }
-    @media (max-width: 768px) {
-      .hero-note-bubble {
-        top: -24px;
-        left: 5px;
-        font-size: 11px;
-        padding: 8px 12px;
-      }
-    }
-
     /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
     .p5-companion {
       position: fixed; z-index: 640; pointer-events: none;
@@ -404,13 +338,12 @@
     mainCard.classList.add('p5-frame');
     container.classList.add('p5-photo-zone');
 
-    /* Mantener visibles las tarjetas apiladas de la ola roja */
+    /* ocultar las "hojas" rojas apiladas detrás (diseño anterior) */
     Array.prototype.forEach.call(container.children, function (ch) {
       if (ch === mainCard) return;
       var st = ch.getAttribute('style') || '';
       if (st.indexOf('position: absolute') >= 0 && st.indexOf('border-radius') >= 0) {
-        ch.style.display = 'block';
-        ch.style.zIndex = '0';
+        ch.classList.add('p5-hero-hidden');
       }
     });
 
@@ -432,12 +365,6 @@
     s1.className = 'p5-star-deco p5-star-s1';
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
-
-    /* burbuja con notita cambiante y flecha */
-    var bubble = document.createElement('div');
-    bubble.className = 'hero-note-bubble';
-    bubble.innerHTML = '⚡ <span>Equipo Comercial Top</span>';
-    container.appendChild(bubble);
 
     /* estrellas detrás del marco, etiquetas por encima */
     container.insertBefore(s1, mainCard);
