@@ -199,11 +199,11 @@
       background-repeat: no-repeat;
     }
 
-    /* ────────── NOTITA CHECKLIST CAMBIANTE ────────── */
+    /* ────────── NOTITA CHECKLIST CAMBIANTE (CON FLECHA AMARILLA) ────────── */
     .p5-notepad {
       position: absolute;
       top: 40px;
-      right: -135px;
+      right: -145px;
       z-index: 10;
       background: #ffffff;
       color: #111827;
@@ -213,7 +213,7 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 13px;
       line-height: 1.6;
-      width: 170px;
+      width: 175px;
       box-shadow: 5px 5px 0 rgba(0,0,0,0.8);
       transform: rotate(3deg);
       pointer-events: none;
@@ -238,11 +238,31 @@
       position: absolute;
       top: -24px;
       left: -28px;
-      width: 32px;
-      height: 32px;
-      background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4 Q 18 8, 26 24' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 22 L 26 24 L 24 16' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      width: 36px;
+      height: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4 Q 18 8, 26 24' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 22 L 26 24 L 24 16' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-size: contain;
       background-repeat: no-repeat;
+    }
+
+    /* ────────── OLA ROJA INFERIOR DEL HERO Y CORONA BLANCA ────────── */
+    .p5-hero-wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 420px;
+      height: 140px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .p5-hero-crown {
+      position: absolute;
+      bottom: 45px;
+      left: 60px;
+      z-index: 4;
+      width: 38px;
+      height: 30px;
+      pointer-events: none;
     }
 
     /* Responsive behavior for speech bubble and notepad */
@@ -490,6 +510,20 @@
           parent.appendChild(note);
         }
       }
+    }
+
+    // Inyectar Ola Roja e Icono Corona Reina en la esquina inferior izquierda de la sección Hero
+    if (!heroSec.querySelector('.p5-hero-wave')) {
+      var wave = document.createElement('div');
+      wave.className = 'p5-hero-wave';
+      wave.innerHTML = `<svg viewBox="0 0 420 140" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:100%;"><path d="M0 140 C 140 140, 240 40, 420 70 L 420 140 Z" fill="#e60013"/></svg>`;
+      heroSec.appendChild(wave);
+    }
+    if (!heroSec.querySelector('.p5-hero-crown')) {
+      var crown = document.createElement('div');
+      crown.className = 'p5-hero-crown';
+      crown.innerHTML = `<svg viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><path d="M2 28 L6 8 L14 18 L19 2 L24 18 L32 8 L36 28 Z" fill="#ffffff" stroke="#000000" stroke-width="2" stroke-linejoin="round"/></svg>`;
+      heroSec.appendChild(crown);
     }
 
     // Adaptar Stats a fuente Anton P5
