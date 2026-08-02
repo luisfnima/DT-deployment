@@ -163,127 +163,6 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── BURBUJA MANUSCRITA Y FLECHA CON CORAZÓN ────────── */
-    .p5-speech-bubble {
-      position: absolute;
-      bottom: 70px;
-      left: -140px;
-      z-index: 10;
-      background: #ffffff;
-      color: #111827;
-      border: 2.5px solid #000000;
-      border-radius: 40px 50px 35px 45px;
-      padding: 16px 22px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 1.25;
-      text-align: center;
-      width: 190px;
-      box-shadow: 4px 4px 0 #000000;
-      transform: rotate(-5deg);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    /* Corazoncito en la burbuja de la izquierda */
-    .p5-speech-bubble::before {
-      content: '♥';
-      position: absolute;
-      bottom: 4px;
-      right: 12px;
-      color: ${RED};
-      font-size: 14px;
-    }
-    /* Flecha curva dibujada indicando hacia la foto */
-    .p5-speech-bubble-arrow {
-      position: absolute;
-      top: -35px;
-      right: -45px;
-      width: 55px;
-      height: 45px;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='50' viewBox='0 0 60 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 40 Q 25 5, 52 22' stroke='%23000000' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M42 14 L 54 23 L 44 32' stroke='%23000000' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-      pointer-events: none;
-    }
-
-    /* ────────── NUBE DIBUJADA DE LA DERECHA (CLOUD NOTEPAD) ────────── */
-    .p5-notepad {
-      position: absolute;
-      top: 50px;
-      right: -155px;
-      z-index: 10;
-      background: #ffffff;
-      color: #111827;
-      border: 2.5px solid #000000;
-      border-radius: 28px 36px 30px 40px;
-      padding: 22px 20px 18px 24px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13.5px;
-      line-height: 1.5;
-      width: 175px;
-      box-shadow: 4px 4px 0 #000000;
-      transform: rotate(4deg);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    /* Corazón rojo superior en la nube derecha */
-    .p5-notepad-heart {
-      position: absolute;
-      top: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ffffff;
-      border: 2px solid #000000;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: ${RED};
-      font-size: 15px;
-      box-shadow: 2px 2px 0 #000000;
-    }
-    .p5-notepad-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-    .p5-notepad-item i {
-      color: #111827;
-      font-style: normal;
-      font-weight: 800;
-    }
-
-    /* ────────── OLA ROJA DE LA ESQUINA INFERIOR IZQUIERDA CON CORONA ────────── */
-    .p5-bottom-red-wave {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 380px;
-      height: 160px;
-      z-index: 1;
-      pointer-events: none;
-    }
-    .p5-bottom-red-wave svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    /* Responsive behavior for speech bubble and notepad */
-    @media (max-width: 1200px) {
-      .p5-speech-bubble { left: -60px; width: 160px; font-size: 12px; }
-      .p5-notepad { right: -70px; width: 145px; font-size: 12px; }
-    }
-    @media (max-width: 900px) {
-      .p5-speech-bubble, .p5-notepad, .p5-speech-bubble-arrow, .p5-bottom-red-wave { display: none !important; }
-    }
-
     /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
     .p5-companion {
       position: fixed; z-index: 640; pointer-events: none;
@@ -488,93 +367,6 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    /* 1. Ola roja de la esquina inferior izquierda con la corona */
-    if (!sec.querySelector('.p5-bottom-red-wave')) {
-      var waveDiv = document.createElement('div');
-      waveDiv.className = 'p5-bottom-red-wave';
-      waveDiv.innerHTML = `
-        <svg viewBox="0 0 380 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M-20 160 C 90 60, 220 120, 380 160 Z" fill="${RED}"/>
-          <g transform="translate(26, 95) scale(0.75)">
-            <path d="M 5 28 L 12 10 L 22 20 L 32 10 L 39 28 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
-            <circle cx="5" cy="8" r="2.5" fill="#FFFFFF"/>
-            <circle cx="22" cy="17" r="2.5" fill="#FFFFFF"/>
-            <circle cx="39" cy="8" r="2.5" fill="#FFFFFF"/>
-            <line x1="2" y1="32" x2="42" y2="32" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-          </g>
-        </svg>
-      `;
-      sec.style.position = 'relative';
-      sec.insertBefore(waveDiv, sec.firstChild);
-    }
-
-    /* 2. Burbuja interactiva manuscrita (Speech bubble) con Flecha y Corazón */
-    var bubble = document.createElement('div');
-    bubble.className = 'p5-speech-bubble';
-    
-    var arrow = document.createElement('div');
-    arrow.className = 'p5-speech-bubble-arrow';
-    
-    var quotes = [
-      '¡Un gran lugar para trabajar!',
-      '¡Terminé mi carrera mientras trabajaba aquí!',
-      '¡Los mejores incentivos y ambiente laboral!',
-      '¡Crecí profesionalmente desde el primer mes!'
-    ];
-    var qIdx = 0;
-    bubble.textContent = quotes[0];
-    container.appendChild(bubble);
-    container.appendChild(arrow);
-
-    setInterval(function() {
-      qIdx = (qIdx + 1) % quotes.length;
-      bubble.style.opacity = '0';
-      bubble.style.transform = 'rotate(-5deg) translateY(6px)';
-      setTimeout(function() {
-        bubble.textContent = quotes[qIdx];
-        bubble.style.opacity = '1';
-        bubble.style.transform = 'rotate(-5deg) translateY(0)';
-      }, 400);
-    }, 4500);
-
-    /* 3. Nube dibujada de la derecha (Cloud Notepad) con Corazón Rojo */
-    var note = document.createElement('div');
-    note.className = 'p5-notepad';
-    var noteSets = [
-      `
-        <div class="p5-notepad-heart">♥</div>
-        <div class="p5-notepad-item"><i>✓</i> Buen ambiente</div>
-        <div class="p5-notepad-item"><i>✓</i> Grandes beneficios</div>
-        <div class="p5-notepad-item"><i>✓</i> Crecimiento profesional</div>
-      `,
-      `
-        <div class="p5-notepad-heart">♥</div>
-        <div class="p5-notepad-item"><i>✓</i> Pagos puntuales</div>
-        <div class="p5-notepad-item"><i>✓</i> Horarios flexibles</div>
-        <div class="p5-notepad-item"><i>✓</i> Premios y bonos</div>
-      `,
-      `
-        <div class="p5-notepad-heart">♥</div>
-        <div class="p5-notepad-item"><i>✓</i> Soporte continuo</div>
-        <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
-        <div class="p5-notepad-item"><i>✓</i> Ambiente dinámico</div>
-      `
-    ];
-    var nIdx = 0;
-    note.innerHTML = noteSets[0];
-    container.appendChild(note);
-
-    setInterval(function() {
-      nIdx = (nIdx + 1) % noteSets.length;
-      note.style.opacity = '0';
-      note.style.transform = 'rotate(4deg) translateY(-4px)';
-      setTimeout(function() {
-        note.innerHTML = noteSets[nIdx];
-        note.style.opacity = '1';
-        note.style.transform = 'rotate(4deg) translateY(0)';
-      }, 400);
-    }, 6000);
-
     /* estrellas detrás del marco, etiquetas por encima */
     container.insertBefore(s1, mainCard);
     container.insertBefore(s2, mainCard);
@@ -588,10 +380,14 @@
       var txt = (el.textContent || '').trim();
       if (!txt || txt.length > 6) return;
       if (!/[0-9∞]/.test(txt)) return;
-      if (txt.indexOf('10') < 0 && txt.indexOf('24') < 0 && txt.indexOf('80') < 0 && txt.indexOf('∞') < 0) return;
-      el.classList.add('p5-hstat');
-      if (el.parentElement && el.parentElement.lastElementChild) {
-        el.parentElement.lastElementChild.classList.add('p5-hstat-label');
+      var fs = parseFloat(getComputedStyle(el).fontSize);
+      if (fs >= 26 && fs <= 64) {
+        el.classList.add('p5-hstat');
+        /* la etiqueta pequeña que acompaña al número */
+        var sib = el.nextElementSibling;
+        if (sib && (sib.textContent || '').trim().length > 4) {
+          sib.classList.add('p5-hstat-label');
+        }
       }
     });
 
@@ -599,101 +395,190 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     2. ESTRELLAS ACOMPAÑANTES EN SCROLL
+     2. SECCIÓN ÚNETE — split foto duotono + copy P5
   ═══════════════════════════════════════════════════════════════ */
-  function setupCompanions() {
-    if (document.getElementById('p5-comp-1')) return;
+  function buildUnete() {
+    return true; // Disabled duplicate P5 layout replacement to allow React CV Form to display
+    var old = document.getElementById('unete');
+    if (!old || old.dataset.p5built === '1') return !!document.querySelector('#unete .up5-grid');
+    if (old.querySelector('.up5-grid')) return true;
 
-    var c1 = document.createElement('div');
-    c1.id = 'p5-comp-1';
-    c1.className = 'p5-companion';
-    c1.innerHTML = '<span class="shape"></span>';
+    /* recuperar la imagen de fondo del CTA original */
+    var oldImg = old.querySelector('img');
+    var photoSrc = oldImg ? oldImg.src :
+      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1600&q=80&fit=crop&crop=center';
 
-    var c2 = document.createElement('div');
-    c2.id = 'p5-comp-2';
-    c2.className = 'p5-companion';
-    c2.innerHTML = '<span class="shape"></span>';
+    /* ocultar el original y ceder el ancla #unete a la nueva sección */
+    old.dataset.p5built = '1';
+    old.id = 'unete-legacy';
+    old.style.display = 'none';
 
-    document.body.appendChild(c1);
-    document.body.appendChild(c2);
+    var sec = document.createElement('section');
+    sec.id = 'unete';
+    sec.innerHTML = `
+      <div class="up5-grid">
+        <div class="up5-photo p5-rv-l">
+          <img src="${photoSrc}" alt="Equipo DreamTeam trabajando">
+          <div class="up5-half"></div>
+          <div class="up5-clip"></div>
+        </div>
+        <div class="up5-copy">
+          <div class="p5-star-deco"></div>
+          <div class="up5-eyebrow p5-rv"><span><span class="tri"></span>Únete al Equipo</span></div>
+          <h2 class="up5-title p5-rv">¿Buscas crecer <span class="red">de verdad?</span></h2>
+          <p class="p5-rv">En DreamTeam no fichamos empleados: incorporamos talento que quiere marcar la diferencia. Si tienes hambre de crecer, este es tu sitio.</p>
+          <div class="up5-perks p5-rv">
+            <div class="up5-perk"><span><i>↑</i>Crecimiento profesional</span></div>
+            <div class="up5-perk"><span><i>◈</i>Equipo diverso</span></div>
+            <div class="up5-perk"><span><i>✦</i>Beneficios competitivos</span></div>
+          </div>
+          <a class="up5-btn p5-rv" href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener"><span>Quiero unirme →</span></a>
+        </div>
+      </div>`;
 
-    /* parallax suave al scrollear */
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        var sy = window.scrollY || window.pageYOffset;
-        c1.style.transform = 'translate3d(0, ' + (sy * 0.08) + 'px, 0)';
-        c2.style.transform = 'translate3d(0, ' + (-sy * 0.05) + 'px, 0)';
-        ticking = false;
-      });
-    }, { passive: true });
+    old.parentNode.insertBefore(sec, old);
+
+    /* stagger para los elementos del copy */
+    var rvs = sec.querySelectorAll('.p5-rv');
+    Array.prototype.forEach.call(rvs, function (el, i) {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     3. REVEAL ON SCROLL (con rebote estilo P5)
+     3. REVEAL ON SCROLL
   ═══════════════════════════════════════════════════════════════ */
-  function setupScrollReveals() {
-    if (!('IntersectionObserver' in window)) return;
+  var observer = null;
 
-    var targets = [
-      'section#inicio h1',
-      'section#inicio p',
-      'section#sobre-nosotros h2',
-      'section#sobre-nosotros p',
-      '#como-trabajamos h2',
-      '#actividades h2',
-      'footer',
-    ];
-
-    /* Asignar clase de reveal según posición */
-    targets.forEach(function (sel) {
-      var els = document.querySelectorAll(sel);
-      Array.prototype.forEach.call(els, function (el, idx) {
-        if (el.dataset.p5rv) return;
-        el.dataset.p5rv = '1';
-        el.classList.add(idx % 2 === 0 ? 'p5-rv-l' : 'p5-rv-r');
-      });
-    });
-
-    /* Bento cards & step cards */
-    var cards = document.querySelectorAll('section#sobre-nosotros [style*="grid-column"], #como-trabajamos [style*="grid-template-columns"] > div');
-    Array.prototype.forEach.call(cards, function (c) {
-      if (c.dataset.p5rv) return;
-      c.dataset.p5rv = '1';
-      c.classList.add('p5-rv');
-    });
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('p5-in');
-          obs.unobserve(e.target);
+  function getObserver() {
+    if (observer) return observer;
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('p5-in');
+          observer.unobserve(en.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    return observer;
+  }
 
-    var allRv = document.querySelectorAll('.p5-rv, .p5-rv-l, .p5-rv-r');
-    Array.prototype.forEach.call(allRv, function (el) {
+  /* Selectores de elementos que se animan al entrar en pantalla */
+  var RV_SELECTORS = [
+    /* Nosotros: tarjetas bento + encabezado */
+    'section#sobre-nosotros [style*="grid-column"]',
+    /* Cómo trabajamos: pasos */
+    '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
+    /* Actividades */
+    '#actividades .act-eyebrow',
+    '#actividades .act-main-title',
+    '#actividades .act-subtitle',
+    '#actividades .act-filters',
+    '#actividades .p5-card',
+    /* Footer: columnas */
+    'footer [style*="grid-template-columns"] > div',
+  ];
+
+  function scanReveals() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    var obs = getObserver();
+
+    RV_SELECTORS.forEach(function (sel) {
+      var els;
+      try { els = document.querySelectorAll(sel); } catch (e) { return; }
+      Array.prototype.forEach.call(els, function (el, i) {
+        if (el.dataset.p5rv === '1') return;
+        el.dataset.p5rv = '1';
+
+        /* si ya está visible en pantalla, no ocultarlo (evita parpadeo) */
+        var r = el.getBoundingClientRect();
+        var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
+
+        if (!inView) {
+          el.classList.add('p5-rv');
+          el.style.transitionDelay = ((i % 6) * 0.08) + 's';
+          obs.observe(el);
+        }
+      });
+    });
+
+    /* elementos .p5-rv añadidos por buildUnete */
+    var manual = document.querySelectorAll('.p5-rv:not([data-p5rv]), .p5-rv-l:not([data-p5rv]), .p5-rv-r:not([data-p5rv])');
+    Array.prototype.forEach.call(manual, function (el) {
+      el.dataset.p5rv = '1';
       obs.observe(el);
     });
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     INIT — reintenta hasta que React renderice la app
+     4. ESTRELLAS ACOMPAÑANTES
+     Dos estrellas P5 fijas en pantalla que giran lentamente y
+     "acompañan" el scroll: se mueven con un retardo elástico
+     (lerp) y derivan en trayectorias suaves según cuánto bajas.
   ═══════════════════════════════════════════════════════════════ */
+  function initCompanions() {
+    if (document.getElementById('p5-comp-1')) return;
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    } catch (e) {}
+
+    function makeStar(id) {
+      var el = document.createElement('div');
+      el.className = 'p5-companion';
+      el.id = id;
+      var shape = document.createElement('span');
+      shape.className = 'shape';
+      el.appendChild(shape);
+      document.body.appendChild(el);
+      return el;
+    }
+    var c1 = makeStar('p5-comp-1');
+    var c2 = makeStar('p5-comp-2');
+
+    var cur = 0;   // scroll suavizado (persigue al scroll real con retardo)
+
+    function loop() {
+      var target = window.scrollY || document.documentElement.scrollTop || 0;
+      cur += (target - cur) * 0.06;          // lerp → efecto de arrastre elástico
+
+      /* trayectorias onduladas dependientes del scroll suavizado */
+      var x1 = Math.sin(cur * 0.0016) * 22;
+      var y1 = Math.sin(cur * 0.0024) * 30 + (target - cur) * 0.18;
+      var x2 = Math.sin(cur * 0.0012 + 2.1) * 26;
+      var y2 = Math.cos(cur * 0.0019) * 38 + (target - cur) * 0.26;
+      var rot = (cur * 0.04) % 360;
+
+      c1.style.transform = 'translate(' + x1.toFixed(1) + 'px,' + y1.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
+      c2.style.transform = 'translate(' + x2.toFixed(1) + 'px,' + y2.toFixed(1) + 'px) rotate(' + (-rot * 0.7).toFixed(1) + 'deg)';
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     INIT — con reintentos para el contenido que React/otros scripts
+     renderizan tarde (hero, actividades)
+  ═══════════════════════════════════════════════════════════════ */
+  var attempts = 0;
+
+  function tick() {
+    var heroOk  = styleHero();
+    var uneteOk = buildUnete();
+    scanReveals();
+    /* re-escanear hasta que todo exista (máx ~12 s) */
+    if ((!heroOk || !uneteOk || attempts < 6) && attempts < 24) {
+      attempts++;
+      setTimeout(tick, 500);
+    }
+  }
+
   function init() {
     injectCSS();
-    setupCompanions();
-
-    var attempts = 0;
-    var timer = setInterval(function () {
-      attempts++;
-      var ok = styleHero();
-      if (ok) setupScrollReveals();
-      if (ok || attempts > 20) clearInterval(timer);
-    }, 150);
+    initCompanions();
+    setTimeout(tick, 250);
   }
 
   if (document.readyState !== 'loading') {
@@ -701,5 +586,4 @@
   } else {
     document.addEventListener('DOMContentLoaded', init);
   }
-
 })();
