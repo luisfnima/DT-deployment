@@ -3,13 +3,13 @@
  * ----------------------------------------------------------------
  *  1. HERO estilo P5: marco polaroid rojo inclinado con sombra dura,
  *     etiqueta "// TALENTO REAL", badge "TAKE YOUR HEART", estrellas,
- *     kicker con línea roja, H1 Anton gigante, stats Anton rojas.
+ *     burbuja de texto interactiva con flecha curvada, notita checklist
+ *     con flecha amarilla indicadora, kicker con línea roja, H1 Anton.
  *  2. Sección final "¿Buscas crecer de verdad?" — split foto duotono
  *     + copy P5 (reemplaza el CTA original manteniendo el ancla #unete).
  *  3. Animaciones de entrada al hacer scroll (IntersectionObserver)
  *     para todas las secciones de la página.
- *
- *  Compatible con hero-slideshow.js (las fotos rotan dentro del marco).
+ *  4. Estrellas acompañantes en scroll.
  */
 (function () {
   'use strict';
@@ -25,7 +25,7 @@
     section#inicio h1 {
       font-family: 'Anton','Impact',sans-serif !important;
       font-weight: 400 !important;
-      font-style: normal !important;
+      font-style: italic !important;
       font-size: clamp(50px, 6.5vw, 104px) !important;
       line-height: 0.88 !important;
       letter-spacing: 1px !important;
@@ -73,7 +73,7 @@
     /* stats Anton (aplicado por JS con .p5-hstat) */
     .p5-hstat {
       font-family: 'Anton','Impact',sans-serif !important;
-      font-style: normal !important;
+      font-style: italic !important;
       color: ${RED} !important;
       letter-spacing: 1px !important;
     }
@@ -91,6 +91,7 @@
       background: ${RED} !important;
       box-shadow: 14px 14px 0 rgba(0,0,0,.6) !important;
       transform: rotate(2.5deg) !important;
+      position: relative !important;
     }
     .p5-frame:hover {
       transform: rotate(1deg) translateY(-4px) !important;
@@ -100,40 +101,13 @@
       filter: contrast(1.12) saturate(.85) !important;
       border-radius: 0 !important;
     }
-    .p5-frame-dots {
-      position: absolute; inset: 0; z-index: 5;
-      pointer-events: none;
-      background-image: radial-gradient(circle, ${RED} 1px, transparent 1.6px);
-      background-size: 7px 7px;
-      opacity: .22;
-      mix-blend-mode: multiply;
-    }
-    .p5-hero-hidden { display: none !important; }
-
-    /* zona de la foto del hero: escalado adaptativo fluido */
-    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; transition: transform .3s ease; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.25); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.1); } }
-    @media (max-width: 768px) {
-      .p5-photo-zone {
-        transform: scale(0.85);
-        margin: 20px 0 30px 0;
-      }
-    }
-    @media (max-width: 480px) {
-      .p5-photo-zone {
-        transform: scale(0.72);
-        margin: 10px 0 20px 0;
-      }
-    }
-
     /* etiqueta "// TALENTO REAL" */
-    .p5-tag2 {
-      position: absolute; top: 20px; right: -4px; z-index: 6;
-      background: ${PAPER}; color: #000;
-      font-family: 'Oswald', sans-serif; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px;
-      padding: 9px 14px; transform: rotate(6deg);
+    .p5-tag-tr {
+      position: absolute; top: -16px; right: -12px; z-index: 6;
+      background: ${RED}; color: #fff;
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 6px 14px; transform: rotate(3.5deg);
       box-shadow: 4px 4px 0 #000;
       pointer-events: none;
     }
@@ -185,7 +159,6 @@
       pointer-events: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    /* Flecha curvada hacia la foto */
     .p5-speech-bubble::after {
       content: '';
       position: absolute;
@@ -232,7 +205,6 @@
       font-style: normal;
       font-weight: 800;
     }
-    /* Flecha amarilla indicadora hacia la nota */
     .p5-notepad::before {
       content: '';
       position: absolute;
@@ -245,7 +217,6 @@
       background-repeat: no-repeat;
     }
 
-    /* Responsive behavior for speech bubble and notepad */
     @media (max-width: 1200px) {
       .p5-speech-bubble { left: -60px; max-width: 180px; font-size: 12px; padding: 10px 16px; }
       .p5-notepad { right: -70px; width: 140px; font-size: 11px; padding: 12px; }
@@ -278,9 +249,7 @@
       #p5-comp-2 { display: none; }
     }
 
-    /* ────────── REVEAL ON SCROLL (con rebote) ──────────
-       cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
-       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
+    /* ────────── REVEAL ON SCROLL (con rebote) ────────── */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -335,288 +304,358 @@
     }
     #unete .up5-copy .p5-star-deco { width: 56px; height: 56px; top: 44px; right: 52px; background: ${RED}; opacity: .9; }
     #unete .up5-eyebrow {
-      display: block; width: 100%;
+      display: block;
       background: ${RED}; color: #fff;
       font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
       letter-spacing: 4px; text-transform: uppercase;
-      padding: 9px 16px 9px 14px;
-      transform: skewX(-8deg);
-      box-shadow: 5px 5px 0 #000;
-      margin-bottom: 30px;
+      padding: 6px 16px; margin-bottom: 20px;
+      transform: rotate(-2deg); box-shadow: 4px 4px 0 #000;
+      width: fit-content;
     }
-    #unete .up5-eyebrow > span { display: inline-flex; align-items: center; gap: 10px; transform: skewX(8deg); }
-    #unete .up5-eyebrow .tri { width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
-    #unete h2.up5-title {
-      font-family: 'Anton','Impact',sans-serif; font-weight: 400;
-      text-transform: uppercase;
-      font-size: clamp(42px, 5.2vw, 78px); line-height: .9;
-      color: #fff; margin: 0 0 8px;
+    #unete h2 {
+      font-family: 'Anton','Impact',sans-serif !important;
+      font-size: clamp(48px, 5.8vw, 84px) !important;
+      line-height: .9 !important; letter-spacing: 1px !important;
+      text-transform: uppercase !important; color: #fff !important;
+      margin-bottom: 24px !important;
     }
-    #unete h2.up5-title .red { color: ${RED}; font-style: italic; }
-    #unete .up5-copy p {
-      font-family: 'Barlow Semi Condensed','DM Sans',sans-serif;
-      font-size: 19px; font-weight: 500; color: #c9c3b5;
-      max-width: 46ch; margin: 16px 0 30px; line-height: 1.55;
+    #unete h2 span { color: ${RED} !important; }
+    #unete p.up5-lead {
+      color: #d8d2c4 !important; font-size: 17px !important;
+      line-height: 1.6 !important; max-width: 480px !important;
+      margin-bottom: 36px !important;
     }
-    #unete .up5-perks { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
-    #unete .up5-perk {
-      font-family: 'Oswald', sans-serif; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
-      color: #fff; border: 2px solid #3a3a3a; padding: 9px 15px;
-      transform: skewX(-8deg); transition: border-color .2s;
+    #unete .up5-bullets {
+      display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px;
     }
-    #unete .up5-perk:hover { border-color: ${RED}; }
-    #unete .up5-perk > span { display: inline-block; transform: skewX(8deg); }
-    #unete .up5-perk i { color: ${RED}; font-style: normal; margin-right: 7px; }
-    #unete .up5-btn {
-      display: inline-block; text-decoration: none;
+    #unete .up5-bullet {
+      display: flex; align-items: center; gap: 14px;
+      color: ${PAPER}; font-family: 'Oswald', sans-serif;
+      font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    #unete .up5-bullet i {
+      width: 22px; height: 22px; background: ${RED}; color: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-style: normal; font-weight: 900; font-size: 12px;
+      box-shadow: 2px 2px 0 #000; flex-shrink: 0;
+    }
+    #unete a.up5-btn {
+      display: inline-flex; align-items: center; gap: 14px;
       background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
+      font-family: 'Anton','Impact',sans-serif; font-size: 22px;
       letter-spacing: 2px; text-transform: uppercase;
-      padding: 18px 38px;
-      transform: skewX(-10deg);
-      box-shadow: 6px 6px 0 #000;
-      transition: transform .12s, box-shadow .12s;
+      padding: 18px 42px; border: 3px solid #000;
+      box-shadow: 6px 6px 0 ${PAPER};
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    #unete .up5-btn:hover {
-      transform: skewX(-10deg) translate(-2px,-2px);
-      box-shadow: 9px 9px 0 #000;
+    #unete a.up5-btn:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 10px 10px 0 ${PAPER};
+      background: #ff1a2d;
     }
-    #unete .up5-btn > span { display: inline-block; transform: skewX(10deg); }
 
     @media (max-width: 900px) {
       #unete .up5-grid { grid-template-columns: 1fr; }
-      #unete .up5-photo { min-height: 340px; position: relative; }
-      #unete .up5-photo img { position: absolute; }
-      #unete .up5-clip { clip-path: polygon(0 82%, 100% 96%, 100% 100%, 0 100%); }
-      #unete .up5-copy { padding: 56px 24px 70px; }
-      #unete .up5-copy .p5-star-deco { top: 24px; right: 22px; width: 40px; height: 40px; }
+      #unete .up5-photo { height: 320px; }
+      #unete .up5-copy { padding: 48px 28px; }
+    }
+
+    /* ────────── CARDS SOBRE NOSOTROS & PROCESO & ACTIVIDADES ────────── */
+    #sobre-nosotros [style*="gridColumn"],
+    #como-trabajamos [style*="gridTemplateColumns"] > div,
+    #actividades .p5-card {
+      border-radius: 0 !important;
+      border: 3px solid #000000 !important;
+      box-shadow: 6px 6px 0 #000000 !important;
+      transition: transform .22s ease, box-shadow .22s ease !important;
+    }
+    #sobre-nosotros [style*="gridColumn"]:hover,
+    #como-trabajamos [style*="gridTemplateColumns"] > div:hover,
+    #actividades .p5-card:hover {
+      transform: translate(-3px, -3px) !important;
+      box-shadow: 10px 10px 0 ${RED} !important;
+    }
+
+    /* ────────── BOTONES CON HOVER ROJO ────────── */
+    #colaboradores-btn,
+    a[href*="forms.gle"] {
+      border-radius: 0 !important;
+      border: 2.5px solid #000 !important;
+      box-shadow: 4px 4px 0 #000 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-weight: 700 !important;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+    }
+    #colaboradores-btn:hover,
+    a[href*="forms.gle"]:hover {
+      transform: translate(-2px, -2px) !important;
+      box-shadow: 7px 7px 0 #000 !important;
+      background: ${RED} !important;
     }
   `;
 
   function injectCSS() {
     if (document.getElementById('p5-sections-style')) return;
-    var s = document.createElement('style');
-    s.id = 'p5-sections-style';
-    s.textContent = CSS;
-    document.head.appendChild(s);
+    var st = document.createElement('style');
+    st.id = 'p5-sections-style';
+    st.textContent = CSS;
+    document.head.appendChild(st);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     1. HERO — marco polaroid + decoraciones + stats
+     1. HERO P5 (ESTRUCTURA + ESTILOS)
   ═══════════════════════════════════════════════════════════════ */
-  function styleHero() {
-    var sec = document.querySelector('section#inicio');
-    if (!sec) return false;
+  function applyHeroP5() {
+    var heroSec = document.querySelector('section#inicio');
+    if (!heroSec) return;
 
-    /* encontrar la foto principal (no avatares) */
-    var mainImg = null;
-    var imgs = sec.querySelectorAll('img');
-    for (var i = 0; i < imgs.length; i++) {
-      var alt = (imgs[i].getAttribute('alt') || '').toLowerCase();
-      if (alt === 'avatar') continue;
-      var r = imgs[i].getBoundingClientRect();
-      if (r.width > 150 && r.height > 150) { mainImg = imgs[i]; break; }
+    // Buscar tarjeta principal (la foto)
+    var photoWrap = heroSec.querySelector('div[style*="rotate(-4deg)"]');
+    if (!photoWrap) {
+      var img = heroSec.querySelector('img[alt="Agente de contact center"]');
+      if (img && img.parentNode) photoWrap = img.parentNode;
     }
-    if (!mainImg) return false;
 
-    var mainCard  = mainImg.parentElement;          // tarjeta con rotate(-4deg)
-    var container = mainCard.parentElement;         // contenedor flex 400×500
-    if (container.dataset.p5hero === '1') return true;
-    container.dataset.p5hero = '1';
+    if (photoWrap && !photoWrap.classList.contains('p5-frame')) {
+      photoWrap.classList.add('p5-frame');
 
-    /* marco P5 + zona agrandada 45% */
-    mainCard.classList.add('p5-frame');
-    container.classList.add('p5-photo-zone');
+      var parent = photoWrap.parentNode;
+      if (parent) {
+        parent.style.position = 'relative';
 
-    /* ocultar las "hojas" rojas apiladas detrás (diseño anterior) */
-    Array.prototype.forEach.call(container.children, function (ch) {
-      if (ch === mainCard) return;
-      var st = ch.getAttribute('style') || '';
-      if (st.indexOf('position: absolute') >= 0 && st.indexOf('border-radius') >= 0) {
-        ch.classList.add('p5-hero-hidden');
+        // Etiqueta // TALENTO REAL
+        if (!parent.querySelector('.p5-tag-tr')) {
+          var tag = document.createElement('div');
+          tag.className = 'p5-tag-tr';
+          tag.innerHTML = '// TALENTO REAL';
+          parent.appendChild(tag);
+        }
+
+        // Badge TAKE YOUR HEART
+        if (!parent.querySelector('.p5-badge-tyh')) {
+          var badge = document.createElement('div');
+          badge.className = 'p5-badge-tyh';
+          badge.innerHTML = 'TAKE <i>♥</i> YOUR HEART';
+          parent.appendChild(badge);
+        }
+
+        // Estrellas decorativas
+        if (!parent.querySelector('.p5-star-s1')) {
+          var s1 = document.createElement('div');
+          s1.className = 'p5-star-deco p5-star-s1';
+          parent.appendChild(s1);
+        }
+        if (!parent.querySelector('.p5-star-s2')) {
+          var s2 = document.createElement('div');
+          s2.className = 'p5-star-deco p5-star-s2';
+          parent.appendChild(s2);
+        }
+
+        // Burbuja interactiva cambiante (Speech bubble)
+        if (!parent.querySelector('.p5-speech-bubble')) {
+          var bubble = document.createElement('div');
+          bubble.className = 'p5-speech-bubble';
+          var quotes = [
+            '¡Terminé mi carrera mientras trabajaba aquí!',
+            '¡Los mejores incentivos y ambiente de trabajo!',
+            '¡Crecí profesionalmente desde el primer mes!',
+            '¡Comisiones sin techo y pagos siempre puntuales!'
+          ];
+          var qIdx = 0;
+          bubble.textContent = quotes[0];
+          parent.appendChild(bubble);
+
+          setInterval(function() {
+            qIdx = (qIdx + 1) % quotes.length;
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'rotate(-4deg) translateY(6px)';
+            setTimeout(function() {
+              bubble.textContent = quotes[qIdx];
+              bubble.style.opacity = '1';
+              bubble.style.transform = 'rotate(-4deg) translateY(0)';
+            }, 400);
+          }, 4500);
+        }
+
+        // Notita checklist fija con flecha amarilla
+        if (!parent.querySelector('.p5-notepad')) {
+          var note = document.createElement('div');
+          note.className = 'p5-notepad';
+          note.innerHTML = `
+            <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
+            <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
+            <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
+            <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
+          `;
+          parent.appendChild(note);
+        }
+      }
+    }
+
+    // Adaptar Stats a fuente Anton P5
+    var statNumbers = heroSec.querySelectorAll('div[style*="fontFamily: \'Sora\'"], div[style*="font-family: Sora"]');
+    statNumbers.forEach(function (el) {
+      if (/^\d+\+?$/.test(el.textContent.trim())) {
+        el.classList.add('p5-hstat');
+        if (el.nextElementSibling) {
+          el.nextElementSibling.classList.add('p5-hstat-label');
+        }
       }
     });
-
-    /* halftone rojo sobre la foto */
-    var dots = document.createElement('div');
-    dots.className = 'p5-frame-dots';
-    mainCard.appendChild(dots);
-
-    /* decoraciones alrededor del marco */
-    var tag = document.createElement('div');
-    tag.className = 'p5-tag2';
-    tag.textContent = '// Talento Real';
-
-    var badge = document.createElement('div');
-    badge.className = 'p5-badge-tyh';
-    badge.innerHTML = 'TAKE<br>YOUR <i>HEART</i>';
-
-    var s1 = document.createElement('div');
-    s1.className = 'p5-star-deco p5-star-s1';
-    var s2 = document.createElement('div');
-    s2.className = 'p5-star-deco p5-star-s2';
-
-    /* Burbuja interactiva cambiante (Speech bubble) */
-    var bubble = document.createElement('div');
-    bubble.className = 'p5-speech-bubble';
-    var quotes = [
-      '¡Terminé mi carrera mientras trabajaba aquí!',
-      '¡Los mejores incentivos y ambiente de trabajo!',
-      '¡Crecí profesionalmente desde el primer mes!',
-      '¡Comisiones sin techo y pagos siempre puntuales!'
-    ];
-    var qIdx = 0;
-    bubble.textContent = quotes[0];
-    container.appendChild(bubble);
-
-    setInterval(function() {
-      qIdx = (qIdx + 1) % quotes.length;
-      bubble.style.opacity = '0';
-      bubble.style.transform = 'rotate(-4deg) translateY(6px)';
-      setTimeout(function() {
-        bubble.textContent = quotes[qIdx];
-        bubble.style.opacity = '1';
-        bubble.style.transform = 'rotate(-4deg) translateY(0)';
-      }, 400);
-    }, 4500);
-
-    /* Notita checklist fija con flecha amarilla */
-    var note = document.createElement('div');
-    note.className = 'p5-notepad';
-    note.innerHTML = `
-      <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
-      <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
-      <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
-      <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
-    `;
-    container.appendChild(note);
-
-    /* estrellas detrás del marco, etiquetas por encima */
-    container.insertBefore(s1, mainCard);
-    container.insertBefore(s2, mainCard);
-    container.appendChild(tag);
-    container.appendChild(badge);
-
-    /* stats "10+ / 24/7 / ∞" → Anton rojo */
-    var nodes = sec.querySelectorAll('div, span');
-    Array.prototype.forEach.call(nodes, function (el) {
-      if (el.childElementCount > 1) return;
-      var txt = (el.textContent || '').trim();
-      if (!txt || txt.length > 6) return;
-      if (!/[0-9∞]/.test(txt)) return;
-      if (txt.indexOf('10') < 0 && txt.indexOf('24') < 0 && txt.indexOf('80') < 0 && txt.indexOf('∞') < 0) return;
-      el.classList.add('p5-hstat');
-      if (el.parentElement && el.parentElement.lastElementChild) {
-        el.parentElement.lastElementChild.classList.add('p5-hstat-label');
-      }
-    });
-
-    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     2. ESTRELLAS ACOMPAÑANTES EN SCROLL
+     2. REEMPLAZO DE LA SECCIÓN CTA (#unete) A P5
   ═══════════════════════════════════════════════════════════════ */
-  function setupCompanions() {
+  function applyCtaP5() {
+    var originalCta = document.querySelector('section#unete');
+    if (!originalCta) return;
+
+    if (originalCta.querySelector('.up5-grid')) return;
+
+    var bgImg = (window.__resources && window.__resources.ctaBg)
+      || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&fit=crop";
+
+    var newContent = document.createElement('div');
+    newContent.className = 'up5-grid';
+    newContent.innerHTML = `
+      <div class="up5-photo">
+        <img src="${bgImg}" alt="Equipo DreamTeam P5">
+        <div class="up5-half"></div>
+        <div class="up5-clip"></div>
+      </div>
+      <div class="up5-copy">
+        <div class="p5-star-deco"></div>
+        <span class="up5-eyebrow">// Únete a DreamTeam</span>
+        <h2>¿BUSCAS CRECER <span>DE VERDAD?</span></h2>
+        <p class="up5-lead">
+          No buscamos empleados convencionales. Incorporamos talento con hambre de superación, pasión por las ventas y visión de futuro.
+        </p>
+        <div class="up5-bullets">
+          <div class="up5-bullet"><i>✓</i> Comisiones sin techo + bonificaciones diarias</div>
+          <div class="up5-bullet"><i>✓</i> Capacitación continua en neuroventas y persuasión</div>
+          <div class="up5-bullet"><i>✓</i> Línea de carrera real en una compañía en constante expansión</div>
+          <div class="up5-bullet"><i>✓</i> Cultura de alto rendimiento y reconocimiento constante</div>
+        </div>
+        <a href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener" class="up5-btn">
+          POSTULAR AHORA ➔
+        </a>
+      </div>
+    `;
+
+    originalCta.innerHTML = '';
+    originalCta.appendChild(newContent);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     3. ANIMACIONES DE ENTRADA SCROLL
+  ═══════════════════════════════════════════════════════════════ */
+  function initScrollReveals() {
+    var sobreCards = document.querySelectorAll('#sobre-nosotros [style*="gridColumn"]');
+    sobreCards.forEach(function (c, i) {
+      if (!c.classList.contains('p5-rv')) {
+        c.classList.add(i % 2 === 0 ? 'p5-rv-l' : 'p5-rv-r');
+      }
+    });
+
+    var procCards = document.querySelectorAll('#como-trabajamos [style*="gridTemplateColumns"] > div');
+    procCards.forEach(function (c, i) {
+      if (!c.classList.contains('p5-rv')) {
+        c.classList.add('p5-rv');
+        c.style.transitionDelay = (i * 0.12) + 's';
+      }
+    });
+
+    var actCards = document.querySelectorAll('#actividades .p5-card');
+    actCards.forEach(function (c, i) {
+      if (!c.classList.contains('p5-rv')) {
+        c.classList.add('p5-rv');
+        c.style.transitionDelay = (i * 0.1) + 's';
+      }
+    });
+
+    var heroSec = document.querySelector('section#inicio');
+    if (heroSec) {
+      var heroEls = heroSec.querySelectorAll('h1, .fade-up-1, .fade-up-3, .fade-up-4, .fade-up-5, .p5-frame');
+      heroEls.forEach(function (el, i) {
+        if (!el.classList.contains('p5-rv')) {
+          el.classList.add('p5-rv');
+          el.style.transitionDelay = (i * 0.08) + 's';
+        }
+      });
+    }
+
+    var allReveals = document.querySelectorAll('.p5-rv, .p5-rv-l, .p5-rv-r');
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('p5-in');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      allReveals.forEach(function (el) {
+        obs.observe(el);
+      });
+    } else {
+      allReveals.forEach(function (el) {
+        el.classList.add('p5-in');
+      });
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     4. ESTRELLAS ACOMPAÑANTES
+  ═══════════════════════════════════════════════════════════════ */
+  function initCompanions() {
     if (document.getElementById('p5-comp-1')) return;
 
     var c1 = document.createElement('div');
     c1.id = 'p5-comp-1';
     c1.className = 'p5-companion';
     c1.innerHTML = '<span class="shape"></span>';
+    document.body.appendChild(c1);
 
     var c2 = document.createElement('div');
     c2.id = 'p5-comp-2';
     c2.className = 'p5-companion';
     c2.innerHTML = '<span class="shape"></span>';
-
-    document.body.appendChild(c1);
     document.body.appendChild(c2);
 
-    /* parallax suave al scrollear */
-    var ticking = false;
     window.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        var sy = window.scrollY || window.pageYOffset;
-        c1.style.transform = 'translate3d(0, ' + (sy * 0.08) + 'px, 0)';
-        c2.style.transform = 'translate3d(0, ' + (-sy * 0.05) + 'px, 0)';
-        ticking = false;
-      });
+      var sc = window.scrollY || document.documentElement.scrollTop;
+      c1.style.transform = 'translateY(' + (sc * 0.06) + 'px)';
+      c2.style.transform = 'translateY(' + (-sc * 0.04) + 'px)';
     }, { passive: true });
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     3. REVEAL ON SCROLL (con rebote estilo P5)
+     INICIALIZACIÓN CONTINUA
   ═══════════════════════════════════════════════════════════════ */
-  function setupScrollReveals() {
-    if (!('IntersectionObserver' in window)) return;
-
-    var targets = [
-      'section#inicio h1',
-      'section#inicio p',
-      'section#sobre-nosotros h2',
-      'section#sobre-nosotros p',
-      '#como-trabajamos h2',
-      '#actividades h2',
-      'footer',
-    ];
-
-    /* Asignar clase de reveal según posición */
-    targets.forEach(function (sel) {
-      var els = document.querySelectorAll(sel);
-      Array.prototype.forEach.call(els, function (el, idx) {
-        if (el.dataset.p5rv) return;
-        el.dataset.p5rv = '1';
-        el.classList.add(idx % 2 === 0 ? 'p5-rv-l' : 'p5-rv-r');
-      });
-    });
-
-    /* Bento cards & step cards */
-    var cards = document.querySelectorAll('section#sobre-nosotros [style*="grid-column"], #como-trabajamos [style*="grid-template-columns"] > div');
-    Array.prototype.forEach.call(cards, function (c) {
-      if (c.dataset.p5rv) return;
-      c.dataset.p5rv = '1';
-      c.classList.add('p5-rv');
-    });
-
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('p5-in');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    var allRv = document.querySelectorAll('.p5-rv, .p5-rv-l, .p5-rv-r');
-    Array.prototype.forEach.call(allRv, function (el) {
-      obs.observe(el);
-    });
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     INIT — reintenta hasta que React renderice la app
-  ═══════════════════════════════════════════════════════════════ */
-  function init() {
+  function boot() {
     injectCSS();
-    setupCompanions();
-
-    var attempts = 0;
-    var timer = setInterval(function () {
-      attempts++;
-      var ok = styleHero();
-      if (ok) setupScrollReveals();
-      if (ok || attempts > 20) clearInterval(timer);
-    }, 150);
+    applyHeroP5();
+    applyCtaP5();
+    initScrollReveals();
+    initCompanions();
   }
 
-  if (document.readyState !== 'loading') {
-    init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    document.addEventListener('DOMContentLoaded', init);
+    boot();
   }
+
+  var count = 0;
+  var timer = setInterval(function () {
+    boot();
+    count++;
+    if (count > 30) clearInterval(timer);
+  }, 300);
 
 })();
