@@ -448,58 +448,6 @@ function ScrollRing({ color }) {
 
 }
 
-/* ── Hand-Drawn Testimonial Speech Bubble Component ── */
-function HandDrawnBubble() {
-  return (
-    <div style={{
-      position: 'absolute',
-      bottom: 60,
-      left: -120,
-      zIndex: 20,
-      pointerEvents: 'none'
-    }}>
-      {/* Speech Bubble */}
-      <div style={{
-        position: 'relative',
-        background: '#ffffff',
-        color: '#111827',
-        border: '2.5px solid #000000',
-        borderRadius: '35px 45px 30px 40px',
-        padding: '14px 22px 14px 18px',
-        fontFamily: '"Caveat", "Comic Sans MS", "DM Sans", cursive, sans-serif',
-        fontWeight: 700,
-        fontSize: 16,
-        lineHeight: 1.2,
-        textAlign: 'center',
-        width: 170,
-        boxShadow: '4px 4px 0 #000000',
-        transform: 'rotate(-4deg)'
-      }}>
-        ¡Un gran lugar para trabajar!
-        {/* Heart doodle */}
-        <span style={{
-          position: 'absolute',
-          bottom: 4,
-          right: 12,
-          color: '#FE0002',
-          fontSize: 13
-        }}>♥</span>
-      </div>
-
-      {/* Curved Hand-Drawn Arrow */}
-      <svg width="50" height="40" viewBox="0 0 50 40" fill="none" style={{
-        position: 'absolute',
-        top: -30,
-        right: -35,
-        pointerEvents: 'none'
-      }}>
-        <path d="M5 35 Q 22 5, 44 18" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-        <path d="M34 12 L 45 19 L 36 26" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      </svg>
-    </div>
-  );
-}
-
 /* ── Hero Image Panel ── */
 function HeroImage({ primary }) {
   const cardW = 320;
@@ -517,9 +465,6 @@ function HeroImage({ primary }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       flexShrink: 0
     }}>
-      {/* Hand-drawn Speech Bubble overlay */}
-      <HandDrawnBubble />
-
       {/* Stacked cards behind */}
       {stackCards.map((c, i) =>
       <div key={i} style={{
@@ -796,39 +741,101 @@ function Nosotros({ primary, secondary, bg }) {
           </div>
         </div>
 
-        {/* Card 5 — Stat badge (col 11-12, row 2) */}
+        {/* Card 5 — 24/7 */}
         <div style={{
             gridColumn: '11 / 13', gridRow: '2',
-            background: 'var(--bg-card)',
-            border: '1.5px solid var(--border-color)',
-            borderRadius: 28, padding: '32px 28px',
+            borderRadius: 28, padding: '40px 36px',
+            minHeight: 240,
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-            alignItems: 'center', textAlign: 'center', minHeight: 240
+            position: 'relative', overflow: 'hidden',
+            background: 'var(--bg-card)',
+            border: '1.5px solid var(--border-color)'
           }}>
-          <div style={{
-              width: 52, height: 52, borderRadius: '50%',
-              background: `${primary}14`, border: `1px solid ${primary}30`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <path d="M11 2v18M2 11h18" stroke={primary} strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div>
-            <div style={{
-                fontFamily: 'Sora', fontWeight: 800,
-                fontSize: 'clamp(28px, 3vw, 42px)',
-                color: 'var(--text-main)', letterSpacing: '-1.5px', lineHeight: 1
-              }}>100%</div>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6, fontWeight: 500 }}>
-              Enfoque en Resultados
+          {/* Animated pulse ring */}
+          <svg style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', opacity: 0.07 }}
+            width="280" height="280" viewBox="0 0 280 280">
+            <circle cx="140" cy="140" r="60" stroke="currentColor" strokeWidth="1" fill="none" />
+            <circle cx="140" cy="140" r="90" stroke="currentColor" strokeWidth="0.8" fill="none" />
+            <circle cx="140" cy="140" r="120" stroke="currentColor" strokeWidth="0.6" fill="none" />
+          </svg>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{
+                fontFamily: 'Sora', fontWeight: 700, fontSize: 11,
+                color: 'var(--text-muted)', letterSpacing: '2.5px', textTransform: 'uppercase'
+              }}>Disponibilidad</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e',
+                  boxShadow: '0 0 0 3px rgba(34,197,94,0.25)' }} />
+              <span style={{ fontSize: 11, color: '#22c55e', fontWeight: 700 }}>En línea</span>
             </div>
           </div>
+
+          <div>
+            <div style={{
+                fontFamily: 'Sora', fontWeight: 900,
+                fontSize: 'clamp(44px, 5vw, 64px)',
+                color: 'var(--text-main)', lineHeight: 1,
+                letterSpacing: '-3px', marginBottom: 12
+              }}>
+              24<span style={{ color: primary, opacity: 0.9 }}>/</span>7
+            </div>
+            <p style={{
+                fontFamily: 'Sora', fontWeight: 700, fontSize: 16,
+                color: 'var(--text-main)', marginBottom: 6
+              }}>Nunca dormimos.</p>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+              El mercado no espera. Nosotros tampoco.
+            </p>
+          </div>
+        </div>
+
+        {/* Card 6 — Valores redesigned */}
+        <div style={{
+            gridColumn: '1 / 13', gridRow: '3',
+            background: 'var(--bg-card)',
+            border: '1.5px solid var(--border-color)',
+            borderRadius: 28, padding: '40px 48px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: 32
+          }}>
+          <div style={{ maxWidth: 280 }}>
+            <span style={{
+                fontFamily: 'Sora', fontWeight: 700, fontSize: 11,
+                color: primary, letterSpacing: '2.5px', textTransform: 'uppercase'
+              }}>Nuestros Pilares</span>
+            <h3 style={{
+                fontFamily: 'Sora', fontWeight: 800, fontSize: 24,
+                color: 'var(--text-main)', letterSpacing: '-0.8px', marginTop: 6
+              }}>Lo que nos mueve cada día</h3>
+          </div>
+
           <div style={{
-              width: '100%', height: 4, borderRadius: 2,
-              background: `${primary}20`, overflow: 'hidden'
+              display: 'flex', gap: 40, flexWrap: 'wrap', flex: 1,
+              justify'space-around'
             }}>
-            <div style={{ width: '100%', height: '100%', background: primary }} />
+            {[
+              { title: 'Persistencia', desc: 'Cada NO es un paso más cerca del SÍ.' },
+              { title: 'Transparencia', desc: 'Métricas claras, reportes en tiempo real.' },
+              { title: 'Excelencia', desc: 'No vendemos por vender. Vendemos bien.' }
+            ].map((v, i) =>
+            <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', maxWidth: 220 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: 12,
+                  background: `${primary}14`, color: primary,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'Sora', fontWeight: 800, fontSize: 14, flexShrink: 0
+                }}>0{i + 1}</div>
+                <div>
+                  <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 15, color: 'var(--text-main)', marginBottom: 4 }}>
+                    {v.title}
+                  </div>
+                  <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                    {v.desc}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
