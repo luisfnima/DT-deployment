@@ -98,54 +98,26 @@
     }
     .p5-frame img {
       filter: contrast(1.12) saturate(.85) !important;
-      border-radius: 0 !important;
     }
-    .p5-frame-dots {
-      position: absolute; inset: 0; z-index: 5;
-      pointer-events: none;
-      background-image: radial-gradient(circle, ${RED} 1px, transparent 1.6px);
-      background-size: 7px 7px;
-      opacity: .22;
-      mix-blend-mode: multiply;
-    }
-    .p5-hero-hidden { display: none !important; }
-
-    /* zona de la foto del hero: escalado adaptativo fluido */
-    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; transition: transform .3s ease; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.25); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.1); } }
-    @media (max-width: 768px) {
-      .p5-photo-zone {
-        transform: scale(0.85);
-        margin: 20px 0 30px 0;
-      }
-    }
-    @media (max-width: 480px) {
-      .p5-photo-zone {
-        transform: scale(0.72);
-        margin: 10px 0 20px 0;
-      }
-    }
-
-    /* etiqueta "// TALENTO REAL" */
-    .p5-tag2 {
-      position: absolute; top: 20px; right: -4px; z-index: 6;
-      background: ${PAPER}; color: #000;
-      font-family: 'Oswald', sans-serif; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px;
-      padding: 9px 14px; transform: rotate(6deg);
-      box-shadow: 4px 4px 0 #000;
+    /* Etiqueta // TALENTO REAL */
+    .p5-tag-tr {
+      position: absolute; top: -20px; left: -16px; z-index: 3;
+      background: #000000; color: ${PAPER};
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 6px 14px; transform: rotate(-4.5deg);
+      box-shadow: 3px 3px 0 ${RED};
       pointer-events: none;
     }
-    /* badge "TAKE YOUR HEART" */
+    /* Badge TAKE YOUR HEART */
     .p5-badge-tyh {
-      position: absolute; bottom: 12px; left: -2px; z-index: 6;
-      background: #000; color: #fff;
-      font-family: 'Anton','Impact',sans-serif; font-size: 19px;
-      text-transform: uppercase; line-height: .95;
-      padding: 14px 18px;
-      transform: rotate(-5deg) skewX(-6deg);
-      box-shadow: 6px 6px 0 ${RED};
+      position: absolute; bottom: -20px; right: -14px; z-index: 3;
+      background: ${PAPER}; color: #000000;
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 7px 15px; transform: rotate(3.5deg);
+      box-shadow: 4px 4px 0 #000;
+      border: 2px solid #000;
       pointer-events: none;
     }
     .p5-badge-tyh i { color: ${RED}; font-style: normal; }
@@ -163,427 +135,577 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
-    .p5-companion {
-      position: fixed; z-index: 640; pointer-events: none;
-      will-change: transform;
+    /* ────────── BURBUJA INTERACTIVA CAMBIANTE (SPEECH BUBBLE) ────────── */
+    .p5-speech-bubble {
+      position: absolute;
+      bottom: 60px;
+      left: -120px;
+      z-index: 10;
+      background: #ffffff;
+      color: #0b0b0b;
+      border: 3px solid #0b0b0b;
+      border-radius: 50px;
+      padding: 14px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.35;
+      text-align: center;
+      max-width: 230px;
+      box-shadow: 4px 4px 0 #000;
+      transform: rotate(-4deg);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .p5-companion .shape {
-      display: block; width: 100%; height: 100%;
-      background: ${RED};
-      clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-      animation: p5CompSpin 16s linear infinite;
-      filter: drop-shadow(3px 3px 0 rgba(0,0,0,.5));
-    }
-    #p5-comp-2 .shape {
-      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
-      animation-duration: 9s; animation-direction: reverse;
-    }
-    @keyframes p5CompSpin { to { transform: rotate(360deg); } }
-    #p5-comp-1 { width: 44px; height: 44px; top: 22vh; left: 3vw;  opacity: .48; }
-    #p5-comp-2 { width: 26px; height: 26px; top: 64vh; right: 3.5vw; opacity: .38; }
-    @media (max-width: 768px) {
-      #p5-comp-1 { width: 30px; height: 30px; opacity: .3; }
-      #p5-comp-2 { display: none; }
-    }
-
-    /* ────────── REVEAL ON SCROLL (con rebote) ──────────
-       cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
-       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
-    .p5-rv {
-      opacity: 0 !important;
-      transform: translateY(52px) scale(.88) skewX(-3deg) !important;
-      animation: none !important;
-      transition: opacity .5s cubic-bezier(.2,.8,.3,1), transform .8s cubic-bezier(.34,1.7,.5,1) !important;
-    }
-    .p5-rv-l {
-      opacity: 0 !important;
-      transform: translateX(-90px) scale(.94) skewX(-5deg) !important;
-      animation: none !important;
-      transition: opacity .5s cubic-bezier(.2,.8,.3,1), transform .85s cubic-bezier(.34,1.65,.5,1) !important;
-    }
-    .p5-rv-r {
-      opacity: 0 !important;
-      transform: translateX(90px) scale(.94) skewX(5deg) !important;
-      animation: none !important;
-      transition: opacity .5s cubic-bezier(.2,.8,.3,1), transform .85s cubic-bezier(.34,1.65,.5,1) !important;
-    }
-    .p5-in {
-      opacity: 1 !important;
-      transform: none !important;
+    /* Flecha curvada hacia la foto */
+    .p5-speech-bubble::after {
+      content: '';
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 12 Q 14 2, 22 12' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 8 L 22 12 L 18 18' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
     }
 
-    /* ────────── SECCIÓN ÚNETE (P5) ────────── */
-    #unete { background: #0a0a0a; position: relative; overflow: hidden; }
-    #unete .up5-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
-    #unete .up5-photo { position: relative; overflow: hidden; }
-    #unete .up5-photo img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; display: block;
-      filter: grayscale(1) contrast(1.25) brightness(.85);
+    /* ────────── NOTITA CHECKLIST CAMBIANTE ────────── */
+    .p5-notepad {
+      position: absolute;
+      top: 40px;
+      right: -135px;
+      z-index: 10;
+      background: #ffffff;
+      color: #111827;
+      border: 2px solid #0b0b0b;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      width: 170px;
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.8);
+      transform: rotate(3deg);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    #unete .up5-photo::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(120deg, rgba(230,0,19,.55), rgba(10,10,10,.2) 60%);
-      mix-blend-mode: multiply;
-    }
-    #unete .up5-half {
-      position: absolute; inset: 0; z-index: 2; pointer-events: none;
-      background-image: radial-gradient(circle, rgba(255,255,255,.9) 1px, transparent 1.5px);
-      background-size: 8px 8px; opacity: .14;
-    }
-    #unete .up5-clip {
-      position: absolute; inset: 0; z-index: 3; pointer-events: none;
-      background: #0a0a0a;
-      clip-path: polygon(78% 0, 100% 0, 100% 100%, 92% 100%);
-    }
-    #unete .up5-copy {
-      padding: 90px 64px; position: relative;
-      display: flex; flex-direction: column; justify-content: center;
+    .p5-notepad-item {
+      display: flex;
       align-items: flex-start;
+      gap: 6px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 6px;
     }
-    #unete .up5-copy .p5-star-deco { width: 56px; height: 56px; top: 44px; right: 52px; background: ${RED}; opacity: .9; }
-    #unete .up5-eyebrow {
-      display: block; width: 100%;
-      background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
-      letter-spacing: 4px; text-transform: uppercase;
-      padding: 9px 16px 9px 14px;
-      transform: skewX(-8deg);
-      box-shadow: 5px 5px 0 #000;
-      margin-bottom: 30px;
+    .p5-notepad-item i {
+      color: ${RED};
+      font-style: normal;
+      font-weight: 800;
     }
-    #unete .up5-eyebrow > span { display: inline-flex; align-items: center; gap: 10px; transform: skewX(8deg); }
-    #unete .up5-eyebrow .tri { width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
-    #unete h2.up5-title {
-      font-family: 'Anton','Impact',sans-serif; font-weight: 400;
-      text-transform: uppercase;
-      font-size: clamp(42px, 5.2vw, 78px); line-height: .9;
-      color: #fff; margin: 0 0 8px;
+    /* Flecha amarilla indicadora hacia la nota */
+    .p5-notepad::before {
+      content: '';
+      position: absolute;
+      top: -24px;
+      left: -28px;
+      width: 32px;
+      height: 32px;
+      background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4 Q 18 8, 26 24' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 22 L 26 24 L 24 16' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
     }
-    #unete h2.up5-title .red { color: ${RED}; font-style: italic; }
-    #unete .up5-copy p {
-      font-family: 'Barlow Semi Condensed','DM Sans',sans-serif;
-      font-size: 19px; font-weight: 500; color: #c9c3b5;
-      max-width: 46ch; margin: 16px 0 30px; line-height: 1.55;
-    }
-    #unete .up5-perks { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
-    #unete .up5-perk {
-      font-family: 'Oswald', sans-serif; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
-      color: #fff; border: 2px solid #3a3a3a; padding: 9px 15px;
-      transform: skewX(-8deg); transition: border-color .2s;
-    }
-    #unete .up5-perk:hover { border-color: ${RED}; }
-    #unete .up5-perk > span { display: inline-block; transform: skewX(8deg); }
-    #unete .up5-perk i { color: ${RED}; font-style: normal; margin-right: 7px; }
-    #unete .up5-btn {
-      display: inline-block; text-decoration: none;
-      background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
-      letter-spacing: 2px; text-transform: uppercase;
-      padding: 18px 38px;
-      transform: skewX(-10deg);
-      box-shadow: 6px 6px 0 #000;
-      transition: transform .12s, box-shadow .12s;
-    }
-    #unete .up5-btn:hover {
-      transform: skewX(-10deg) translate(-2px,-2px);
-      box-shadow: 9px 9px 0 #000;
-    }
-    #unete .up5-btn > span { display: inline-block; transform: skewX(10deg); }
 
+    /* Responsive behavior for speech bubble and notepad */
+    @media (max-width: 1200px) {
+      .p5-speech-bubble { left: -60px; max-width: 180px; font-size: 12px; padding: 10px 16px; }
+      .p5-notepad { right: -60px; width: 140px; font-size: 11px; padding: 12px; }
+    }
+    @media (max-width: 992px) {
+      .p5-speech-bubble { display: none !important; }
+      .p5-notepad { display: none !important; }
+    }
+
+    /* ────────── OLA ROJA CON CORONA INFERIOR ────────── */
+    .p5-bottom-wave-container {
+      position: relative;
+      width: 100%;
+      background: #000000;
+      margin-top: 0;
+      padding-top: 60px;
+      overflow: hidden;
+    }
+    .p5-wave-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 120px;
+      max-height: 220px;
+    }
+    .p5-crown-badge {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background: ${RED};
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(230, 0, 19, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ────────── CARDS SOBRE NOSOTROS & PROCESO & ACTIVIDADES ────────── */
+    #sobre-nosotros [style*="gridColumn"],
+    #como-trabajamos [style*="gridTemplateColumns"] > div,
+    #actividades .p5-card {
+      border-radius: 0 !important;
+      border: 3px solid #000000 !important;
+      box-shadow: 6px 6px 0 #000000 !important;
+      transition: transform .22s ease, box-shadow .22s ease !important;
+    }
+    #sobre-nosotros [style*="gridColumn"]:hover,
+    #como-trabajamos [style*="gridTemplateColumns"] > div:hover,
+    #actividades .p5-card:hover {
+      transform: translate(-3px, -3px) !important;
+      box-shadow: 10px 10px 0 ${RED} !important;
+    }
+
+    /* ────────── BOTONES CON HOVER ROJO ────────── */
+    #colaboradores-btn,
+    a[href*="forms.gle"] {
+      border-radius: 0 !important;
+      border: 2.5px solid #000 !important;
+      box-shadow: 4px 4px 0 #000 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-weight: 700 !important;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease !important;
+    }
+    #colaboradores-btn:hover,
+    a[href*="forms.gle"]:hover {
+      transform: translate(-2px, -2px) !important;
+      box-shadow: 7px 7px 0 #000 !important;
+      background: ${RED} !important;
+    }
+
+    /* ────────── SECCIÓN FINAL CTA COMPLETA P5 ────────── */
+    .p5-cta-wrap {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0 !important;
+      align-items: stretch !important;
+      background: #0b0b0b !important;
+      border-top: 4px solid ${RED} !important;
+      border-bottom: 4px solid ${RED} !important;
+    }
     @media (max-width: 900px) {
-      #unete .up5-grid { grid-template-columns: 1fr; }
-      #unete .up5-photo { min-height: 340px; position: relative; }
-      #unete .up5-photo img { position: absolute; }
-      #unete .up5-clip { clip-path: polygon(0 82%, 100% 96%, 100% 100%, 0 100%); }
-      #unete .up5-copy { padding: 56px 24px 70px; }
-      #unete .up5-copy .p5-star-deco { top: 24px; right: 22px; width: 40px; height: 40px; }
+      .p5-cta-wrap { grid-template-columns: 1fr !important; }
+    }
+
+    .p5-cta-left {
+      padding: clamp(48px, 6vw, 96px) clamp(28px, 4vw, 72px) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    .p5-cta-title {
+      font-family: 'Anton','Impact',sans-serif !important;
+      font-size: clamp(44px, 5.2vw, 84px) !important;
+      line-height: 0.9 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+      color: #ffffff !important;
+      margin-bottom: 24px !important;
+    }
+    .p5-cta-title span {
+      color: ${RED} !important;
+      display: block !important;
+      background: #000 !important;
+      padding: 0 10px !important;
+      width: fit-content !important;
+      margin-top: 6px !important;
+      transform: rotate(-1.5deg) !important;
+      box-shadow: 4px 4px 0 ${PAPER} !important;
+    }
+
+    .p5-cta-sub {
+      color: #d1ccbe !important;
+      font-size: 17px !important;
+      line-height: 1.6 !important;
+      max-width: 480px !important;
+      margin-bottom: 36px !important;
+    }
+
+    .p5-cta-bullets {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+      margin-bottom: 44px !important;
+    }
+    .p5-cta-bullet {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      color: ${PAPER} !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-size: 15px !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+    }
+    .p5-cta-bullet-icon {
+      width: 22px; height: 22px;
+      background: ${RED};
+      color: #fff;
+      display: flex; alignItems: center; justifyContent: center;
+      font-weight: 900; font-size: 12px;
+      box-shadow: 2px 2px 0 #000;
+      flex-shrink: 0;
+    }
+
+    .p5-cta-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      background: ${RED} !important;
+      color: #ffffff !important;
+      font-family: 'Anton','Impact',sans-serif !important;
+      font-size: 22px !important;
+      letter-spacing: 2px !important;
+      text-transform: uppercase !important;
+      padding: 18px 42px !important;
+      border: 3px solid #000 !important;
+      box-shadow: 6px 6px 0 #fff !important;
+      text-decoration: none !important;
+      width: fit-content !important;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease !important;
+    }
+    .p5-cta-btn:hover {
+      transform: translate(-3px, -3px) !important;
+      box-shadow: 10px 10px 0 ${PAPER} !important;
+      background: #ff1a2d !important;
+    }
+
+    .p5-cta-right {
+      position: relative !important;
+      min-height: 420px !important;
+      overflow: hidden !important;
+      border-left: 4px solid ${RED} !important;
+      background: #000 !important;
+    }
+    @media (max-width: 900px) {
+      .p5-cta-right { border-left: none !important; border-top: 4px solid ${RED} !important; min-height: 340px !important; }
+    }
+    .p5-cta-right img {
+      width: 100% !important; height: 100% !important;
+      object-fit: cover !object-position: center !important;
+      filter: contrast(1.18) saturate(0.8) !important;
+      opacity: 0.85 !important;
+    }
+    .p5-cta-right-overlay {
+      position: absolute !important; inset: 0 !important;
+      background: linear-gradient(135deg, rgba(230,0,19,0.35) 0%, rgba(0,0,0,0.75) 100%) !important;
+      pointer-events: none !important;
+    }
+
+    /* ────────── ANIMACIÓN DE PARPADEO EN SCROLL ────────── */
+    .p5-reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .p5-reveal.is-in {
+      opacity: 1;
+      transform: translateY(0);
     }
   `;
 
   function injectCSS() {
     if (document.getElementById('p5-sections-style')) return;
-    var s = document.createElement('style');
-    s.id = 'p5-sections-style';
-    s.textContent = CSS;
-    document.head.appendChild(s);
+    var st = document.createElement('style');
+    st.id = 'p5-sections-style';
+    st.textContent = CSS;
+    document.head.appendChild(st);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     1. HERO — marco polaroid + decoraciones + stats
+     1. TRANSFORMACIÓN DEL HERO A P5
   ═══════════════════════════════════════════════════════════════ */
-  function styleHero() {
-    var sec = document.querySelector('section#inicio');
-    if (!sec) return false;
+  function applyHeroP5() {
+    var heroSec = document.querySelector('section#inicio');
+    if (!heroSec) return;
 
-    /* encontrar la foto principal (no avatares) */
-    var mainImg = null;
-    var imgs = sec.querySelectorAll('img');
-    for (var i = 0; i < imgs.length; i++) {
-      var alt = (imgs[i].getAttribute('alt') || '').toLowerCase();
-      if (alt === 'avatar') continue;
-      var r = imgs[i].getBoundingClientRect();
-      if (r.width > 150 && r.height > 150) { mainImg = imgs[i]; break; }
+    // Buscar tarjeta principal (la foto)
+    var photoWrap = heroSec.querySelector('div[style*="rotate(-4deg)"]');
+    if (!photoWrap) {
+      // Fallback: buscar div contenedor que tenga la img heroPhoto
+      var img = heroSec.querySelector('img[alt="Agente de contact center"]');
+      if (img && img.parentNode) photoWrap = img.parentNode;
     }
-    if (!mainImg) return false;
 
-    var mainCard  = mainImg.parentElement;          // tarjeta con rotate(-4deg)
-    var container = mainCard.parentElement;         // contenedor flex 400×500
-    if (container.dataset.p5hero === '1') return true;
-    container.dataset.p5hero = '1';
+    if (photoWrap && !photoWrap.classList.contains('p5-frame')) {
+      photoWrap.classList.add('p5-frame');
 
-    /* marco P5 + zona agrandada 45% */
-    mainCard.classList.add('p5-frame');
-    container.classList.add('p5-photo-zone');
-
-    /* Mantener visibles las tarjetas apiladas de la ola roja */
-    Array.prototype.forEach.call(container.children, function (ch) {
-      if (ch === mainCard) return;
-      var st = ch.getAttribute('style') || '';
-      if (st.indexOf('position: absolute') >= 0 && st.indexOf('border-radius') >= 0) {
-        ch.style.display = 'block';
-        ch.style.zIndex = '0';
+      var parent = photoWrap.parentNode;
+      if (parent && getComputedStyle(parent).position === 'static') {
+        parent.style.position = 'relative';
       }
-    });
 
-    /* halftone rojo sobre la foto */
-    var dots = document.createElement('div');
-    dots.className = 'p5-frame-dots';
-    mainCard.appendChild(dots);
+      // 1. Tag // TALENTO REAL
+      if (parent && !parent.querySelector('.p5-tag-tr')) {
+        var tag = document.createElement('div');
+        tag.className = 'p5-tag-tr';
+        tag.innerHTML = '// TALENTO REAL';
+        parent.appendChild(tag);
+      }
 
-    /* decoraciones alrededor del marco */
-    var tag = document.createElement('div');
-    tag.className = 'p5-tag2';
-    tag.textContent = '// Talento Real';
+      // 2. Badge TAKE YOUR HEART
+      if (parent && !parent.querySelector('.p5-badge-tyh')) {
+        var badge = document.createElement('div');
+        badge.className = 'p5-badge-tyh';
+        badge.innerHTML = 'TAKE <i>♥</i> YOUR HEART';
+        parent.appendChild(badge);
+      }
 
-    var badge = document.createElement('div');
-    badge.className = 'p5-badge-tyh';
-    badge.innerHTML = 'TAKE<br>YOUR HEART';
+      // 3. Estrellas rojas/blancas decorativas
+      if (parent && !parent.querySelector('.p5-star-s1')) {
+        var s1 = document.createElement('div');
+        s1.className = 'p5-star-deco p5-star-s1';
+        parent.appendChild(s1);
+      }
+      if (parent && !parent.querySelector('.p5-star-s2')) {
+        var s2 = document.createElement('div');
+        s2.className = 'p5-star-deco p5-star-s2';
+        parent.appendChild(s2);
+      }
 
-    var s1 = document.createElement('div');
-    s1.className = 'p5-star-deco p5-star-s1';
-    var s2 = document.createElement('div');
-    s2.className = 'p5-star-deco p5-star-s2';
+      // 4. BURBUJA INTERACTIVA CAMBIANTE (SPEECH BUBBLE)
+      if (parent && !parent.querySelector('.p5-speech-bubble')) {
+        var bubble = document.createElement('div');
+        bubble.className = 'p5-speech-bubble';
+        bubble.id = 'p5-speech-bubble';
+        bubble.textContent = '¡Un gran lugar para trabajar! ✨';
+        parent.appendChild(bubble);
 
-    /* estrellas detrás del marco, etiquetas por encima */
-    container.insertBefore(s1, mainCard);
-    container.insertBefore(s2, mainCard);
-    container.appendChild(tag);
-    container.appendChild(badge);
+        // Rotación de frases en la burbuja
+        var frases = [
+          '¡Un gran lugar para trabajar! ✨',
+          '¡Ambiente genial y metas reales! 🚀',
+          '¡El mejor equipo de ventas! 🏆',
+          '¡Comisiones sin techo! 💰',
+          '¡Crecimiento profesional garantizado! ⭐'
+        ];
+        var fraseIdx = 0;
+        setInterval(function() {
+          fraseIdx = (fraseIdx + 1) % frases.length;
+          bubble.style.opacity = '0';
+          bubble.style.transform = 'rotate(-4deg) translateY(6px)';
+          setTimeout(function() {
+            bubble.textContent = frases[fraseIdx];
+            bubble.style.opacity = '1';
+            bubble.style.transform = 'rotate(-4deg) translateY(0)';
+          }, 400);
+        }, 4000);
+      }
 
-    /* stats "10+ / 24/7 / ∞" → Anton rojo */
-    var nodes = sec.querySelectorAll('div, span');
-    Array.prototype.forEach.call(nodes, function (el) {
-      if (el.childElementCount > 1) return;
-      var txt = (el.textContent || '').trim();
-      if (!txt || txt.length > 6) return;
-      if (!/[0-9∞]/.test(txt)) return;
-      var fs = parseFloat(getComputedStyle(el).fontSize);
-      if (fs >= 26 && fs <= 64) {
+      // 5. NOTITA CHECKLIST CAMBIANTE
+      if (parent && !parent.querySelector('.p5-notepad')) {
+        var notepad = document.createElement('div');
+        notepad.className = 'p5-notepad';
+        notepad.id = 'p5-notepad';
+
+        var noteLists = [
+          [
+            { text: 'Sueldo fijo garantizado', check: true },
+            { text: 'Incentivos diarios', check: true },
+            { text: 'Capacitación pagada', check: true }
+          ],
+          [
+            { text: 'Línea de carrera real', check: true },
+            { text: 'Excelente ambiente', check: true },
+            { text: 'Horarios flexibles', check: true }
+          ],
+          [
+            { text: 'Pagos puntuales', check: true },
+            { text: 'Bonos de desempeño', check: true },
+            { text: 'Modalidad híbrida', check: true }
+          ]
+        ];
+        var noteIdx = 0;
+
+        function renderNotepad(items) {
+          notepad.innerHTML = items.map(function(it) {
+            return '<div class="p5-notepad-item"><i>✓</i> ' + it.text + '</div>';
+          }).join('');
+        }
+
+        renderNotepad(noteLists[0]);
+        parent.appendChild(notepad);
+
+        setInterval(function() {
+          noteIdx = (noteIdx + 1) % noteLists.length;
+          notepad.style.opacity = '0';
+          notepad.style.transform = 'rotate(3deg) translateY(-6px)';
+          setTimeout(function() {
+            renderNotepad(noteLists[noteIdx]);
+            notepad.style.opacity = '1';
+            notepad.style.transform = 'rotate(3deg) translateY(0)';
+          }, 400);
+        }, 5000);
+      }
+    }
+
+    // Adaptar Stats a fuente Anton P5
+    var statNumbers = heroSec.querySelectorAll('div[style*="fontFamily: \'Sora\'"], div[style*="font-family: Sora"]');
+    statNumbers.forEach(function (el) {
+      if (/^\d+\+?$/.test(el.textContent.trim())) {
         el.classList.add('p5-hstat');
-        /* la etiqueta pequeña que acompaña al número */
-        var sib = el.nextElementSibling;
-        if (sib && (sib.textContent || '').trim().length > 4) {
-          sib.classList.add('p5-hstat-label');
+        if (el.nextElementSibling) {
+          el.nextElementSibling.classList.add('p5-hstat-label');
         }
       }
     });
 
-    return true;
+    // OLA ROJA CON CORONA INFERIOR AL FINAL DEL HERO
+    if (!document.querySelector('.p5-bottom-wave-container')) {
+      var waveContainer = document.createElement('div');
+      waveContainer.className = 'p5-bottom-wave-container';
+      waveContainer.innerHTML = `
+        <div class="p5-crown-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 12h14l3-12-6 7-4-5-4 5-6-7z"/></svg>
+          EQUIPO DE ÉLITE
+        </div>
+        <svg class="p5-wave-svg" viewBox="0 0 1440 160" fill="none" preserveAspectRatio="none">
+          <path d="M0 80 Q 360 160, 720 80 T 1440 80 L 1440 160 L 0 160 Z" fill="${RED}" opacity="0.85"/>
+          <path d="M0 100 Q 360 40, 720 100 T 1440 100 L 1440 160 L 0 160 Z" fill="${RED}"/>
+        </svg>
+      `;
+      heroSec.appendChild(waveContainer);
+    }
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     2. SECCIÓN ÚNETE — split foto duotono + copy P5
+     2. REEMPLAZO DE LA SECCIÓN CTA (#unete) A P5
   ═══════════════════════════════════════════════════════════════ */
-  function buildUnete() {
-    return true; // Disabled duplicate P5 layout replacement to allow React CV Form to display
-    var old = document.getElementById('unete');
-    if (!old || old.dataset.p5built === '1') return !!document.querySelector('#unete .up5-grid');
-    if (old.querySelector('.up5-grid')) return true;
+  function applyCtaP5() {
+    var originalCta = document.querySelector('section#unete');
+    if (!originalCta) return;
 
-    /* recuperar la imagen de fondo del CTA original */
-    var oldImg = old.querySelector('img');
-    var photoSrc = oldImg ? oldImg.src :
-      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1600&q=80&fit=crop&crop=center';
+    // Si ya fue reemplazada, no hacer nada
+    if (originalCta.querySelector('.p5-cta-wrap')) return;
 
-    /* ocultar el original y ceder el ancla #unete a la nueva sección */
-    old.dataset.p5built = '1';
-    old.id = 'unete-legacy';
-    old.style.display = 'none';
+    var bgImg = (window.__resources && window.__resources.ctaBg)
+      || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&fit=crop";
 
-    var sec = document.createElement('section');
-    sec.id = 'unete';
-    sec.innerHTML = `
-      <div class="up5-grid">
-        <div class="up5-photo p5-rv-l">
-          <img src="${photoSrc}" alt="Equipo DreamTeam trabajando">
-          <div class="up5-half"></div>
-          <div class="up5-clip"></div>
+    var newContent = document.createElement('div');
+    newContent.className = 'p5-cta-wrap';
+    newContent.innerHTML = `
+      <div class="p5-cta-left">
+        <div style="font-family:'Oswald',sans-serif; font-size:14px; font-weight:700; color:${RED}; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">
+          // ÚNETE A DREAMTEAM
         </div>
-        <div class="up5-copy">
-          <div class="p5-star-deco"></div>
-          <div class="up5-eyebrow p5-rv"><span><span class="tri"></span>Únete al Equipo</span></div>
-          <h2 class="up5-title p5-rv">¿Buscas crecer <span class="red">de verdad?</span></h2>
-          <p class="p5-rv">En DreamTeam no fichamos empleados: incorporamos talento que quiere marcar la diferencia. Si tienes hambre de crecer, este es tu sitio.</p>
-          <div class="up5-perks p5-rv">
-            <div class="up5-perk"><span><i>↑</i>Crecimiento profesional</span></div>
-            <div class="up5-perk"><span><i>◈</i>Equipo diverso</span></div>
-            <div class="up5-perk"><span><i>✦</i>Beneficios competitivos</span></div>
+        <h2 class="p5-cta-title">
+          ¿BUSCAS CRECER <span>DE VERDAD?</span>
+        </h2>
+        <p class="p5-cta-sub">
+          No buscamos empleados convencionales. Incorporamos talento con hambre de superación, pasión por las ventas y visión de futuro.
+        </p>
+
+        <div class="p5-cta-bullets">
+          <div class="p5-cta-bullet">
+            <span class="p5-cta-bullet-icon">✓</span>
+            Comisiones sin techo + bonificaciones diarias
           </div>
-          <a class="up5-btn p5-rv" href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener"><span>Quiero unirme →</span></a>
+          <div class="p5-cta-bullet">
+            <span class="p5-cta-bullet-icon">✓</span>
+            Capacitación continua en neuroventas y persuasión
+          </div>
+          <div class="p5-cta-bullet">
+            <span class="p5-cta-bullet-icon">✓</span>
+            Línea de carrera real en una compañía en constante expansión
+          </div>
+          <div class="p5-cta-bullet">
+            <span class="p5-cta-bullet-icon">✓</span>
+            Cultura de alto rendimiento y reconocimiento constante
+          </div>
         </div>
-      </div>`;
 
-    old.parentNode.insertBefore(sec, old);
+        <a href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener" class="p5-cta-btn">
+          POSTULAR AHORA ➔
+        </a>
+      </div>
 
-    /* stagger para los elementos del copy */
-    var rvs = sec.querySelectorAll('.p5-rv');
-    Array.prototype.forEach.call(rvs, function (el, i) {
-      el.style.transitionDelay = (i * 0.1) + 's';
-    });
+      <div class="p5-cta-right">
+        <img src="${bgImg}" alt="Equipo DreamTeam P5">
+        <div class="p5-cta-right-overlay"></div>
+      </div>
+    `;
 
-    return true;
+    // Limpiar contenido previo del section y reemplazar por la versión P5 limpia
+    originalCta.innerHTML = '';
+    originalCta.appendChild(newContent);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     3. REVEAL ON SCROLL
+     3. ANIMACIONES DE ENTRADA AL HACER SCROLL
   ═══════════════════════════════════════════════════════════════ */
-  var observer = null;
-
-  function getObserver() {
-    if (observer) return observer;
-    observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          en.target.classList.add('p5-in');
-          observer.unobserve(en.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    return observer;
-  }
-
-  /* Selectores de elementos que se animan al entrar en pantalla */
-  var RV_SELECTORS = [
-    /* Nosotros: tarjetas bento + encabezado */
-    'section#sobre-nosotros [style*="grid-column"]',
-    /* Cómo trabajamos: pasos */
-    '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
-    /* Actividades */
-    '#actividades .act-eyebrow',
-    '#actividades .act-main-title',
-    '#actividades .act-subtitle',
-    '#actividades .act-filters',
-    '#actividades .p5-card',
-    /* Footer: columnas */
-    'footer [style*="grid-template-columns"] > div',
-  ];
-
-  function scanReveals() {
-    if (typeof IntersectionObserver === 'undefined') return;
-    var obs = getObserver();
-
-    RV_SELECTORS.forEach(function (sel) {
-      var els;
-      try { els = document.querySelectorAll(sel); } catch (e) { return; }
-      Array.prototype.forEach.call(els, function (el, i) {
-        if (el.dataset.p5rv === '1') return;
-        el.dataset.p5rv = '1';
-
-        /* si ya está visible en pantalla, no ocultarlo (evita parpadeo) */
-        var r = el.getBoundingClientRect();
-        var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
-
-        if (!inView) {
-          el.classList.add('p5-rv');
-          el.style.transitionDelay = ((i % 6) * 0.08) + 's';
-          obs.observe(el);
-        }
-      });
+  function initScrollReveals() {
+    var targets = document.querySelectorAll('#sobre-nosotros, #como-trabajamos, #actividades, #unete');
+    targets.forEach(function (sec) {
+      sec.classList.add('p5-reveal');
     });
 
-    /* elementos .p5-rv añadidos por buildUnete */
-    var manual = document.querySelectorAll('.p5-rv:not([data-p5rv]), .p5-rv-l:not([data-p5rv]), .p5-rv-r:not([data-p5rv])');
-    Array.prototype.forEach.call(manual, function (el) {
-      el.dataset.p5rv = '1';
-      obs.observe(el);
-    });
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      targets.forEach(function (t) { obs.observe(t); });
+    } else {
+      targets.forEach(function (t) { t.classList.add('is-in'); });
+    }
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     4. ESTRELLAS ACOMPAÑANTES
-     Dos estrellas P5 fijas en pantalla que giran lentamente y
-     "acompañan" el scroll: se mueven con un retardo elástico
-     (lerp) y derivan en trayectorias suaves según cuánto bajas.
+     INICIALIZACIÓN CONTINUA (Reacción al renderizado React)
   ═══════════════════════════════════════════════════════════════ */
-  function initCompanions() {
-    if (document.getElementById('p5-comp-1')) return;
-    try {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    } catch (e) {}
-
-    function makeStar(id) {
-      var el = document.createElement('div');
-      el.className = 'p5-companion';
-      el.id = id;
-      var shape = document.createElement('span');
-      shape.className = 'shape';
-      el.appendChild(shape);
-      document.body.appendChild(el);
-      return el;
-    }
-    var c1 = makeStar('p5-comp-1');
-    var c2 = makeStar('p5-comp-2');
-
-    var cur = 0;   // scroll suavizado (persigue al scroll real con retardo)
-
-    function loop() {
-      var target = window.scrollY || document.documentElement.scrollTop || 0;
-      cur += (target - cur) * 0.06;          // lerp → efecto de arrastre elástico
-
-      /* trayectorias onduladas dependientes del scroll suavizado */
-      var x1 = Math.sin(cur * 0.0016) * 22;
-      var y1 = Math.sin(cur * 0.0024) * 30 + (target - cur) * 0.18;
-      var x2 = Math.sin(cur * 0.0012 + 2.1) * 26;
-      var y2 = Math.cos(cur * 0.0019) * 38 + (target - cur) * 0.26;
-      var rot = (cur * 0.04) % 360;
-
-      c1.style.transform = 'translate(' + x1.toFixed(1) + 'px,' + y1.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
-      c2.style.transform = 'translate(' + x2.toFixed(1) + 'px,' + y2.toFixed(1) + 'px) rotate(' + (-rot * 0.7).toFixed(1) + 'deg)';
-
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     INIT — con reintentos para el contenido que React/otros scripts
-     renderizan tarde (hero, actividades)
-  ═══════════════════════════════════════════════════════════════ */
-  var attempts = 0;
-
-  function tick() {
-    var heroOk  = styleHero();
-    var uneteOk = buildUnete();
-    scanReveals();
-    /* re-escanear hasta que todo exista (máx ~12 s) */
-    if ((!heroOk || !uneteOk || attempts < 6) && attempts < 24) {
-      attempts++;
-      setTimeout(tick, 500);
-    }
-  }
-
-  function init() {
+  function boot() {
     injectCSS();
-    initCompanions();
-    setTimeout(tick, 250);
+    applyHeroP5();
+    applyCtaP5();
+    initScrollReveals();
   }
 
-  if (document.readyState !== 'loading') {
-    init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    document.addEventListener('DOMContentLoaded', init);
+    boot();
   }
+
+  // Polling breve por si React reinicia el DOM de #root
+  var count = 0;
+  var timer = setInterval(function () {
+    boot();
+    count++;
+    if (count > 25) clearInterval(timer);
+  }, 400);
+
 })();
