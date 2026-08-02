@@ -482,16 +482,43 @@
       }, 400);
     }, 4500);
 
-    /* Notita checklist fija con flecha amarilla */
+    /* Notita checklist cambiante con flecha amarilla */
     var note = document.createElement('div');
     note.className = 'p5-notepad';
-    note.innerHTML = `
-      <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
-      <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
-      <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
-      <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
-    `;
+    var noteSets = [
+      `
+        <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
+        <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
+        <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
+        <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
+      `,
+      `
+        <div class="p5-notepad-item"><i>✓</i> Pagos puntuales</div>
+        <div class="p5-notepad-item"><i>✓</i> Horarios flexibles</div>
+        <div class="p5-notepad-item"><i>✓</i> Premios y bonos</div>
+        <div class="p5-notepad-item"><i>✓</i> Equipo multicultural</div>
+      `,
+      `
+        <div class="p5-notepad-item"><i>✓</i> Soporte continuo</div>
+        <div class="p5-notepad-item"><i>✓</i> Herramientas de vanguardia</div>
+        <div class="p5-notepad-item"><i>✓</i> Oportunidad de ascenso</div>
+        <div class="p5-notepad-item"><i>✓</i> Ambiente dinámico</div>
+      `
+    ];
+    var nIdx = 0;
+    note.innerHTML = noteSets[0];
     container.appendChild(note);
+
+    setInterval(function() {
+      nIdx = (nIdx + 1) % noteSets.length;
+      note.style.opacity = '0';
+      note.style.transform = 'rotate(3deg) translateY(-4px)';
+      setTimeout(function() {
+        note.innerHTML = noteSets[nIdx];
+        note.style.opacity = '1';
+        note.style.transform = 'rotate(3deg) translateY(0)';
+      }, 400);
+    }, 6000);
 
     /* estrellas detrás del marco, etiquetas por encima */
     container.insertBefore(s1, mainCard);
