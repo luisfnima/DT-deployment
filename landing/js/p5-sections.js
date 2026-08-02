@@ -3,13 +3,13 @@
  * ----------------------------------------------------------------
  *  1. HERO estilo P5: marco polaroid rojo inclinado con sombra dura,
  *     etiqueta "// TALENTO REAL", badge "TAKE YOUR HEART", estrellas,
- *     burbuja de texto interactiva con flecha curvada, notita checklist
- *     con flecha amarilla indicadora, kicker con línea roja, H1 Anton.
+ *     kicker con línea roja, H1 Anton gigante, stats Anton rojas.
  *  2. Sección final "¿Buscas crecer de verdad?" — split foto duotono
  *     + copy P5 (reemplaza el CTA original manteniendo el ancla #unete).
  *  3. Animaciones de entrada al hacer scroll (IntersectionObserver)
  *     para todas las secciones de la página.
- *  4. Estrellas acompañantes en scroll.
+ *
+ *  Compatible con hero-slideshow.js (las fotos rotan dentro del marco).
  */
 (function () {
   'use strict';
@@ -25,7 +25,7 @@
     section#inicio h1 {
       font-family: 'Anton','Impact',sans-serif !important;
       font-weight: 400 !important;
-      font-style: italic !important;
+      font-style: normal !important;
       font-size: clamp(50px, 6.5vw, 104px) !important;
       line-height: 0.88 !important;
       letter-spacing: 1px !important;
@@ -73,7 +73,7 @@
     /* stats Anton (aplicado por JS con .p5-hstat) */
     .p5-hstat {
       font-family: 'Anton','Impact',sans-serif !important;
-      font-style: italic !important;
+      font-style: normal !important;
       color: ${RED} !important;
       letter-spacing: 1px !important;
     }
@@ -91,7 +91,6 @@
       background: ${RED} !important;
       box-shadow: 14px 14px 0 rgba(0,0,0,.6) !important;
       transform: rotate(2.5deg) !important;
-      position: relative !important;
     }
     .p5-frame:hover {
       transform: rotate(1deg) translateY(-4px) !important;
@@ -101,13 +100,40 @@
       filter: contrast(1.12) saturate(.85) !important;
       border-radius: 0 !important;
     }
+    .p5-frame-dots {
+      position: absolute; inset: 0; z-index: 5;
+      pointer-events: none;
+      background-image: radial-gradient(circle, ${RED} 1px, transparent 1.6px);
+      background-size: 7px 7px;
+      opacity: .22;
+      mix-blend-mode: multiply;
+    }
+    .p5-hero-hidden { display: none !important; }
+
+    /* zona de la foto del hero: escalado adaptativo fluido */
+    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; transition: transform .3s ease; }
+    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.25); } }
+    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.1); } }
+    @media (max-width: 768px) {
+      .p5-photo-zone {
+        transform: scale(0.85);
+        margin: 20px 0 30px 0;
+      }
+    }
+    @media (max-width: 480px) {
+      .p5-photo-zone {
+        transform: scale(0.72);
+        margin: 10px 0 20px 0;
+      }
+    }
+
     /* etiqueta "// TALENTO REAL" */
-    .p5-tag-tr {
-      position: absolute; top: -16px; right: -12px; z-index: 6;
-      background: ${RED}; color: #fff;
-      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase;
-      padding: 6px 14px; transform: rotate(3.5deg);
+    .p5-tag2 {
+      position: absolute; top: 20px; right: -4px; z-index: 6;
+      background: ${PAPER}; color: #000;
+      font-family: 'Oswald', sans-serif; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px; font-size: 13px;
+      padding: 9px 14px; transform: rotate(6deg);
       box-shadow: 4px 4px 0 #000;
       pointer-events: none;
     }
@@ -159,6 +185,7 @@
       pointer-events: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
+    /* Flecha curvada hacia la foto */
     .p5-speech-bubble::after {
       content: '';
       position: absolute;
@@ -205,6 +232,7 @@
       font-style: normal;
       font-weight: 800;
     }
+    /* Flecha amarilla indicadora hacia la nota */
     .p5-notepad::before {
       content: '';
       position: absolute;
@@ -217,6 +245,7 @@
       background-repeat: no-repeat;
     }
 
+    /* Responsive behavior for speech bubble and notepad */
     @media (max-width: 1200px) {
       .p5-speech-bubble { left: -60px; max-width: 180px; font-size: 12px; padding: 10px 16px; }
       .p5-notepad { right: -70px; width: 140px; font-size: 11px; padding: 12px; }
@@ -249,7 +278,9 @@
       #p5-comp-2 { display: none; }
     }
 
-    /* ────────── REVEAL ON SCROLL (con rebote) ────────── */
+    /* ────────── REVEAL ON SCROLL (con rebote) ──────────
+       cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
+       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -304,109 +335,75 @@
     }
     #unete .up5-copy .p5-star-deco { width: 56px; height: 56px; top: 44px; right: 52px; background: ${RED}; opacity: .9; }
     #unete .up5-eyebrow {
-      display: block;
+      display: block; width: 100%;
       background: ${RED}; color: #fff;
       font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
       letter-spacing: 4px; text-transform: uppercase;
-      padding: 6px 16px; margin-bottom: 20px;
-      transform: rotate(-2deg); box-shadow: 4px 4px 0 #000;
-      width: fit-content;
+      padding: 9px 16px 9px 14px;
+      transform: skewX(-8deg);
+      box-shadow: 5px 5px 0 #000;
+      margin-bottom: 30px;
     }
-    #unete h2 {
-      font-family: 'Anton','Impact',sans-serif !important;
-      font-size: clamp(48px, 5.8vw, 84px) !important;
-      line-height: .9 !important; letter-spacing: 1px !important;
-      text-transform: uppercase !important; color: #fff !important;
-      margin-bottom: 24px !important;
+    #unete .up5-eyebrow > span { display: inline-flex; align-items: center; gap: 10px; transform: skewX(8deg); }
+    #unete .up5-eyebrow .tri { width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
+    #unete h2.up5-title {
+      font-family: 'Anton','Impact',sans-serif; font-weight: 400;
+      text-transform: uppercase;
+      font-size: clamp(42px, 5.2vw, 78px); line-height: .9;
+      color: #fff; margin: 0 0 8px;
     }
-    #unete h2 span { color: ${RED} !important; }
-    #unete p.up5-lead {
-      color: #d8d2c4 !important; font-size: 17px !important;
-      line-height: 1.6 !important; max-width: 480px !important;
-      margin-bottom: 36px !important;
+    #unete h2.up5-title .red { color: ${RED}; font-style: italic; }
+    #unete .up5-copy p {
+      font-family: 'Barlow Semi Condensed','DM Sans',sans-serif;
+      font-size: 19px; font-weight: 500; color: #c9c3b5;
+      max-width: 46ch; margin: 16px 0 30px; line-height: 1.55;
     }
-    #unete .up5-bullets {
-      display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px;
+    #unete .up5-perks { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
+    #unete .up5-perk {
+      font-family: 'Oswald', sans-serif; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
+      color: #fff; border: 2px solid #3a3a3a; padding: 9px 15px;
+      transform: skewX(-8deg); transition: border-color .2s;
     }
-    #unete .up5-bullet {
-      display: flex; align-items: center; gap: 14px;
-      color: ${PAPER}; font-family: 'Oswald', sans-serif;
-      font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
-    }
-    #unete .up5-bullet i {
-      width: 22px; height: 22px; background: ${RED}; color: #fff;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-style: normal; font-weight: 900; font-size: 12px;
-      box-shadow: 2px 2px 0 #000; flex-shrink: 0;
-    }
-    #unete a.up5-btn {
-      display: inline-flex; align-items: center; gap: 14px;
+    #unete .up5-perk:hover { border-color: ${RED}; }
+    #unete .up5-perk > span { display: inline-block; transform: skewX(8deg); }
+    #unete .up5-perk i { color: ${RED}; font-style: normal; margin-right: 7px; }
+    #unete .up5-btn {
+      display: inline-block; text-decoration: none;
       background: ${RED}; color: #fff;
-      font-family: 'Anton','Impact',sans-serif; font-size: 22px;
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
       letter-spacing: 2px; text-transform: uppercase;
-      padding: 18px 42px; border: 3px solid #000;
-      box-shadow: 6px 6px 0 ${PAPER};
-      text-decoration: none;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      padding: 18px 38px;
+      transform: skewX(-10deg);
+      box-shadow: 6px 6px 0 #000;
+      transition: transform .12s, box-shadow .12s;
     }
-    #unete a.up5-btn:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: 10px 10px 0 ${PAPER};
-      background: #ff1a2d;
+    #unete .up5-btn:hover {
+      transform: skewX(-10deg) translate(-2px,-2px);
+      box-shadow: 9px 9px 0 #000;
     }
+    #unete .up5-btn > span { display: inline-block; transform: skewX(10deg); }
 
     @media (max-width: 900px) {
       #unete .up5-grid { grid-template-columns: 1fr; }
-      #unete .up5-photo { height: 320px; }
-      #unete .up5-copy { padding: 48px 28px; }
-    }
-
-    /* ────────── CARDS SOBRE NOSOTROS & PROCESO & ACTIVIDADES ────────── */
-    #sobre-nosotros [style*="gridColumn"],
-    #como-trabajamos [style*="gridTemplateColumns"] > div,
-    #actividades .p5-card {
-      border-radius: 0 !important;
-      border: 3px solid #000000 !important;
-      box-shadow: 6px 6px 0 #000000 !important;
-      transition: transform .22s ease, box-shadow .22s ease !important;
-    }
-    #sobre-nosotros [style*="gridColumn"]:hover,
-    #como-trabajamos [style*="gridTemplateColumns"] > div:hover,
-    #actividades .p5-card:hover {
-      transform: translate(-3px, -3px) !important;
-      box-shadow: 10px 10px 0 ${RED} !important;
-    }
-
-    /* ────────── BOTONES CON HOVER ROJO ────────── */
-    #colaboradores-btn,
-    a[href*="forms.gle"] {
-      border-radius: 0 !important;
-      border: 2.5px solid #000 !important;
-      box-shadow: 4px 4px 0 #000 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 1px !important;
-      font-family: 'Oswald', sans-serif !important;
-      font-weight: 700 !important;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease !important;
-    }
-    #colaboradores-btn:hover,
-    a[href*="forms.gle"]:hover {
-      transform: translate(-2px, -2px) !important;
-      box-shadow: 7px 7px 0 #000 !important;
-      background: ${RED} !important;
+      #unete .up5-photo { min-height: 340px; position: relative; }
+      #unete .up5-photo img { position: absolute; }
+      #unete .up5-clip { clip-path: polygon(0 82%, 100% 96%, 100% 100%, 0 100%); }
+      #unete .up5-copy { padding: 56px 24px 70px; }
+      #unete .up5-copy .p5-star-deco { top: 24px; right: 22px; width: 40px; height: 40px; }
     }
   `;
 
   function injectCSS() {
     if (document.getElementById('p5-sections-style')) return;
-    var st = document.createElement('style');
-    st.id = 'p5-sections-style';
-    st.textContent = CSS;
-    document.head.appendChild(st);
+    var s = document.createElement('style');
+    s.id = 'p5-sections-style';
+    s.textContent = CSS;
+    document.head.appendChild(s);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     1. HERO P5 (ESTRUCTURA + ESTILOS)
+     1. HERO — marco polaroid + decoraciones + stats
   ═══════════════════════════════════════════════════════════════ */
   function applyHeroP5() {
     var heroSec = document.querySelector('section#inicio');
