@@ -151,8 +151,17 @@
     '  section#inicio img[alt="avatar"]:first-child { margin-left: 0 !important; }',
     /* CTA buttons: wrap nicely */
     '  section#inicio .fade-up-5 { flex-wrap: wrap !important; gap: 10px !important; }',
-    /* Hide the HeroImage tilted card (4th direct child of inner div) */
-    '  section#inicio > div > div:nth-child(4) { display: none !important; }',
+    /* Keep Hero image container visible & center it below text on mobile */
+    '  section#inicio > div > div:nth-child(4) {',
+    '    display: flex !important;',
+    '    width: 100% !important;',
+    '    max-width: 100% !important;',
+    '    height: auto !important;',
+    '    padding-top: 10px !important;',
+    '    justify-content: center !important;',
+    '    align-items: center !important;',
+    '    align-self: center !important;',
+    '  }',
 
     /* ─── NOSOTROS BENTO GRID ────────────────────────────────────────────── */
     /* Change the 12-column CSS grid to a single column flex */
@@ -372,5 +381,3 @@
   }
 
 })();
-
-
