@@ -71,7 +71,26 @@
     #root > div { background: var(--p5-ink) !important; }
 
     /* ── Secciones principales → fondo oscuro ─────────────────────── */
-    section#inicio           { background: var(--p5-ink) !important; }
+    section#inicio {
+      background: var(--p5-ink) !important;
+      position: relative !important;
+    }
+    section#inicio::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('images/ctaBg.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.12;
+      filter: grayscale(0.6) contrast(1.1);
+      pointer-events: none;
+      z-index: 0;
+    }
+    section#inicio > div {
+      position: relative;
+      z-index: 2;
+    }
     section#sobre-nosotros   { background: var(--p5-ink2) !important; }
     section#sobre-nosotros > div { background: transparent !important; }
     #como-trabajamos > section { background: #0f0f0f !important; }
@@ -298,205 +317,19 @@
 
     /* ── CÓMO TRABAJAMOS ──────────────────────────────────────────── */
     /* Step title color in ComoTrabajamos grid */
-    #como-trabajamos [style*="font-size: 22"] {
+    [id="como-trabajamos"] div[style*="fontFamily: 'Sora'"] {
       color: var(--p5-paper) !important;
     }
-    #como-trabajamos section { background: var(--p5-ink) !important; }
-    #como-trabajamos h2 { font-family: 'Anton', sans-serif !important; font-style: italic !important; }
-    #como-trabajamos [style*="background: rgba(255,255,255,0.04)"],
-    #como-trabajamos [style*="background: rgba(255,255,255,0.07)"] {
-      border: 1px solid rgba(230,0,19,0.15) !important;
+
+    /* ────────── RESPONSIVE P5 OVERRIDES ────────── */
+    @media (max-width: 768px) {
+      section#inicio h1 {
+        font-size: clamp(38px, 9vw, 56px) !important;
+      }
     }
-    [data-theme="light"] #como-trabajamos [style*="background: rgba(255,255,255,0.04)"],
-    [data-theme="light"] #como-trabajamos [style*="background: rgba(255,255,255,0.07)"] {
-      background: rgba(0,0,0,0.04) !important;
-    }
-    #como-trabajamos [style*="fontFamily: 'Sora'"] {
-      font-family: 'Anton', sans-serif !important;
-      font-style: italic !important;
-      color: var(--p5-red) !important;
-    }
-    #como-trabajamos h3 { color: var(--p5-paper) !important; }
-
-    /* ── BRANDS CAROUSEL ──────────────────────────────────────────── */
-    /* El wrapper ya es blanco → override hecho arriba (background: white) */
-    /* Texto de la sección → crema */
-    div p[style*="textAlign: 'center'"] { color: var(--p5-text-muted-more) !important; }
-
-    /* ── TICKER ───────────────────────────────────────────────────── */
-    /* Ya es oscuro (secondary) — solo ajustar el color de texto */
-
-    /* ── FOOTER ───────────────────────────────────────────────────── */
-    footer { border-top: 3px solid var(--p5-red) !important; }
-    footer h5 {
-      font-family: 'Oswald', sans-serif !important;
-      text-transform: uppercase !important;
-      letter-spacing: 2px !important;
-      color: var(--p5-paper) !important;
-    }
-    footer a { color: rgba(243,239,230,0.55) !important; transition: color 0.2s !important; }
-    footer a:hover { color: var(--p5-red) !important; }
-    footer p, footer small { color: var(--p5-text-muted-more) !important; }
-
-    /* ── ACTIVITIES SECTION ────────────────────────────────────────
-       activities.js ya trae su propio diseño P5 nativo — sin overrides */
-
-    /* ── BADGES / EYEBROWS (etiquetas P5 con rojo sesgado) ─────────── */
-    /* Contador animado de la sección "pros" */
-    div[ref] { font-family: 'Anton', sans-serif !important; }
-
-    /* ── GRAIN OVERLAY (textura de ruido cinematográfico) ─────────── */
-    #p5-grain {
-      position: fixed; inset: 0;
-      pointer-events: none;
-      z-index: 99998;
-      opacity: 0.045;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 256px 256px;
-    }
-
-    /* ── SLASH BARS decorativas del hero ──────────────────────────── */
-    #p5-slash-1, #p5-slash-2 {
-      position: absolute;
-      background: var(--p5-red);
-      transform: skewY(-8deg);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.08;
-    }
-    #p5-slash-1 {
-      top: -60px; left: -80px;
-      width: 400px; height: 600px;
-    }
-    #p5-slash-2 {
-      bottom: -40px; right: -60px;
-      width: 300px; height: 400px;
-      transform: skewY(10deg);
-      opacity: 0.05;
-    }
-
-    /* ── HALFTONE DOT OVERLAY en secciones oscuras ─────────────────── */
-    #p5-halftone {
-      position: absolute; inset: 0;
-      pointer-events: none;
-      background-image: radial-gradient(circle, rgba(243,239,230,0.9) 1px, transparent 1.5px);
-      background-size: 8px 8px;
-      opacity: 0.05;
-      z-index: 0;
-    }
-
-    /* ── BOTONES GLOBALES → P5 style ──────────────────────────────── */
-    /* Cualquier botón con background primario (red) */
-    [style*="background: rgb(254, 0, 2)"],
-    [style*="background: #FE0002"],
-    [style*="background: rgb(254,0,2)"] {
-      background: var(--p5-red) !important;
-      border-radius: 0 !important;
-      box-shadow: 5px 5px 0 #000 !important;
-    }
-
-    /* ── ANIMACIONES ENTRADA ──────────────────────────────────────── */
-    .fade-up { opacity: 1 !important; transform: none !important; }
-
-    /* ── SCROLLBAR P5 ─────────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--p5-ink); }
-    ::-webkit-scrollbar-thumb { background: var(--p5-red); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--p5-red); opacity: 0.8; }
-
-    /* Ensure all text inside Unete section stays white due to dark background image */
-    #unete h2,
-    #unete h3,
-    #unete p,
-    #unete span,
-    #unete label,
-    #unete .up5-eyebrow,
-    #unete .up5-eyebrow span {
-      color: #ffffff !important;
-    }
-    
   `;
 
-  /* ═══════════════════════════════════════════════════════════════════════
-     3. ELEMENTOS DOM DECORATIVOS
-  ═══════════════════════════════════════════════════════════════════════ */
-  function buildDecorativeDOM() {
-    /* ── Grain overlay ── */
-    if (!document.getElementById('p5-grain')) {
-      var grain = document.createElement('div');
-      grain.id = 'p5-grain';
-      document.body.appendChild(grain);
-    }
-
-    /* ── Slash bars en el hero ── */
-    var heroSection = document.querySelector('section#inicio');
-    if (heroSection && heroSection.style.position !== 'relative') {
-      heroSection.style.position = 'relative';
-    }
-    if (heroSection && !document.getElementById('p5-slash-1')) {
-      var s1 = document.createElement('div'); s1.id = 'p5-slash-1';
-      var s2 = document.createElement('div'); s2.id = 'p5-slash-2';
-      heroSection.insertBefore(s1, heroSection.firstChild);
-      heroSection.insertBefore(s2, heroSection.firstChild);
-    }
-
-    /* ── Halftone en sección Nosotros ── */
-    var nosotros = document.querySelector('section#sobre-nosotros');
-    if (nosotros && !nosotros.querySelector('#p5-halftone')) {
-      var ht = document.createElement('div'); ht.id = 'p5-halftone';
-      nosotros.insertBefore(ht, nosotros.firstChild);
-    }
-
-    /* ── Línea roja en el ticker (ya es dark, añadir acento) ── */
-    var ticker = document.querySelector('[data-anim="ticker"]');
-    if (ticker) {
-      ticker.style.boxShadow = '0 0 0 2px ' + P5.red + ', 0 8px 32px rgba(0,0,0,0.4)';
-    }
-
-    /* ── Transformar etiquetas de sección → eyebrow P5 ── */
-    applyEyebrowStyle();
-  }
-
-  /* ── Convertir etiquetas de sección al estilo eyebrow de P5 ─── */
-  function applyEyebrowStyle() {
-    var eyebrowTexts = ['Sobre Nosotros', 'Proceso', 'Nuestro Equipo', 'Actividades'];
-    var spans = document.querySelectorAll('span');
-    spans.forEach(function(span) {
-      var txt = span.textContent.trim();
-      if (!eyebrowTexts.some(function(t) { return txt.indexOf(t) >= 0; })) return;
-      var computedStyle = window.getComputedStyle(span);
-      if (computedStyle.letterSpacing && parseFloat(computedStyle.letterSpacing) > 2) {
-        // Looks like a label — style it as P5 eyebrow
-        Object.assign(span.style, {
-          fontFamily: "'Oswald', sans-serif",
-          fontWeight: '700',
-          textTransform: 'uppercase',
-          letterSpacing: '4px',
-          fontSize: '13px',
-          color: '#fff',
-          background: P5.red,
-          padding: '6px 14px 6px 12px',
-          transform: 'skewX(-10deg)',
-          boxShadow: '4px 4px 0 #000',
-          display: 'inline-block',
-        });
-        // Reset parent dot decoration
-        var parent = span.parentElement;
-        if (parent) {
-          var dot = parent.querySelector('div[style*="width: 8px"]');
-          if (dot) dot.style.display = 'none';
-        }
-      }
-    });
-  }
-
-  /* ═══════════════════════════════════════════════════════════════════════
-     4. CSS INJECTION
-  ═══════════════════════════════════════════════════════════════════════ */
   function injectCSS() {
-
-
     if (document.getElementById('p5-theme-style')) return;
     var s = document.createElement('style');
     s.id = 'p5-theme-style';
@@ -504,22 +337,14 @@
     document.head.appendChild(s);
   }
 
-  /* ═══════════════════════════════════════════════════════════════════════
-     5. INIT
-  ═══════════════════════════════════════════════════════════════════════ */
   function init() {
     injectFonts();
     injectCSS();
-    /* Esperar un tick para que React haya terminado el render */
-    setTimeout(buildDecorativeDOM, 120);
-    /* Segunda pasada para elementos que tardan más (lazy) */
-    setTimeout(buildDecorativeDOM, 800);
   }
 
   if (document.readyState !== 'loading') {
-    setTimeout(init, 60);
+    init();
   } else {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 60); });
+    document.addEventListener('DOMContentLoaded', init);
   }
-
 })();
