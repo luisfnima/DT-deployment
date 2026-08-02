@@ -163,61 +163,87 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── BURBUJA INTERACTIVA CAMBIANTE (SPEECH BUBBLE) ────────── */
+    /* ────────── BURBUJA MANUSCRITA Y FLECHA CON CORAZÓN ────────── */
     .p5-speech-bubble {
       position: absolute;
-      bottom: 60px;
-      left: -120px;
-      z-index: 10;
-      background: #ffffff;
-      color: #0b0b0b;
-      border: 3px solid #0b0b0b;
-      border-radius: 50px;
-      padding: 14px 22px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 1.35;
-      text-align: center;
-      max-width: 230px;
-      box-shadow: 4px 4px 0 #000;
-      transform: rotate(-4deg);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    /* Flecha curvada hacia la foto */
-    .p5-speech-bubble::after {
-      content: '';
-      position: absolute;
-      right: -24px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 12 Q 14 2, 22 12' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 8 L 22 12 L 18 18' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    /* ────────── NOTITA CHECKLIST CAMBIANTE ────────── */
-    .p5-notepad {
-      position: absolute;
-      top: 40px;
-      right: -135px;
+      bottom: 70px;
+      left: -140px;
       z-index: 10;
       background: #ffffff;
       color: #111827;
-      border: 2px solid #0b0b0b;
-      border-radius: 8px;
-      padding: 16px 18px;
+      border: 2.5px solid #000000;
+      border-radius: 40px 50px 35px 45px;
+      padding: 16px 22px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      line-height: 1.6;
-      width: 170px;
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.8);
-      transform: rotate(3deg);
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.25;
+      text-align: center;
+      width: 190px;
+      box-shadow: 4px 4px 0 #000000;
+      transform: rotate(-5deg);
       pointer-events: none;
       transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    /* Corazoncito en la burbuja de la izquierda */
+    .p5-speech-bubble::before {
+      content: '♥';
+      position: absolute;
+      bottom: 4px;
+      right: 12px;
+      color: ${RED};
+      font-size: 14px;
+    }
+    /* Flecha curva dibujada indicando hacia la foto */
+    .p5-speech-bubble-arrow {
+      position: absolute;
+      top: -35px;
+      right: -45px;
+      width: 55px;
+      height: 45px;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='50' viewBox='0 0 60 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 40 Q 25 5, 52 22' stroke='%23000000' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M42 14 L 54 23 L 44 32' stroke='%23000000' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* ────────── NUBE DIBUJADA DE LA DERECHA (CLOUD NOTEPAD) ────────── */
+    .p5-notepad {
+      position: absolute;
+      top: 50px;
+      right: -155px;
+      z-index: 10;
+      background: #ffffff;
+      color: #111827;
+      border: 2.5px solid #000000;
+      border-radius: 28px 36px 30px 40px;
+      padding: 22px 20px 18px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.5;
+      width: 175px;
+      box-shadow: 4px 4px 0 #000000;
+      transform: rotate(4deg);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    /* Corazón rojo superior en la nube derecha */
+    .p5-notepad-heart {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      border: 2px solid #000000;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: ${RED};
+      font-size: 15px;
+      box-shadow: 2px 2px 0 #000000;
     }
     .p5-notepad-item {
       display: flex;
@@ -228,30 +254,34 @@
       margin-bottom: 6px;
     }
     .p5-notepad-item i {
-      color: ${RED};
+      color: #111827;
       font-style: normal;
       font-weight: 800;
     }
-    /* Flecha amarilla indicadora hacia la nota */
-    .p5-notepad::before {
-      content: '';
+
+    /* ────────── OLA ROJA DE LA ESQUINA INFERIOR IZQUIERDA CON CORONA ────────── */
+    .p5-bottom-red-wave {
       position: absolute;
-      top: -24px;
-      left: -28px;
-      width: 32px;
-      height: 32px;
-      background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4 Q 18 8, 26 24' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 22 L 26 24 L 24 16' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
+      bottom: 0;
+      left: 0;
+      width: 380px;
+      height: 160px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .p5-bottom-red-wave svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     /* Responsive behavior for speech bubble and notepad */
     @media (max-width: 1200px) {
-      .p5-speech-bubble { left: -60px; max-width: 180px; font-size: 12px; padding: 10px 16px; }
-      .p5-notepad { right: -70px; width: 140px; font-size: 11px; padding: 12px; }
+      .p5-speech-bubble { left: -60px; width: 160px; font-size: 12px; }
+      .p5-notepad { right: -70px; width: 145px; font-size: 12px; }
     }
     @media (max-width: 900px) {
-      .p5-speech-bubble, .p5-notepad { display: none !important; }
+      .p5-speech-bubble, .p5-notepad, .p5-speech-bubble-arrow, .p5-bottom-red-wave { display: none !important; }
     }
 
     /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
@@ -280,7 +310,7 @@
 
     /* ────────── REVEAL ON SCROLL (con rebote) ──────────
        cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
-       poco de largo y rebota a su largo, estilo menú de Persona 5 */
+       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -458,50 +488,75 @@
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    /* Burbuja interactiva cambiante (Speech bubble) */
+    /* 1. Ola roja de la esquina inferior izquierda con la corona */
+    if (!sec.querySelector('.p5-bottom-red-wave')) {
+      var waveDiv = document.createElement('div');
+      waveDiv.className = 'p5-bottom-red-wave';
+      waveDiv.innerHTML = `
+        <svg viewBox="0 0 380 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-20 160 C 90 60, 220 120, 380 160 Z" fill="${RED}"/>
+          <g transform="translate(26, 95) scale(0.75)">
+            <path d="M 5 28 L 12 10 L 22 20 L 32 10 L 39 28 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="5" cy="8" r="2.5" fill="#FFFFFF"/>
+            <circle cx="22" cy="17" r="2.5" fill="#FFFFFF"/>
+            <circle cx="39" cy="8" r="2.5" fill="#FFFFFF"/>
+            <line x1="2" y1="32" x2="42" y2="32" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      `;
+      sec.style.position = 'relative';
+      sec.insertBefore(waveDiv, sec.firstChild);
+    }
+
+    /* 2. Burbuja interactiva manuscrita (Speech bubble) con Flecha y Corazón */
     var bubble = document.createElement('div');
     bubble.className = 'p5-speech-bubble';
+    
+    var arrow = document.createElement('div');
+    arrow.className = 'p5-speech-bubble-arrow';
+    
     var quotes = [
+      '¡Un gran lugar para trabajar!',
       '¡Terminé mi carrera mientras trabajaba aquí!',
-      '¡Los mejores incentivos y ambiente de trabajo!',
-      '¡Crecí profesionalmente desde el primer mes!',
-      '¡Comisiones sin techo y pagos siempre puntuales!'
+      '¡Los mejores incentivos y ambiente laboral!',
+      '¡Crecí profesionalmente desde el primer mes!'
     ];
     var qIdx = 0;
     bubble.textContent = quotes[0];
     container.appendChild(bubble);
+    container.appendChild(arrow);
 
     setInterval(function() {
       qIdx = (qIdx + 1) % quotes.length;
       bubble.style.opacity = '0';
-      bubble.style.transform = 'rotate(-4deg) translateY(6px)';
+      bubble.style.transform = 'rotate(-5deg) translateY(6px)';
       setTimeout(function() {
         bubble.textContent = quotes[qIdx];
         bubble.style.opacity = '1';
-        bubble.style.transform = 'rotate(-4deg) translateY(0)';
+        bubble.style.transform = 'rotate(-5deg) translateY(0)';
       }, 400);
     }, 4500);
 
-    /* Notita checklist cambiante con flecha amarilla */
+    /* 3. Nube dibujada de la derecha (Cloud Notepad) con Corazón Rojo */
     var note = document.createElement('div');
     note.className = 'p5-notepad';
     var noteSets = [
       `
-        <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
-        <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
-        <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
-        <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
+        <div class="p5-notepad-heart">♥</div>
+        <div class="p5-notepad-item"><i>✓</i> Buen ambiente</div>
+        <div class="p5-notepad-item"><i>✓</i> Grandes beneficios</div>
+        <div class="p5-notepad-item"><i>✓</i> Crecimiento profesional</div>
       `,
       `
+        <div class="p5-notepad-heart">♥</div>
         <div class="p5-notepad-item"><i>✓</i> Pagos puntuales</div>
         <div class="p5-notepad-item"><i>✓</i> Horarios flexibles</div>
         <div class="p5-notepad-item"><i>✓</i> Premios y bonos</div>
-        <div class="p5-notepad-item"><i>✓</i> Equipo multicultural</div>
       `,
       `
+        <div class="p5-notepad-heart">♥</div>
         <div class="p5-notepad-item"><i>✓</i> Soporte continuo</div>
-        <div class="p5-notepad-item"><i>✓</i> Herramientas de vanguardia</div>
-        <div class="p5-notepad-item"><i>✓</i> Oportunidad de ascenso</div>
+        <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
         <div class="p5-notepad-item"><i>✓</i> Ambiente dinámico</div>
       `
     ];
@@ -512,11 +567,11 @@
     setInterval(function() {
       nIdx = (nIdx + 1) % noteSets.length;
       note.style.opacity = '0';
-      note.style.transform = 'rotate(3deg) translateY(-4px)';
+      note.style.transform = 'rotate(4deg) translateY(-4px)';
       setTimeout(function() {
         note.innerHTML = noteSets[nIdx];
         note.style.opacity = '1';
-        note.style.transform = 'rotate(3deg) translateY(0)';
+        note.style.transform = 'rotate(4deg) translateY(0)';
       }, 400);
     }, 6000);
 
