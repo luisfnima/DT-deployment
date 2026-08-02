@@ -4,8 +4,12 @@
  *  1. HERO estilo P5: marco polaroid rojo inclinado con sombra dura,
  *     etiqueta "// TALENTO REAL", badge "TAKE YOUR HEART", estrellas,
  *     kicker con línea roja, H1 Anton gigante, stats Anton rojas.
- *  2. Fondo de oficina desaturado + ola roja con corona inferior.
- *  3. Animaciones de entrada al hacer scroll (IntersectionObserver).
+ *  2. Sección final "¿Buscas crecer de verdad?" — split foto duotono
+ *     + copy P5 (reemplaza el CTA original manteniendo el ancla #unete).
+ *  3. Animaciones de entrada al hacer scroll (IntersectionObserver)
+ *     para todas las secciones de la página.
+ *
+ *  Compatible con hero-slideshow.js (las fotos rotan dentro del marco).
  */
 (function () {
   'use strict';
@@ -13,6 +17,9 @@
   var RED   = '#e60013';
   var PAPER = '#f3efe6';
 
+  /* ═══════════════════════════════════════════════════════════════
+     CSS GLOBAL DEL MÓDULO
+  ═══════════════════════════════════════════════════════════════ */
   var CSS = `
     /* ────────── HERO: texto ────────── */
     section#inicio h1 {
@@ -103,9 +110,22 @@
     }
     .p5-hero-hidden { display: none !important; }
 
-    .p5-photo-zone { transform: translateX(-60px) scale(1.35); transform-origin: center center; position: relative; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: translateX(-40px) scale(1.2); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: translateX(-20px) scale(1.05); } }
+    /* zona de la foto del hero: escalado adaptativo fluido */
+    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; transition: transform .3s ease; }
+    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.25); } }
+    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.1); } }
+    @media (max-width: 768px) {
+      .p5-photo-zone {
+        transform: scale(0.85);
+        margin: 20px 0 30px 0;
+      }
+    }
+    @media (max-width: 480px) {
+      .p5-photo-zone {
+        transform: scale(0.72);
+        margin: 10px 0 20px 0;
+      }
+    }
 
     /* etiqueta "// TALENTO REAL" */
     .p5-tag2 {
@@ -120,7 +140,7 @@
     /* badge "TAKE YOUR HEART" */
     .p5-badge-tyh {
       position: absolute; bottom: 12px; left: -2px; z-index: 6;
-      background: #000; color: #ffffff !important;
+      background: #000; color: #fff;
       font-family: 'Anton','Impact',sans-serif; font-size: 19px;
       text-transform: uppercase; line-height: .95;
       padding: 14px 18px;
@@ -128,10 +148,8 @@
       box-shadow: 6px 6px 0 ${RED};
       pointer-events: none;
     }
-    .p5-badge-tyh span, .p5-badge-tyh { color: #ffffff !important; }
-    .p5-badge-tyh i { color: ${RED} !important; font-style: normal; }
-
-    /* destellos P5 con parpadeo animado */
+    .p5-badge-tyh i { color: ${RED}; font-style: normal; }
+    /* destellos P5 (sparkle de 4 puntas) con parpadeo animado */
     .p5-star-deco {
       position: absolute; z-index: 1; pointer-events: none;
       clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
@@ -145,7 +163,33 @@
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
 
-    /* ────────── REVEAL ON SCROLL (con rebote) ────────── */
+    /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
+    .p5-companion {
+      position: fixed; z-index: 640; pointer-events: none;
+      will-change: transform;
+    }
+    .p5-companion .shape {
+      display: block; width: 100%; height: 100%;
+      background: ${RED};
+      clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+      animation: p5CompSpin 16s linear infinite;
+      filter: drop-shadow(3px 3px 0 rgba(0,0,0,.5));
+    }
+    #p5-comp-2 .shape {
+      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+      animation-duration: 9s; animation-direction: reverse;
+    }
+    @keyframes p5CompSpin { to { transform: rotate(360deg); } }
+    #p5-comp-1 { width: 44px; height: 44px; top: 22vh; left: 3vw;  opacity: .48; }
+    #p5-comp-2 { width: 26px; height: 26px; top: 64vh; right: 3.5vw; opacity: .38; }
+    @media (max-width: 768px) {
+      #p5-comp-1 { width: 30px; height: 30px; opacity: .3; }
+      #p5-comp-2 { display: none; }
+    }
+
+    /* ────────── REVEAL ON SCROLL (con rebote) ──────────
+       cubic-bezier(.34,1.7,.5,1) = overshoot: el elemento pasa un
+       poco de largo y rebota a su lugar, estilo menú de Persona 5 */
     .p5-rv {
       opacity: 0 !important;
       transform: translateY(52px) scale(.88) skewX(-3deg) !important;
@@ -168,6 +212,95 @@
       opacity: 1 !important;
       transform: none !important;
     }
+
+    /* ────────── SECCIÓN ÚNETE (P5) ────────── */
+    #unete { background: #0a0a0a; position: relative; overflow: hidden; }
+    #unete .up5-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
+    #unete .up5-photo { position: relative; overflow: hidden; }
+    #unete .up5-photo img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      filter: grayscale(1) contrast(1.25) brightness(.85);
+    }
+    #unete .up5-photo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(120deg, rgba(230,0,19,.55), rgba(10,10,10,.2) 60%);
+      mix-blend-mode: multiply;
+    }
+    #unete .up5-half {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,.9) 1px, transparent 1.5px);
+      background-size: 8px 8px; opacity: .14;
+    }
+    #unete .up5-clip {
+      position: absolute; inset: 0; z-index: 3; pointer-events: none;
+      background: #0a0a0a;
+      clip-path: polygon(78% 0, 100% 0, 100% 100%, 92% 100%);
+    }
+    #unete .up5-copy {
+      padding: 90px 64px; position: relative;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: flex-start;
+    }
+    #unete .up5-copy .p5-star-deco { width: 56px; height: 56px; top: 44px; right: 52px; background: ${RED}; opacity: .9; }
+    #unete .up5-eyebrow {
+      display: block; width: 100%;
+      background: ${RED}; color: #fff;
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 13px;
+      letter-spacing: 4px; text-transform: uppercase;
+      padding: 9px 16px 9px 14px;
+      transform: skewX(-8deg);
+      box-shadow: 5px 5px 0 #000;
+      margin-bottom: 30px;
+    }
+    #unete .up5-eyebrow > span { display: inline-flex; align-items: center; gap: 10px; transform: skewX(8deg); }
+    #unete .up5-eyebrow .tri { width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; display: inline-block; }
+    #unete h2.up5-title {
+      font-family: 'Anton','Impact',sans-serif; font-weight: 400;
+      text-transform: uppercase;
+      font-size: clamp(42px, 5.2vw, 78px); line-height: .9;
+      color: #fff; margin: 0 0 8px;
+    }
+    #unete h2.up5-title .red { color: ${RED}; font-style: italic; }
+    #unete .up5-copy p {
+      font-family: 'Barlow Semi Condensed','DM Sans',sans-serif;
+      font-size: 19px; font-weight: 500; color: #c9c3b5;
+      max-width: 46ch; margin: 16px 0 30px; line-height: 1.55;
+    }
+    #unete .up5-perks { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; }
+    #unete .up5-perk {
+      font-family: 'Oswald', sans-serif; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
+      color: #fff; border: 2px solid #3a3a3a; padding: 9px 15px;
+      transform: skewX(-8deg); transition: border-color .2s;
+    }
+    #unete .up5-perk:hover { border-color: ${RED}; }
+    #unete .up5-perk > span { display: inline-block; transform: skewX(8deg); }
+    #unete .up5-perk i { color: ${RED}; font-style: normal; margin-right: 7px; }
+    #unete .up5-btn {
+      display: inline-block; text-decoration: none;
+      background: ${RED}; color: #fff;
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 17px;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 18px 38px;
+      transform: skewX(-10deg);
+      box-shadow: 6px 6px 0 #000;
+      transition: transform .12s, box-shadow .12s;
+    }
+    #unete .up5-btn:hover {
+      transform: skewX(-10deg) translate(-2px,-2px);
+      box-shadow: 9px 9px 0 #000;
+    }
+    #unete .up5-btn > span { display: inline-block; transform: skewX(10deg); }
+
+    @media (max-width: 900px) {
+      #unete .up5-grid { grid-template-columns: 1fr; }
+      #unete .up5-photo { min-height: 340px; position: relative; }
+      #unete .up5-photo img { position: absolute; }
+      #unete .up5-clip { clip-path: polygon(0 82%, 100% 96%, 100% 100%, 0 100%); }
+      #unete .up5-copy { padding: 56px 24px 70px; }
+      #unete .up5-copy .p5-star-deco { top: 24px; right: 22px; width: 40px; height: 40px; }
+    }
   `;
 
   function injectCSS() {
@@ -178,59 +311,34 @@
     document.head.appendChild(s);
   }
 
-  function injectOfficeBgAndWave() {
-    var sec = document.querySelector('section#inicio');
-    if (!sec) return;
-
-    if (!sec.querySelector('.hero-office-bg')) {
-      var bg = document.createElement('div');
-      bg.className = 'hero-office-bg';
-      sec.insertBefore(bg, sec.firstChild);
-    }
-
-    if (!sec.querySelector('.p5-red-wave-corner')) {
-      var wave = document.createElement('div');
-      wave.className = 'p5-red-wave-corner';
-      wave.innerHTML = `
-        <svg viewBox="0 0 650 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 260V90 C 140 150, 320 260, 650 160 V 260 H 0 Z" fill="#FE0002"/>
-          <g transform="translate(45, 160) scale(1.6)">
-            <path d="M12 28L4 12L16 18L24 4L32 18L44 12L36 28H12Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-            <circle cx="8" cy="10" r="2" fill="white"/>
-            <circle cx="24" cy="3" r="2" fill="white"/>
-            <circle cx="40" cy="10" r="2" fill="white"/>
-          </g>
-        </svg>
-      `;
-      sec.appendChild(wave);
-    }
-  }
-
+  /* ═══════════════════════════════════════════════════════════════
+     1. HERO — marco polaroid + decoraciones + stats
+  ═══════════════════════════════════════════════════════════════ */
   function styleHero() {
     var sec = document.querySelector('section#inicio');
     if (!sec) return false;
 
-    injectOfficeBgAndWave();
-
+    /* encontrar la foto principal (no avatares) */
     var mainImg = null;
     var imgs = sec.querySelectorAll('img');
     for (var i = 0; i < imgs.length; i++) {
       var alt = (imgs[i].getAttribute('alt') || '').toLowerCase();
-      var src = (imgs[i].getAttribute('src') || '').toLowerCase();
       if (alt === 'avatar') continue;
-      if (src.indexOf('herophoto') >= 0 || src.indexOf('empleado') >= 0 || imgs[i].width > 100 || imgs[i].height > 100 || imgs[i].naturalWidth > 100) { mainImg = imgs[i]; break; }
+      var r = imgs[i].getBoundingClientRect();
+      if (r.width > 150 && r.height > 150) { mainImg = imgs[i]; break; }
     }
-    if (!mainImg && imgs.length > 0) mainImg = imgs[0];
     if (!mainImg) return false;
 
-    var mainCard  = mainImg.parentElement;          
-    var container = mainCard.parentElement;         
+    var mainCard  = mainImg.parentElement;          // tarjeta con rotate(-4deg)
+    var container = mainCard.parentElement;         // contenedor flex 400×500
     if (container.dataset.p5hero === '1') return true;
     container.dataset.p5hero = '1';
 
+    /* marco P5 + zona agrandada 45% */
     mainCard.classList.add('p5-frame');
     container.classList.add('p5-photo-zone');
 
+    /* ocultar las "hojas" rojas apiladas detrás (diseño anterior) */
     Array.prototype.forEach.call(container.children, function (ch) {
       if (ch === mainCard) return;
       var st = ch.getAttribute('style') || '';
@@ -239,143 +347,144 @@
       }
     });
 
+    /* halftone rojo sobre la foto */
     var dots = document.createElement('div');
     dots.className = 'p5-frame-dots';
     mainCard.appendChild(dots);
 
+    /* decoraciones alrededor del marco */
     var tag = document.createElement('div');
     tag.className = 'p5-tag2';
     tag.textContent = '// Talento Real';
 
     var badge = document.createElement('div');
     badge.className = 'p5-badge-tyh';
-    badge.innerHTML = '<span style="color:#ffffff !important;">TAKE<br>YOUR</span> <i style="color:#e60013 !important;">HEART</i>';
+    badge.innerHTML = 'TAKE<br>YOUR <i>HEART</i>';
 
     var s1 = document.createElement('div');
     s1.className = 'p5-star-deco p5-star-s1';
     var s2 = document.createElement('div');
     s2.className = 'p5-star-deco p5-star-s2';
 
-    // ── BURBUJA + FLECHA APUNTANDO DIRECTAMENTE AL MARCO DE LA FOTO ──
-    var bubble = document.createElement('div');
-    bubble.className = 'p5-doodle-bubble';
-    bubble.id = 'hero-doodle-bubble';
-    bubble.innerHTML = `
-      <span class="bubble-text" id="hero-bubble-text">¡Un gran lugar para trabajar!</span>
-      <svg class="arrow-doodle" viewBox="0 0 100 80" fill="none">
-        <path d="M10 55 Q 45 15, 85 45" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M70 30 L85 45 L78 60" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10 55 Q 45 15, 85 45" stroke="#111827" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-        <path d="M70 30 L85 45 L78 60" stroke="#111827" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#FE0002" style="position:absolute; bottom:-8px; right:20px;">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-      </svg>
-    `;
-
-    var note = document.createElement('div');
-    note.className = 'p5-doodle-note';
-    note.id = 'hero-doodle-note';
-    note.innerHTML = `
-      <svg class="heart-icon" viewBox="0 0 24 24" fill="#FE0002" stroke="#111827" stroke-width="1.8">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-      </svg>
-      <ul id="hero-note-list">
-        <li>Buen ambiente</li>
-        <li>Grandes beneficios</li>
-        <li>Crecimiento profesional</li>
-      </ul>
-    `;
-
+    /* estrellas detrás del marco, etiquetas por encima */
     container.insertBefore(s1, mainCard);
     container.insertBefore(s2, mainCard);
     container.appendChild(tag);
     container.appendChild(badge);
-    container.appendChild(bubble);
-    container.appendChild(note);
 
+    /* stats "10+ / 24/7 / ∞" → Anton rojo */
     var nodes = sec.querySelectorAll('div, span');
     Array.prototype.forEach.call(nodes, function (el) {
       if (el.childElementCount > 1) return;
       var txt = (el.textContent || '').trim();
       if (!txt || txt.length > 6) return;
       if (!/[0-9∞]/.test(txt)) return;
-      var fs = parseFloat(getComputedStyle(el).fontSize);
-      if (fs >= 26 && fs <= 64) {
-        el.classList.add('p5-hstat');
-        var sib = el.nextElementSibling;
-        if (sib && (sib.textContent || '').trim().length > 4) {
-          sib.classList.add('p5-hstat-label');
-        }
+      if (txt.indexOf('10') < 0 && txt.indexOf('24') < 0 && txt.indexOf('80') < 0 && txt.indexOf('∞') < 0) return;
+      el.classList.add('p5-hstat');
+      if (el.parentElement && el.parentElement.lastElementChild) {
+        el.parentElement.lastElementChild.classList.add('p5-hstat-label');
       }
     });
 
     return true;
   }
 
-  var observer = null;
+  /* ═══════════════════════════════════════════════════════════════
+     2. ESTRELLAS ACOMPAÑANTES EN SCROLL
+  ═══════════════════════════════════════════════════════════════ */
+  function setupCompanions() {
+    if (document.getElementById('p5-comp-1')) return;
 
-  function getObserver() {
-    if (observer) return observer;
-    observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          en.target.classList.add('p5-in');
-          observer.unobserve(en.target);
-        }
+    var c1 = document.createElement('div');
+    c1.id = 'p5-comp-1';
+    c1.className = 'p5-companion';
+    c1.innerHTML = '<span class="shape"></span>';
+
+    var c2 = document.createElement('div');
+    c2.id = 'p5-comp-2';
+    c2.className = 'p5-companion';
+    c2.innerHTML = '<span class="shape"></span>';
+
+    document.body.appendChild(c1);
+    document.body.appendChild(c2);
+
+    /* parallax suave al scrollear */
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var sy = window.scrollY || window.pageYOffset;
+        c1.style.transform = 'translate3d(0, ' + (sy * 0.08) + 'px, 0)';
+        c2.style.transform = 'translate3d(0, ' + (-sy * 0.05) + 'px, 0)';
+        ticking = false;
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    return observer;
+    }, { passive: true });
   }
 
-  var RV_SELECTORS = [
-    'section#sobre-nosotros [style*="grid-column"]',
-    '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
-    '#actividades .act-eyebrow',
-    '#actividades .act-main-title',
-    '#actividades .act-subtitle',
-    '#actividades .act-filters',
-    '#actividades .p5-card',
-    'footer [style*="grid-template-columns"] > div',
-  ];
+  /* ═══════════════════════════════════════════════════════════════
+     3. REVEAL ON SCROLL (con rebote estilo P5)
+  ═══════════════════════════════════════════════════════════════ */
+  function setupScrollReveals() {
+    if (!('IntersectionObserver' in window)) return;
 
-  function scanReveals() {
-    if (typeof IntersectionObserver === 'undefined') return;
-    var obs = getObserver();
+    var targets = [
+      'section#inicio h1',
+      'section#inicio p',
+      'section#sobre-nosotros h2',
+      'section#sobre-nosotros p',
+      '#como-trabajamos h2',
+      '#actividades h2',
+      'footer',
+    ];
 
-    RV_SELECTORS.forEach(function (sel) {
-      var els;
-      try { els = document.querySelectorAll(sel); } catch (e) { return; }
-      Array.prototype.forEach.call(els, function (el, i) {
-        if (el.dataset.p5rv = '1') return;
+    /* Asignar clase de reveal según posición */
+    targets.forEach(function (sel) {
+      var els = document.querySelectorAll(sel);
+      Array.prototype.forEach.call(els, function (el, idx) {
+        if (el.dataset.p5rv) return;
         el.dataset.p5rv = '1';
+        el.classList.add(idx % 2 === 0 ? 'p5-rv-l' : 'p5-rv-r');
+      });
+    });
 
-        var r = el.getBoundingClientRect();
-        var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
+    /* Bento cards & step cards */
+    var cards = document.querySelectorAll('section#sobre-nosotros [style*="grid-column"], #como-trabajamos [style*="grid-template-columns"] > div');
+    Array.prototype.forEach.call(cards, function (c) {
+      if (c.dataset.p5rv) return;
+      c.dataset.p5rv = '1';
+      c.classList.add('p5-rv');
+    });
 
-        if (!inView) {
-          el.classList.add('p5-rv');
-          el.style.transitionDelay = ((i % 6) * 0.08) + 's';
-          obs.observe(el);
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('p5-in');
+          obs.unobserve(e.target);
         }
       });
+    }, { threshold: 0.12 });
+
+    var allRv = document.querySelectorAll('.p5-rv, .p5-rv-l, .p5-rv-r');
+    Array.prototype.forEach.call(allRv, function (el) {
+      obs.observe(el);
     });
   }
 
-  var attempts = 0;
-
-  function tick() {
-    var heroOk = styleHero();
-    scanReveals();
-    if (!heroOk && attempts < 24) {
-      attempts++;
-      setTimeout(tick, 500);
-    }
-  }
-
+  /* ═══════════════════════════════════════════════════════════════
+     INIT — reintenta hasta que React renderice la app
+  ═══════════════════════════════════════════════════════════════ */
   function init() {
     injectCSS();
-    setTimeout(tick, 250);
+    setupCompanions();
+
+    var attempts = 0;
+    var timer = setInterval(function () {
+      attempts++;
+      var ok = styleHero();
+      if (ok) setupScrollReveals();
+      if (ok || attempts > 20) clearInterval(timer);
+    }, 150);
   }
 
   if (document.readyState !== 'loading') {
@@ -383,4 +492,5 @@
   } else {
     document.addEventListener('DOMContentLoaded', init);
   }
+
 })();
