@@ -49,9 +49,13 @@ window.HERO_SLIDES = {
 
   images: [
     'asesor 1.png',
+    'asesor 16.png',
     'asesor 2.png',
+    'asesor 11.png',
     'asesor 3.png',
-    'asesor 4.png',
+    'asesor 10.png',
+    'asesor 9.png',
+    'asesor 13.png',
     'asesor 5.png',
     'asesor 6.png'
     // 👇 escribe aquí tus fotos (una por línea, entre comillas y con coma)
