@@ -451,6 +451,7 @@
           parent.appendChild(tag);
         }
 
+        /*
         // Badge TAKE YOUR HEART
         if (!parent.querySelector('.p5-badge-tyh')) {
           var badge = document.createElement('div');
@@ -458,7 +459,8 @@
           badge.innerHTML = 'TAKE <i>♥</i> YOUR HEART';
           parent.appendChild(badge);
         }
-
+        */
+       
         // Estrellas decorativas
         if (!parent.querySelector('.p5-star-s1')) {
           var s1 = document.createElement('div');
