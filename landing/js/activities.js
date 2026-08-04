@@ -117,7 +117,7 @@
           line-height:.92;letter-spacing:1px;text-transform:uppercase;
           color:#f3efe6;margin:0}
         #actividades .act-main-title em{color:#e60013;font-style:italic;padding-right:8px}
-        #actividades .act-subtitle{font-family:'Barlow Semi Condensed','DM Sans',sans-serif;font-size:15px;color:rgba(243,239,230,.6);line-height:1.55;max-width:340px;margin:0 0 8px}
+        #actividades .act-subtitle{font-family:'Barlow Semi Condensed','DM Sans',sans-serif;font-size:15px;color:rgba(243,239,230,.88) !important;line-height:1.55;max-width:340px;margin:0 0 8px}
 
         /* ═══ FILTROS — botones paralelogramo P5 ═══ */
         #actividades .act-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:38px}

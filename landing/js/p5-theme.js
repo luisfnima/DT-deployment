@@ -398,8 +398,15 @@
       transition: filter 0.3s !important;
     }
 
-    /* ── ACTIVITIES SECTION ────────────────────────────────────────
-       activities.js ya trae su propio diseño P5 nativo — sin overrides */
+    /* ── ACTIVITIES SECTION ──────────────────────────────────────── */
+    #actividades .act-subtitle,
+    #actividades p,
+    #actividades .act-main-title {
+      color: #f3efe6 !important;
+    }
+    #actividades .act-subtitle {
+      color: rgba(243, 239, 230, 0.88) !important;
+    }
 
     /* ── BADGES / EYEBROWS (etiquetas P5 con rojo sesgado) ─────────── */
     /* Contador animado de la sección "pros" */
