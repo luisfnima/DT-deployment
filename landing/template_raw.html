@@ -1133,8 +1133,10 @@ function Footer({ primary, secondary }) {
 
   return (
     <footer style={{
-      background: '#0f0f0f',
-      position: 'relative', overflow: 'hidden'
+      background: 'var(--footer-bg, #0A0A0A)',
+      position: 'relative', overflow: 'hidden',
+      borderTop: '1px solid var(--footer-border, rgba(255,255,255,0.08))',
+      transition: 'background 0.3s, border-color 0.3s'
     }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', width: '100%', padding: 'clamp(48px, 6vw, 80px) clamp(24px, 4vw, 80px) 0' }}>
       {/* Top accent */}
@@ -1155,12 +1157,12 @@ function Footer({ primary, secondary }) {
         <div data-anim="footer-col">
           {/* Logo */}
           <div style={{ marginBottom: 24 }}>
-            <img src={window.__resources && window.__resources.logoImg || "logo.png"} alt="DreamTeam" style={{ height: 56, width: 'auto', objectFit: 'contain', display: 'block', filter: 'brightness(0) invert(1)' }} />
+            <img src={window.__resources && window.__resources.logoImg || "logo.png"} alt="DreamTeam" className="footer-logo-img" style={{ height: 56, width: 'auto', objectFit: 'contain', display: 'block', filter: 'var(--footer-logo-filter, brightness(0) invert(1))' }} />
           </div>
 
           <p style={{
                 fontSize: 14, lineHeight: 1.8,
-                color: 'rgba(255,255,255,0.4)',
+                color: 'var(--footer-text, #D1D5DB)',
                 fontFamily: 'DM Sans', maxWidth: 280, marginBottom: 32
               }}>
             Innovación y excelencia en telecomunicaciones. El aliado estratégico que convierte llamadas en resultados.
@@ -1171,16 +1173,17 @@ function Footer({ primary, secondary }) {
             {socials.map((s) =>
                 <a key={s.name} href={s.href} target="_blank" rel="noopener"
                 title={s.name}
+                className="footer-social-btn"
                 style={{
                   width: 38, height: 38, borderRadius: 10,
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'var(--footer-social-bg, rgba(255,255,255,0.06))',
+                  border: '1px solid var(--footer-social-border, rgba(255,255,255,0.08))',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
+                  color: 'var(--footer-social-color, #E5E7EB)', textDecoration: 'none',
                   transition: 'background 0.2s, color 0.2s, border-color 0.2s'
                 }}
                 onMouseEnter={(e) => {e.currentTarget.style.background = `${primary}22`;e.currentTarget.style.color = primary;e.currentTarget.style.borderColor = `${primary}44`;}}
-                onMouseLeave={(e) => {e.currentTarget.style.background = 'rgba(255,255,255,0.06)';e.currentTarget.style.color = 'rgba(255,255,255,0.5)';e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';}}>
+                onMouseLeave={(e) => {e.currentTarget.style.background = 'var(--footer-social-bg, rgba(255,255,255,0.06))';e.currentTarget.style.color = 'var(--footer-social-color, #E5E7EB)';e.currentTarget.style.borderColor = 'var(--footer-social-border, rgba(255,255,255,0.08))';}}>
                   {s.svg}</a>
                 )}
           </div>
@@ -1188,19 +1191,20 @@ function Footer({ primary, secondary }) {
 
         {/* Nav column */}
         <div data-anim="footer-col">
-          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
+          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'var(--footer-title, #F9FAFB)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
             Navegación
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {navLinks.map((l) =>
                 <a key={l.label} href={l.href}
+                className="footer-nav-link"
                 style={{
                   fontFamily: 'DM Sans', fontSize: 14, fontWeight: 500,
-                  color: 'rgba(255,255,255,0.45)', textDecoration: 'none',
+                  color: 'var(--footer-text, #D1D5DB)', textDecoration: 'none',
                   transition: 'color 0.2s'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}>
+                onMouseEnter={(e) => e.currentTarget.style.color = primary}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--footer-text, #D1D5DB)'}>
                   {l.label}</a>
                 )}
           </div>
@@ -1208,7 +1212,7 @@ function Footer({ primary, secondary }) {
 
         {/* Contact column */}
         <div data-anim="footer-col">
-          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
+          <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: 12, color: 'var(--footer-title, #F9FAFB)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 24 }}>
             Contacto
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -1231,7 +1235,7 @@ function Footer({ primary, secondary }) {
               Escríbenos
             </a>
 
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', lineHeight: 1.7, fontFamily: 'DM Sans' }}>
+            <div style={{ fontSize: 13, color: 'var(--footer-muted, #9CA3AF)', lineHeight: 1.7, fontFamily: 'DM Sans' }}>
               Perú · España<br />
               Innovación y Excelencia<br />
               en Telecomunicaciones
@@ -1243,15 +1247,15 @@ function Footer({ primary, secondary }) {
       </div>
       {/* Bottom bar */}
       <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.06)',
+          borderTop: '1px solid var(--footer-border, rgba(255,255,255,0.08))',
           padding: '24px 0 28px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: 12
         }}>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', fontFamily: 'DM Sans' }}>
-          © 2025 DreamTeam. Todos los derechos reservados.
+        <span style={{ fontSize: 12, color: 'var(--footer-muted, #9CA3AF)', fontFamily: 'DM Sans' }}>
+          © 2026 DreamTeam. Todos los derechos reservados.
         </span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', fontFamily: 'DM Sans' }}>
+        <span style={{ fontSize: 12, color: 'var(--footer-muted, #9CA3AF)', fontFamily: 'DM Sans' }}>
           Innovación y Excelencia en Telecomunicaciones
         </span>
       </div>

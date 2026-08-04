@@ -52,17 +52,37 @@
       --p5-ink:   #F9FAFB;
       --p5-ink2:  #FFFFFF;
       --p5-paper: #111827;
-      --p5-text-muted: #4B5563;
-      --p5-text-muted-more: #6B7280;
+      --p5-text-muted: #374151;
+      --p5-text-muted-more: #4B5563;
       --p5-brand-brightness: 0.25;
+
+      --footer-bg: #FFFFFF;
+      --footer-text: #374151;
+      --footer-title: #111827;
+      --footer-muted: #4B5563;
+      --footer-border: rgba(0, 0, 0, 0.08);
+      --footer-social-bg: rgba(0, 0, 0, 0.05);
+      --footer-social-border: rgba(0, 0, 0, 0.1);
+      --footer-social-color: #374151;
+      --footer-logo-filter: none;
     }
     [data-theme="dark"] {
       --p5-ink:   #0a0a0a;
       --p5-ink2:  #141414;
       --p5-paper: #f3efe6;
-      --p5-text-muted: rgba(243,239,230,0.65);
-      --p5-text-muted-more: rgba(243,239,230,0.5);
+      --p5-text-muted: #D1D5DB;
+      --p5-text-muted-more: #9CA3AF;
       --p5-brand-brightness: 1;
+
+      --footer-bg: #0A0A0A;
+      --footer-text: #D1D5DB;
+      --footer-title: #F9FAFB;
+      --footer-muted: #9CA3AF;
+      --footer-border: rgba(255, 255, 255, 0.08);
+      --footer-social-bg: rgba(255, 255, 255, 0.06);
+      --footer-social-border: rgba(255, 255, 255, 0.1);
+      --footer-social-color: #E5E7EB;
+      --footer-logo-filter: brightness(0) invert(1);
     }
     ::selection { background: var(--p5-red); color: #fff; }
 
@@ -346,16 +366,37 @@
     /* Ya es oscuro (secondary) — solo ajustar el color de texto */
 
     /* ── FOOTER ───────────────────────────────────────────────────── */
-    footer { border-top: 3px solid var(--p5-red) !important; }
-    footer h5 {
+    footer {
+      background: var(--footer-bg, #0A0A0A) !important;
+      border-top: 3px solid var(--p5-red) !important;
+      color: var(--footer-text, #D1D5DB) !important;
+      transition: background 0.3s, color 0.3s !important;
+    }
+    footer h5, footer [data-anim="footer-col"] > div:first-child {
       font-family: 'Oswald', sans-serif !important;
       text-transform: uppercase !important;
       letter-spacing: 2px !important;
-      color: var(--p5-paper) !important;
+      color: var(--footer-title, #F9FAFB) !important;
     }
-    footer a { color: rgba(243,239,230,0.55) !important; transition: color 0.2s !important; }
-    footer a:hover { color: var(--p5-red) !important; }
-    footer p, footer small { color: var(--p5-text-muted-more) !important; }
+    footer a {
+      color: var(--footer-text, #D1D5DB) !important;
+      opacity: 1 !important;
+      transition: color 0.2s !important;
+    }
+    footer a:hover {
+      color: var(--p5-red) !important;
+      opacity: 1 !important;
+    }
+    footer p, footer span, footer div, footer small {
+      color: var(--footer-muted, #9CA3AF) !important;
+    }
+    footer p {
+      color: var(--footer-text, #D1D5DB) !important;
+    }
+    footer .footer-logo-img, footer img[alt="DreamTeam"] {
+      filter: var(--footer-logo-filter, brightness(0) invert(1)) !important;
+      transition: filter 0.3s !important;
+    }
 
     /* ── ACTIVITIES SECTION ────────────────────────────────────────
        activities.js ya trae su propio diseño P5 nativo — sin overrides */
