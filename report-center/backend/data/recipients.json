@@ -17,7 +17,7 @@
     },
     "observations": "Número de prueba inicial para el MVP",
     "createdAt": "2026-07-07T22:08:00.863Z",
-    "lastDeliveryAt": "2026-07-07T23:18:23.464Z",
+    "lastDeliveryAt": "2026-07-17T14:01:21.015Z",
     "reportIds": []
   },
   {
@@ -56,7 +56,7 @@
     "observations": "",
     "id": "3",
     "createdAt": "2026-07-08T01:27:03.499Z",
-    "lastDeliveryAt": "2026-07-17T09:29:24.805Z",
+    "lastDeliveryAt": "2026-07-20T17:03:20.700Z",
     "reportIds": [
       "1",
       "2",

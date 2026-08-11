@@ -1,0 +1,44 @@
+{
+  "id": "7",
+  "name": "Reporte Captura CRM DreamTeam",
+  "description": "Reporte automatizado con login en el CRM y captura de la Gestión de Ventas.",
+  "status": "active",
+  "time": "08:00",
+  "frequency": "daily",
+  "channel": "whatsapp",
+  "recipientIds": [
+    "1"
+  ],
+  "timezone": "America/Lima",
+  "retryCount": 3,
+  "template": "screenshot",
+  "createdAt": "2026-08-10T20:25:00.000Z",
+  "daysOfWeek": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "isScreenshot": true,
+  "loginUrl": "http://31.97.165.147/login",
+  "username": "utest@dreamteam.pe",
+  "password": "pollipavo",
+  "usernameSelector": "",
+  "passwordSelector": "",
+  "submitSelector": "",
+  "targetUrls": [
+    "http://31.97.165.147/sales/sales"
+  ],
+  "screenshotTargets": [
+    {
+      "url": "http://31.97.165.147/sales/sales",
+      "loginUrl": "http://31.97.165.147/login",
+      "username": "utest@dreamteam.pe",
+      "password": "pollipavo"
+    }
+  ],
+  "nextExecutionAt": "2026-08-11T13:00:00.000Z"
+}

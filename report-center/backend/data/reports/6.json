@@ -1,0 +1,26 @@
+{
+  "id": "6",
+  "name": "Reporte Ventas del Mes (BO)",
+  "description": "Reporte acumulado del mes sobre ventas cerradas registradas en BO.",
+  "status": "active",
+  "time": "08:00",
+  "frequency": "daily",
+  "channel": "whatsapp",
+  "recipientIds": [
+    "1"
+  ],
+  "timezone": "America/Lima",
+  "retryCount": 3,
+  "template": "sales_month_bo",
+  "createdAt": "2026-07-17T14:00:00.000Z",
+  "daysOfWeek": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "nextExecutionAt": "2026-07-18T13:00:00.000Z"
+}
