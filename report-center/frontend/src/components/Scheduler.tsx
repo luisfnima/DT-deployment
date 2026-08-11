@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { 
   Play, Plus, Trash2, X, Clock, Eye, FlaskConical, Edit2, AlertTriangle, Loader2,
-  AlertCircle, MessageSquare, MessageCircle, Mail
+  AlertCircle, MessageSquare, MessageCircle, Mail, Key
 } from 'lucide-react';
 import { ConfirmModal } from './ConfirmModal';
+
+interface TargetItem {
+  url: string;
+  loginUrl: string;
+  username: string;
+  password: string;
+  showCustomLogin: boolean;
+}
 
 interface Recipient {
   id: string;
@@ -29,6 +37,15 @@ interface Report {
   daysOfWeek?: number[];
   lastExecutedAt?: string;
   nextExecutionAt?: string;
+  isScreenshot?: boolean;
+  loginUrl?: string;
+  username?: string;
+  password?: string;
+  usernameSelector?: string;
+  passwordSelector?: string;
+  submitSelector?: string;
+  targetUrls?: string[];
+  screenshotTargets?: any[];
 }
 
 interface SchedulerProps {
@@ -74,6 +91,18 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
   const [retryCount, setRetryCount] = useState<number>(3);
   const [template, setTemplate] = useState('default');
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
+
+  // Screenshot Report Custom State
+  const [isScreenshot, setIsScreenshot] = useState(false);
+  const [loginUrl, setLoginUrl] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [usernameSelector, setUsernameSelector] = useState('');
+  const [passwordSelector, setPasswordSelector] = useState('');
+  const [submitSelector, setSubmitSelector] = useState('');
+  const [targets, setTargets] = useState<TargetItem[]>([
+    { url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }
+  ]);
 
   const formatDaysOfWeek = (days?: number[]) => {
     if (!days || days.length === 0 || days.length === 7) return 'Todos los días';
@@ -144,6 +173,14 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setRetryCount(3);
     setTemplate('default');
     setDaysOfWeek([0, 1, 2, 3, 4, 5, 6]);
+    setIsScreenshot(false);
+    setLoginUrl('');
+    setUsername('');
+    setPassword('');
+    setUsernameSelector('');
+    setPasswordSelector('');
+    setSubmitSelector('');
+    setTargets([{ url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }]);
     setShowForm(true);
   };
 
@@ -159,6 +196,29 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setRetryCount(report.retryCount ?? 3);
     setTemplate(report.template || 'default');
     setDaysOfWeek(report.daysOfWeek || [0, 1, 2, 3, 4, 5, 6]);
+    
+    setIsScreenshot(!!report.isScreenshot);
+    setLoginUrl(report.loginUrl || '');
+    setUsername(report.username || '');
+    setPassword(report.password || '');
+    setUsernameSelector(report.usernameSelector || '');
+    setPasswordSelector(report.passwordSelector || '');
+    setSubmitSelector(report.submitSelector || '');
+
+    if (report.screenshotTargets && report.screenshotTargets.length > 0) {
+      setTargets(report.screenshotTargets.map((st: any) => ({
+        url: st.url || '',
+        loginUrl: st.loginUrl || '',
+        username: st.username || '',
+        password: st.password || '',
+        showCustomLogin: !!(st.loginUrl || st.username)
+      })));
+    } else if (report.targetUrls && report.targetUrls.length > 0) {
+      setTargets(report.targetUrls.map(u => ({ url: u, loginUrl: '', username: '', password: '', showCustomLogin: false })));
+    } else {
+      setTargets([{ url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }]);
+    }
+
     setShowForm(true);
   };
 
@@ -193,10 +253,10 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     
     const initialSteps: StepperStep[] = [
       { label: 'Iniciando Despachador', status: 'running', desc: 'Verificando cola y parámetros de distribución...' },
-      { label: 'Consultando CRM Corporativo', status: 'pending', desc: 'Extrayendo registros de leads y estado de ventas en Neon...' },
+      { label: 'Consultando CRM Corporativo / Fuentes Web', status: 'pending', desc: 'Conectando con Neon DB y enlaces configurados...' },
       { label: 'Procesando Datos del Reporte', status: 'pending', desc: 'Cálculo de registros y supervisores asociados...' },
-      { label: 'Generando Reporte HTML', status: 'pending', desc: 'Maquetando layout corporativo y estilos CSS de tablas...' },
-      { label: 'Renderizando Imagen de Salida', status: 'pending', desc: 'Captura de pantalla PNG vía navegador Playwright...' },
+      { label: 'Generando Reporte HTML / Capturas', status: 'pending', desc: 'Maquetando layout corporativo o navegando con Playwright...' },
+      { label: 'Renderizando Imagen / Captura de Pantalla', status: 'pending', desc: 'Generación de buffers PNG de salida...' },
       { label: 'Enviando por WhatsApp', status: 'pending', desc: 'Subida de buffer de imagen a Evolution API y despacho a destinatarios...' },
       { label: 'Ejecución Finalizada', status: 'pending', desc: 'Confirmación de entrega e historial registrado en data local.' }
     ];
@@ -215,7 +275,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
         }
         return next;
       });
-    }, 1800);
+    }, 2000);
 
     try {
       const res = await fetch(`/api/reports/${id}/${endpoint}`, { method: 'POST' });
@@ -271,11 +331,11 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setPreviewingName(name);
     try {
       const res = await fetch(`/api/reports/${id}/preview`);
-      const data = await res.json();
-      if (res.ok && data.html) {
-        setPreviewHtml(data.html);
+      const htmlText = await res.text();
+      if (res.ok) {
+        setPreviewHtml(htmlText);
       } else {
-        addToast(data.error || 'No se pudo generar la vista previa.', 'error');
+        addToast('No se pudo generar la vista previa.', 'error');
       }
     } catch (e) {
       addToast('Error de red al conectar al endpoint de vista previa.', 'error');
@@ -294,6 +354,15 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     e.preventDefault();
     if (!name.trim()) return;
 
+    const formattedTargets = targets
+      .filter(t => t.url && t.url.trim() !== '')
+      .map(t => ({
+        url: t.url.trim(),
+        loginUrl: t.showCustomLogin ? t.loginUrl.trim() : '',
+        username: t.showCustomLogin ? t.username.trim() : '',
+        password: t.showCustomLogin ? t.password : ''
+      }));
+
     const payload = {
       name,
       description,
@@ -303,9 +372,18 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
       recipientIds: selectedRecipients,
       timezone,
       retryCount: Number(retryCount),
-      template,
+      template: isScreenshot ? 'screenshot' : template,
       channel: 'whatsapp',
-      daysOfWeek
+      daysOfWeek,
+      isScreenshot,
+      loginUrl,
+      username,
+      password,
+      usernameSelector,
+      passwordSelector,
+      submitSelector,
+      targetUrls: formattedTargets.map(t => t.url),
+      screenshotTargets: formattedTargets
     };
 
     try {
@@ -452,8 +530,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
             <div className="space-y-2 md:col-span-1">
               <label className="text-xs font-bold text-dark-muted uppercase tracking-wider block mb-1">Días de Envío</label>
               <div className="flex gap-1">
-                {[
-                  { l: 'D', v: 0 },
+                {[\n                  { l: 'D', v: 0 },
                   { l: 'L', v: 1 },
                   { l: 'M', v: 2 },
                   { l: 'M', v: 3 },
@@ -505,7 +582,8 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
                 value={template}
                 onChange={e => setTemplate(e.target.value)}
                 required
-                className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text focus:outline-none focus:border-brand-red transition"
+                disabled={isScreenshot}
+                className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text focus:outline-none focus:border-brand-red transition disabled:opacity-50"
               />
             </div>
 
@@ -533,6 +611,145 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
                   <span>Inactivo</span>
                 </label>
               </div>
+            </div>
+
+            {/* SCREENSHOT REPORT TOGGLE */}
+            <div className="space-y-2 md:col-span-3 bg-dark-bg/60 border border-dark-border/80 rounded-xl p-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox"
+                  checked={isScreenshot}
+                  onChange={e => {
+                    setIsScreenshot(e.target.checked);
+                    if (e.target.checked) setTemplate('screenshot');
+                  }}
+                  className="w-4 h-4 rounded border-dark-border bg-dark-bg text-brand-red focus:ring-0"
+                />
+                <div>
+                  <span className="text-sm font-bold text-dark-text">📸 Reporte de Captura de Pantalla Web</span>
+                  <p className="text-xs text-dark-muted">Navega a los sitios web configurados y toma capturas de pantalla de forma automática.</p>
+                </div>
+              </label>
+
+              {isScreenshot && (
+                <div className="mt-4 pt-4 border-t border-dark-border/60 space-y-4">
+                  <div className="bg-brand-red/5 border border-brand-red/20 p-3 rounded-lg text-xs text-dark-muted">
+                    <span className="font-bold text-brand-red block mb-1">ℹ️ Captura de Páginas Web</span>
+                    Ingresa las URLs de los sitios que deseas capturar. Si alguna página requiere usuario y clave para ingresar, presiona el botón <span className="font-bold text-dark-text">"🔑 ¿Tiene login?"</span> en su casilla.
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-dark-muted uppercase tracking-wider block">
+                        URLs de Destino para Capturar Pantalla ({targets.length}/6)
+                      </label>
+                      {targets.length < 6 && (
+                        <button
+                          type="button"
+                          onClick={() => setTargets([...targets, { url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }])}
+                          className="flex items-center gap-1 text-xs text-brand-red hover:underline font-bold"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> Agregar URL
+                        </button>
+                      )}
+                    </div>
+
+                    {targets.map((t, idx) => (
+                      <div key={idx} className="bg-dark-bg/80 border border-dark-border rounded-xl p-3 space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-dark-muted w-14 shrink-0">Link {idx + 1}:</span>
+                          <input 
+                            type="url"
+                            value={t.url}
+                            onChange={e => {
+                              const newTargets = [...targets];
+                              newTargets[idx].url = e.target.value;
+                              setTargets(newTargets);
+                            }}
+                            placeholder={`https://ejemplo.com/reporte-${idx + 1}`}
+                            className="flex-1 bg-dark-card border border-dark-border rounded-lg px-3 py-1.5 text-xs text-dark-text focus:outline-none focus:border-brand-red"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newTargets = [...targets];
+                              newTargets[idx].showCustomLogin = !newTargets[idx].showCustomLogin;
+                              setTargets(newTargets);
+                            }}
+                            className={`flex items-center gap-1 text-[11px] px-2.5 py-1.5 rounded-lg border font-medium transition ${
+                              t.showCustomLogin 
+                                ? 'bg-brand-red/10 border-brand-red/40 text-brand-red font-bold' 
+                                : 'bg-dark-card border-dark-border text-dark-muted hover:text-dark-text'
+                            }`}
+                            title="Configurar usuario y contraseña para este link"
+                          >
+                            <Key className="w-3.5 h-3.5" />
+                            <span>{t.showCustomLogin ? '🔑 Con login activo' : '🔑 ¿Tiene login?'}</span>
+                          </button>
+
+                          {targets.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => setTargets(targets.filter((_, i) => i !== idx))}
+                              className="p-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition"
+                              title="Eliminar este link"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+
+                        {t.showCustomLogin && (
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-2 border-t border-dark-border/40 bg-dark-card/40 p-2.5 rounded-lg">
+                            <div>
+                              <label className="text-[10px] font-bold text-dark-muted uppercase">URL de Login</label>
+                              <input 
+                                type="url"
+                                value={t.loginUrl}
+                                onChange={e => {
+                                  const newTargets = [...targets];
+                                  newTargets[idx].loginUrl = e.target.value;
+                                  setTargets(newTargets);
+                                }}
+                                placeholder="https://ejemplo.com/login"
+                                className="w-full bg-dark-bg border border-dark-border rounded px-2.5 py-1 text-xs text-dark-text focus:outline-none focus:border-brand-red"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-dark-muted uppercase">Usuario / Email</label>
+                              <input 
+                                type="text"
+                                value={t.username}
+                                onChange={e => {
+                                  const newTargets = [...targets];
+                                  newTargets[idx].username = e.target.value;
+                                  setTargets(newTargets);
+                                }}
+                                placeholder="usuario@ejemplo.com"
+                                className="w-full bg-dark-bg border border-dark-border rounded px-2.5 py-1 text-xs text-dark-text focus:outline-none focus:border-brand-red"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] font-bold text-dark-muted uppercase">Contraseña</label>
+                              <input 
+                                type="password"
+                                value={t.password}
+                                onChange={e => {
+                                  const newTargets = [...targets];
+                                  newTargets[idx].password = e.target.value;
+                                  setTargets(newTargets);
+                                }}
+                                placeholder="••••••••"
+                                className="w-full bg-dark-bg border border-dark-border rounded px-2.5 py-1 text-xs text-dark-text focus:outline-none focus:border-brand-red"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Recipient Checklist */}
@@ -625,7 +842,14 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
                   return (
                     <tr key={report.id} className="hover:bg-dark-card/55 transition duration-150">
                       <td className="px-6 py-4">
-                        <div className="font-semibold text-dark-text">{report.name}</div>
+                        <div className="font-semibold text-dark-text flex items-center gap-2">
+                          {report.name}
+                          {report.isScreenshot && (
+                            <span className="bg-brand-red/10 border border-brand-red/20 text-brand-red text-[10px] px-1.5 py-0.5 rounded font-bold">
+                              📸 Captura Web ({report.screenshotTargets?.length || report.targetUrls?.length || 1})
+                            </span>
+                          )}
+                        </div>
                         <div className="text-xs text-dark-muted line-clamp-1 mt-0.5">{report.description || 'Sin descripción.'}</div>
                       </td>
                       <td className="px-6 py-4">
