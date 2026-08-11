@@ -1,9 +1,19 @@
+export interface ScreenshotTarget {
+  url: string;
+  loginUrl?: string;
+  username?: string;
+  password?: string;
+  usernameSelector?: string;
+  passwordSelector?: string;
+  submitSelector?: string;
+}
+
 export interface Report {
   id: string;
   name: string;
   description: string;
   status: 'active' | 'inactive';
-  time: string; // e.g. "18:00"
+  time: string;
   frequency: 'daily' | 'weekly' | 'monthly';
   channel: 'whatsapp' | 'email' | 'telegram';
   recipientIds: string[];
@@ -11,7 +21,18 @@ export interface Report {
   retryCount: number;
   template: string;
   createdAt: string;
-  daysOfWeek?: number[]; // [0 = Sunday, 1 = Monday, ..., 6 = Saturday]
+  daysOfWeek?: number[];
   lastExecutedAt?: string;
   nextExecutionAt?: string;
+  
+  // Opciones para Capturas Web Dinámicas
+  isScreenshot?: boolean;
+  loginUrl?: string;
+  username?: string;
+  password?: string;
+  usernameSelector?: string;
+  passwordSelector?: string;
+  submitSelector?: string;
+  targetUrls?: string[];
+  screenshotTargets?: ScreenshotTarget[];
 }
