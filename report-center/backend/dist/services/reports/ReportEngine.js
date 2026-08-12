@@ -139,7 +139,7 @@ class ReportEngine {
             let excelBuffer;
             let screenshotBuffers = [];
             let reportData = {};
-            if (report.isScreenshot) {
+            if (report.isScreenshot || report.template === 'screenshot') {
                 ReportRepository_1.ReportRepository.addLog('Scheduler', `${tagLabel} 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...`, 'info', report.id);
                 screenshotBuffers = await this.takeScreenshots(report);
                 if (screenshotBuffers.length === 0) {
