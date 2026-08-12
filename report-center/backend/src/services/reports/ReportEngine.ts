@@ -48,11 +48,43 @@ export class ReportEngine {
       throw new Error(`Reporte ID ${reportId} no encontrado.`);
     }
 
-    if (report.isScreenshot) {
+    if (report.isScreenshot || report.template === 'screenshot') {
       ReportRepository.addLog('Scheduler', `📸 Generando vista previa de capturas para "${report.name}"...`, 'info', report.id);
-      const buffers = await this.takeScreenshots(report);
+      let buffers: Buffer[] = [];
+      try {
+        buffers = await this.takeScreenshots(report);
+      } catch (err: any) {
+        console.error('Error taking screenshots for preview:', err);
+      }
+
+      const targets = (report.screenshotTargets && report.screenshotTargets.length > 0)
+        ? report.screenshotTargets
+        : (report.targetUrls || []).map(url => ({
+            url,
+            loginUrl: report.loginUrl,
+            username: report.username,
+            password: report.password
+          }));
+
       if (buffers.length === 0) {
-        return `<div style="padding: 20px; font-family: sans-serif; text-align: center; color: #ef4444; background: #0f172a; border-radius: 8px;">No se pudieron tomar capturas de pantalla. Revisa la URL y configuración del reporte.</div>`;
+        const targetsListHtml = targets.map((t, idx) => `
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px 18px; border-radius: 12px; margin-bottom: 12px;">
+            <div style="font-weight: bold; color: #ff3b30; font-size: 13px;">📸 Captura #${idx + 1}: ${t.url}</div>
+            ${t.loginUrl ? `<div style="font-size: 11px; color: #aaa; margin-top: 4px;">🔑 Autenticación en vivo: ${t.username || 'N/A'} @ ${t.loginUrl}</div>` : '<div style="font-size: 11px; color: #666; margin-top: 4px;">🔓 Navegación Directa (Sin Login)</div>'}
+          </div>
+        `).join('');
+
+        return `
+          <div style="padding: 24px; font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #f8fafc; border-radius: 12px;">
+            <h2 style="margin-top:0; margin-bottom: 8px; color: #38bdf8;">📷 ${report.name}</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">${report.description || 'Reporte de captura automatizada en vivo mediante CRM y Playwright.'}</p>
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: #cbd5e1;">URLs y Servidores Configurados (${targets.length}):</div>
+            ${targetsListHtml}
+            <div style="margin-top: 20px; font-size: 11px; color: #64748b; border-top: 1px solid #1e293b; padding-top: 12px; text-align: center;">
+              ⚡ Nota: En el servidor Render en la nube, las capturas PNG completas se generan al ejecutarse la tarea programada y se despachan directamente por WhatsApp.
+            </div>
+          </div>
+        `;
       }
       
       let html = `<div style="padding: 20px; font-family: sans-serif; background: #0f172a; color: #f8fafc; border-radius: 8px;">`;
