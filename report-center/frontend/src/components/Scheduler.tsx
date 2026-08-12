@@ -179,7 +179,6 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setPassword('');
     setUsernameSelector('');
     setPasswordSelector('');
-    setSubmitSelector('');
     setTargets([{ url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }]);
     setShowForm(true);
   };
@@ -196,7 +195,6 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setRetryCount(report.retryCount ?? 3);
     setTemplate(report.template || 'default');
     setDaysOfWeek(report.daysOfWeek || [0, 1, 2, 3, 4, 5, 6]);
-    
     setIsScreenshot(!!report.isScreenshot || report.template === 'screenshot');
     setLoginUrl(report.loginUrl || '');
     setUsername(report.username || '');
@@ -204,21 +202,20 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setUsernameSelector(report.usernameSelector || '');
     setPasswordSelector(report.passwordSelector || '');
     setSubmitSelector(report.submitSelector || '');
-
+    
     if (report.screenshotTargets && report.screenshotTargets.length > 0) {
-      setTargets(report.screenshotTargets.map((st: any) => ({
-        url: st.url || '',
-        loginUrl: st.loginUrl || '',
-        username: st.username || '',
-        password: st.password || '',
-        showCustomLogin: !!(st.loginUrl || st.username)
+      setTargets(report.screenshotTargets.map((t: any) => ({
+        url: t.url || '',
+        loginUrl: t.loginUrl || '',
+        username: t.username || '',
+        password: t.password || '',
+        showCustomLogin: !!(t.loginUrl || t.username || t.password)
       })));
-    } else if (report.targetUrls && report.targetUrls.length > 0) {
-      setTargets(report.targetUrls.map(u => ({ url: u, loginUrl: '', username: '', password: '', showCustomLogin: false })));
     } else {
-      setTargets([{ url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }]);
+      const urls = report.targetUrls || [];
+      const formatted = urls.map((u: string) => ({ url: u, loginUrl: '', username: '', password: '', showCustomLogin: false }));
+      setTargets(formatted.length > 0 ? formatted : [{ url: '', loginUrl: '', username: '', password: '', showCustomLogin: false }]);
     }
-
     setShowForm(true);
   };
 
@@ -253,10 +250,10 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     
     const initialSteps: StepperStep[] = [
       { label: 'Iniciando Despachador', status: 'running', desc: 'Verificando cola y parámetros de distribución...' },
-      { label: 'Consultando CRM Corporativo / Fuentes Web', status: 'pending', desc: 'Conectando con Neon DB y enlaces configurados...' },
+      { label: 'Consultando CRM Corporativo', status: 'pending', desc: 'Extrayendo registros de leads y estado de ventas en Neon...' },
       { label: 'Procesando Datos del Reporte', status: 'pending', desc: 'Cálculo de registros y supervisores asociados...' },
-      { label: 'Generando Reporte HTML / Capturas', status: 'pending', desc: 'Maquetando layout corporativo o navegando con Playwright...' },
-      { label: 'Renderizando Imagen / Captura de Pantalla', status: 'pending', desc: 'Generación de buffers PNG de salida...' },
+      { label: 'Generando Reporte HTML', status: 'pending', desc: 'Maquetando layout corporativo y estilos CSS de tablas...' },
+      { label: 'Renderizando Imagen de Salida', status: 'pending', desc: 'Captura de pantalla PNG vía navegador Playwright...' },
       { label: 'Enviando por WhatsApp', status: 'pending', desc: 'Subida de buffer de imagen a Evolution API y despacho a destinatarios...' },
       { label: 'Ejecución Finalizada', status: 'pending', desc: 'Confirmación de entrega e historial registrado en data local.' }
     ];
@@ -275,7 +272,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
         }
         return next;
       });
-    }, 2000);
+    }, 1800);
 
     try {
       const res = await fetch(`/api/reports/${id}/${endpoint}`, { method: 'POST' });
@@ -331,11 +328,11 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setPreviewingName(name);
     try {
       const res = await fetch(`/api/reports/${id}/preview`);
-      const htmlText = await res.text();
-      if (res.ok) {
-        setPreviewHtml(htmlText);
+      const data = await res.json();
+      if (res.ok && data.html) {
+        setPreviewHtml(data.html);
       } else {
-        addToast('No se pudo generar la vista previa.', 'error');
+        addToast(data.error || 'No se pudo generar la vista previa.', 'error');
       }
     } catch (e) {
       addToast('Error de red al conectar al endpoint de vista previa.', 'error');
@@ -354,13 +351,13 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    const formattedTargets = targets
-      .filter(t => t.url && t.url.trim() !== '')
+    const validTargets = targets
+      .filter(t => t.url.trim().length > 0)
       .map(t => ({
         url: t.url.trim(),
         loginUrl: t.showCustomLogin ? t.loginUrl.trim() : '',
         username: t.showCustomLogin ? t.username.trim() : '',
-        password: t.showCustomLogin ? t.password : ''
+        password: t.showCustomLogin ? t.password.trim() : ''
       }));
 
     const payload = {
@@ -372,7 +369,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
       recipientIds: selectedRecipients,
       timezone,
       retryCount: Number(retryCount),
-      template: isScreenshot ? 'screenshot' : template,
+      template,
       channel: 'whatsapp',
       daysOfWeek,
       isScreenshot,
@@ -382,8 +379,8 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
       usernameSelector,
       passwordSelector,
       submitSelector,
-      targetUrls: formattedTargets.map(t => t.url),
-      screenshotTargets: formattedTargets
+      targetUrls: validTargets.map(t => t.url),
+      screenshotTargets: validTargets
     };
 
     try {
@@ -530,7 +527,8 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
             <div className="space-y-2 md:col-span-1">
               <label className="text-xs font-bold text-dark-muted uppercase tracking-wider block mb-1">Días de Envío</label>
               <div className="flex gap-1">
-                {[\n                  { l: 'D', v: 0 },
+                {[
+                  { l: 'D', v: 0 },
                   { l: 'L', v: 1 },
                   { l: 'M', v: 2 },
                   { l: 'M', v: 3 },
@@ -582,8 +580,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
                 value={template}
                 onChange={e => setTemplate(e.target.value)}
                 required
-                disabled={isScreenshot}
-                className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text focus:outline-none focus:border-brand-red transition disabled:opacity-50"
+                className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-2 text-sm text-dark-text focus:outline-none focus:border-brand-red transition"
               />
             </div>
 
@@ -613,21 +610,48 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
               </div>
             </div>
 
-            {/* SCREENSHOT REPORT TOGGLE */}
-            <div className="space-y-2 md:col-span-3 bg-dark-bg/60 border border-dark-border/80 rounded-xl p-4">
+            {/* Recipient Checklist */}
+            <div className="space-y-2 md:col-span-2">
+              <label className="text-xs font-bold text-dark-muted uppercase tracking-wider block mb-1">
+                Destinatarios Asociados (Selecciona uno o más)
+              </label>
+              {recipients.length === 0 ? (
+                <div className="text-xs text-amber-500 bg-amber-500/5 border border-amber-500/10 p-3 rounded-lg flex items-center gap-1">
+                  <AlertTriangle className="w-4.5 h-4.5" />
+                  No hay destinatarios activos creados. Ve a la pestaña "Destinatarios" para crear uno primero.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-36 overflow-y-auto p-3 bg-dark-bg border border-dark-border rounded-lg">
+                  {recipients.map((rec) => (
+                    <label key={rec.id} className="flex items-center gap-2.5 text-xs text-dark-text cursor-pointer hover:bg-dark-card/50 p-1.5 rounded transition">
+                      <input 
+                        type="checkbox"
+                        checked={selectedRecipients.includes(rec.id)}
+                        onChange={() => handleRecipientToggle(rec.id)}
+                        className="rounded border-dark-border bg-dark-bg text-brand-red focus:ring-0"
+                      />
+                      <div className="truncate flex items-center gap-1.5">
+                        {getRecipientChannelIcon(rec.channel)}
+                        <span className="font-bold">{rec.name}</span> <span className="text-dark-muted">({rec.value})</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Checkbox for Screenshot Report */}
+            <div className="space-y-3 md:col-span-3 bg-dark-bg/60 border border-dark-border p-4 rounded-xl">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input 
                   type="checkbox"
                   checked={isScreenshot}
-                  onChange={e => {
-                    setIsScreenshot(e.target.checked);
-                    if (e.target.checked) setTemplate('screenshot');
-                  }}
+                  onChange={e => setIsScreenshot(e.target.checked)}
                   className="w-4 h-4 rounded border-dark-border bg-dark-bg text-brand-red focus:ring-0"
                 />
                 <div>
                   <span className="text-sm font-bold text-dark-text">📸 Reporte de Captura de Pantalla Web</span>
-                  <p className="text-xs text-dark-muted">Navega a los sitios web configurados y toma capturas de pantalla de forma automática.</p>
+                  <p className="text-xs text-dark-muted">Navega a un sitio web, inicia sesión y toma captura de hasta 4 páginas de forma automática.</p>
                 </div>
               </label>
 
@@ -752,36 +776,6 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
               )}
             </div>
 
-            {/* Recipient Checklist */}
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-xs font-bold text-dark-muted uppercase tracking-wider block mb-1">
-                Destinatarios Asociados (Selecciona uno o más)
-              </label>
-              {recipients.length === 0 ? (
-                <div className="text-xs text-amber-500 bg-amber-500/5 border border-amber-500/10 p-3 rounded-lg flex items-center gap-1">
-                  <AlertTriangle className="w-4.5 h-4.5" />
-                  No hay destinatarios activos creados. Ve a la pestaña "Destinatarios" para crear uno primero.
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-36 overflow-y-auto p-3 bg-dark-bg border border-dark-border rounded-lg">
-                  {recipients.map((rec) => (
-                    <label key={rec.id} className="flex items-center gap-2.5 text-xs text-dark-text cursor-pointer hover:bg-dark-card/50 p-1.5 rounded transition">
-                      <input 
-                        type="checkbox"
-                        checked={selectedRecipients.includes(rec.id)}
-                        onChange={() => handleRecipientToggle(rec.id)}
-                        className="rounded border-dark-border bg-dark-bg text-brand-red focus:ring-0"
-                      />
-                      <div className="truncate flex items-center gap-1.5">
-                        {getRecipientChannelIcon(rec.channel)}
-                        <span className="font-bold">{rec.name}</span> <span className="text-dark-muted">({rec.value})</span>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
-
             <div className="space-y-2 md:col-span-3">
               <label className="text-xs font-bold text-dark-muted uppercase tracking-wider">Descripción del Reporte</label>
               <textarea 
@@ -845,8 +839,8 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
                         <div className="font-semibold text-dark-text flex items-center gap-2">
                           {report.name}
                           {report.isScreenshot && (
-                            <span className="bg-brand-red/10 border border-brand-red/20 text-brand-red text-[10px] px-1.5 py-0.5 rounded font-bold">
-                              📸 Captura Web ({report.screenshotTargets?.length || report.targetUrls?.length || 1})
+                            <span className="px-2 py-0.5 text-[10px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 rounded-md">
+                              📸 Captura Web ({report.targetUrls?.length || 0})
                             </span>
                           )}
                         </div>
@@ -1048,7 +1042,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
             </div>
 
             <div className="px-6 py-3 border-t border-dark-border flex justify-end bg-dark-bg/30 text-xs text-dark-muted">
-              <span>El diseño se renderizará automáticamente en una imagen PNG antes de despacharse a WhatsApp.</span>
+              <span>{previewingName.includes('Mes') ? 'Este reporte se generará y enviará como un documento de Excel (.xlsx) por WhatsApp.' : 'El diseño se renderizará automáticamente en una imagen PNG antes de despacharse a WhatsApp.'}</span>
             </div>
           </div>
         </div>
