@@ -10,6 +10,7 @@ import { InstaladasHoyReport } from './InstaladasHoyReport';
 import { CanceladasHoyReport } from './CanceladasHoyReport';
 import { ProcesoHoyReport } from './ProcesoHoyReport';
 import { VentasMesBOReport } from './VentasMesBOReport';
+import { ScreenshotReport } from './ScreenshotReport';
 import { ImageRenderer } from '../../renderers/ImageRenderer';
 import { env } from '../../config/env';
 
@@ -33,6 +34,7 @@ export class ReportEngine {
     this.registerModule('4', new CanceladasHoyReport());
     this.registerModule('5', new ProcesoHoyReport());
     this.registerModule('6', new VentasMesBOReport());
+    this.registerModule('7', new ScreenshotReport());
   }
 
   public registerModule(reportId: string, module: IReportModule) {
