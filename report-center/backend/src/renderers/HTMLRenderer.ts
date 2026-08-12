@@ -5,17 +5,22 @@ import { soloDia, soloHora } from '../services/reports/helpers';
 export class HTMLRenderer implements IRenderer {
   private renderEstiloGestion(valor: string): string {
     if (!valor || valor === 'Sin seguimiento') {
-      return `<span style="color: #d97706; background-color: #fef3c7; border: 1px solid #fde68a; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 11px; white-space: nowrap;">⚠️ Sin seguimiento</span>`;
+      return `<span style="color: #71717a; background-color: #f4f4f5; border: 1px solid #e4e4e7; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 11px; white-space: nowrap;">⚪ Sin seguimiento</span>`;
     }
     const upper = valor.toUpperCase();
+    if (upper.includes('OK') || upper.includes('RECUPERADO')) {
+      return `<span style="color: #16a34a; background-color: #dcfce7; border: 1px solid #bbf7d0; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; white-space: nowrap;">✅ ${valor}</span>`;
+    }
     if (upper.includes('CANCELADO') || upper.includes('BAJA') || upper.includes('RECHAZADO')) {
       return `<span style="color: #dc2626; background-color: #fee2e2; border: 1px solid #fecaca; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; white-space: nowrap;">❌ ${valor}</span>`;
     }
-    return `<span style="color: #16a34a; background-color: #dcfce7; border: 1px solid #bbf7d0; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; white-space: nowrap;">✅ ${valor}</span>`;
+    // For 'No contesta', 'Volver a llamar', etc. (Pendientes / En proceso)
+    return `<span style="color: #d97706; background-color: #fef3c7; border: 1px solid #fde68a; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px; white-space: nowrap;">⚠️ ${valor}</span>`;
   }
 
   public render(data: any): string {
     const { reportName, subTitle, timestamp, metrics, isGrouped, porSupervisor, isSeguimientoBO, rows } = data;
+    const isMonthly = reportName && reportName.includes('Mes');
     
     const formattedDate = new Date(timestamp).toLocaleString('es-PE', {
       timeZone: 'America/Lima',
@@ -133,8 +138,13 @@ export class HTMLRenderer implements IRenderer {
               <table style="width: 100%; min-width: 850px; border-collapse: collapse; text-align: left; font-size: 11px;">
                 <thead>
                   <tr style="background-color: #27272a; color: #ffffff;">
-                    <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 8%;">Hora</th>
-                    <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 12%;">Asesor</th>
+                    ${isMonthly ? `
+                      <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 8%;">Gestion Contra</th>
+                      <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 8%;">Gestion Fide</th>
+                    ` : `
+                      <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 8%;">Hora</th>
+                    `}
+                    <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 10%;">Asesor</th>
                     <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 18%;">Cliente</th>
                     <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 10%;">DNI/RUC</th>
                     <th style="padding: 10px 12px; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; width: 10%;">Estado</th>
@@ -151,7 +161,12 @@ export class HTMLRenderer implements IRenderer {
             const rowBg = index % 2 === 1 ? '#fafafa' : '#ffffff';
             html += `
               <tr style="background-color: ${rowBg}; border-bottom: 1px solid #f4f4f5;">
-                <td style="padding: 10px 12px; font-family: monospace; font-weight: 600;">${v.sale_date ? soloHora(v.sale_date) : '-'}</td>
+                ${isMonthly ? `
+                  <td style="padding: 10px 12px; font-family: monospace; font-weight: 600; color: ${v.fecha_contra === 'PTE' ? '#a1a1aa' : '#16a34a'};">${v.fecha_contra}</td>
+                  <td style="padding: 10px 12px; font-family: monospace; font-weight: 600; color: ${v.fecha_fide === 'PTE' ? '#a1a1aa' : '#16a34a'};">${v.fecha_fide}</td>
+                ` : `
+                  <td style="padding: 10px 12px; font-family: monospace; font-weight: 600;">${v.sale_date ? soloHora(v.sale_date) : '-'}</td>
+                `}
                 <td style="padding: 10px 12px; font-weight: 600; color: #09090b;">${v.agent || '-'}</td>
                 <td style="padding: 10px 12px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${v.cliente_nombre_del_cliente || '-'}</td>
                 <td style="padding: 10px 12px; font-family: monospace;">${v.cliente_nro_de_documento || '-'}</td>
