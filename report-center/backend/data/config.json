@@ -1,11 +1,11 @@
 {
   "scheduler": "running",
-  "evolutionApi": "connected",
+  "evolutionApi": "disconnected",
   "crmApi": "connected",
-  "averageExecutionTimeMs": 22094,
-  "sentToday": 4,
-  "failedToday": 8,
-  "lastSendErrorAt": "2026-07-17T09:27:05.001Z",
-  "lastSendErrorMsg": "Sin ventas hoy (2026-07-17) para reporte BO.",
-  "lastSendSuccessAt": "2026-07-17T09:29:24.851Z"
+  "averageExecutionTimeMs": 21969,
+  "sentToday": 0,
+  "failedToday": 21,
+  "lastSendErrorAt": "2026-08-12T02:21:54.242Z",
+  "lastSendErrorMsg": "No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+  "lastSendSuccessAt": "2026-07-20T17:03:20.713Z"
 }
