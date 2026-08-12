@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "l_1786501314246_3wu1q",
+    "timestamp": "2026-08-12T02:21:54.246Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Proceso Hoy\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501314210_zkw1q",
+    "timestamp": "2026-08-12T02:21:54.210Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501314208_pot2f",
+    "timestamp": "2026-08-12T02:21:54.208Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501314203_d5a48",
+    "timestamp": "2026-08-12T02:21:54.203Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501314200_z2jw8",
+    "timestamp": "2026-08-12T02:21:54.200Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501314198_jvsyg",
+    "timestamp": "2026-08-12T02:21:54.198Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501312857_uu01f",
+    "timestamp": "2026-08-12T02:21:52.857Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501312854_xps0i",
+    "timestamp": "2026-08-12T02:21:52.854Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501297219_mm7ip",
+    "timestamp": "2026-08-12T02:21:37.219Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501297215_7omcb",
+    "timestamp": "2026-08-12T02:21:37.215Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501297207_5vcmt",
+    "timestamp": "2026-08-12T02:21:37.207Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501295174_r6dqw",
+    "timestamp": "2026-08-12T02:21:35.174Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501295171_ox9yd",
+    "timestamp": "2026-08-12T02:21:35.171Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501295168_ljrvh",
+    "timestamp": "2026-08-12T02:21:35.168Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501295165_4xa1w",
+    "timestamp": "2026-08-12T02:21:35.165Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501295162_7khcm",
+    "timestamp": "2026-08-12T02:21:35.162Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501293867_tclb1",
+    "timestamp": "2026-08-12T02:21:33.867Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501293863_ab78o",
+    "timestamp": "2026-08-12T02:21:33.863Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501283483_egyn0",
+    "timestamp": "2026-08-12T02:21:23.483Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501283480_brt8x",
+    "timestamp": "2026-08-12T02:21:23.480Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501283476_p61ep",
+    "timestamp": "2026-08-12T02:21:23.476Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501281443_s3rax",
+    "timestamp": "2026-08-12T02:21:21.443Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501281440_txk8f",
+    "timestamp": "2026-08-12T02:21:21.440Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501281437_2w4cw",
+    "timestamp": "2026-08-12T02:21:21.437Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501281434_fp8i2",
+    "timestamp": "2026-08-12T02:21:21.434Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501281431_089it",
+    "timestamp": "2026-08-12T02:21:21.431Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501280181_c63xb",
+    "timestamp": "2026-08-12T02:21:20.181Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501280176_yzxd4",
+    "timestamp": "2026-08-12T02:21:20.176Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501269081_01yd5",
+    "timestamp": "2026-08-12T02:21:09.081Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501269076_r90fg",
+    "timestamp": "2026-08-12T02:21:09.076Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501269073_9a751",
+    "timestamp": "2026-08-12T02:21:09.073Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (21:21) encontrada para \"Proceso Hoy\". Iniciando flujo...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190073_zounz",
+    "timestamp": "2026-08-12T02:19:50.073Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Proceso Hoy\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190041_50n2h",
+    "timestamp": "2026-08-12T02:19:50.041Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190039_nwvea",
+    "timestamp": "2026-08-12T02:19:50.039Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190036_qhudb",
+    "timestamp": "2026-08-12T02:19:50.036Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190029_po4q0",
+    "timestamp": "2026-08-12T02:19:50.029Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501190023_9txt9",
+    "timestamp": "2026-08-12T02:19:50.023Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501188551_2pbpy",
+    "timestamp": "2026-08-12T02:19:48.551Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501188545_ryr44",
+    "timestamp": "2026-08-12T02:19:48.545Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501177398_qrqx3",
+    "timestamp": "2026-08-12T02:19:37.398Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501177394_vc4gu",
+    "timestamp": "2026-08-12T02:19:37.394Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501177391_mnsa1",
+    "timestamp": "2026-08-12T02:19:37.391Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501175359_cez0i",
+    "timestamp": "2026-08-12T02:19:35.359Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501175354_3tsbf",
+    "timestamp": "2026-08-12T02:19:35.354Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501175351_l1urr",
+    "timestamp": "2026-08-12T02:19:35.351Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501175349_m3oxe",
+    "timestamp": "2026-08-12T02:19:35.349Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501175345_yym5q",
+    "timestamp": "2026-08-12T02:19:35.345Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501174020_wxrhh",
+    "timestamp": "2026-08-12T02:19:34.020Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501174016_qmww7",
+    "timestamp": "2026-08-12T02:19:34.016Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501163142_vpm8k",
+    "timestamp": "2026-08-12T02:19:23.142Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501163140_x2q9i",
+    "timestamp": "2026-08-12T02:19:23.140Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501163137_6z0wi",
+    "timestamp": "2026-08-12T02:19:23.137Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501161106_6vnvh",
+    "timestamp": "2026-08-12T02:19:21.106Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Proceso Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501161103_udojz",
+    "timestamp": "2026-08-12T02:19:21.103Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501161101_i6pmt",
+    "timestamp": "2026-08-12T02:19:21.101Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501161100_y8s38",
+    "timestamp": "2026-08-12T02:19:21.100Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501161095_hntqn",
+    "timestamp": "2026-08-12T02:19:21.095Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501159055_p1bi4",
+    "timestamp": "2026-08-12T02:19:19.055Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501159050_jzci0",
+    "timestamp": "2026-08-12T02:19:19.050Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501148972_0nrv3",
+    "timestamp": "2026-08-12T02:19:08.972Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Proceso Hoy\"...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501148969_64tkd",
+    "timestamp": "2026-08-12T02:19:08.969Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Proceso Hoy\" (automatic)",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786501148964_lo50v",
+    "timestamp": "2026-08-12T02:19:08.964Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (21:19) encontrada para \"Proceso Hoy\". Iniciando flujo...",
+    "reportId": "5"
+  },
+  {
+    "id": "l_1786496467965_9jnm1",
+    "timestamp": "2026-08-12T01:01:07.965Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Ventas del Mes BO\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496467929_hohvg",
+    "timestamp": "2026-08-12T01:01:07.929Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Ventas del Mes BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496467925_oezha",
+    "timestamp": "2026-08-12T01:01:07.925Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496467919_qvuuk",
+    "timestamp": "2026-08-12T01:01:07.919Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496467830_cny3p",
+    "timestamp": "2026-08-12T01:01:07.830Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📊 Generando archivo Excel (.xlsx) con exceljs...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496467825_sl9ft",
+    "timestamp": "2026-08-12T01:01:07.825Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496446639_mv4lw",
+    "timestamp": "2026-08-12T01:00:46.639Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Ventas del Mes BO\"...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496446636_wall2",
+    "timestamp": "2026-08-12T01:00:46.636Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Ventas del Mes BO\" (automatic)",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496446633_r52b3",
+    "timestamp": "2026-08-12T01:00:46.633Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Ventas del Mes BO\"...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496444588_f8rh8",
+    "timestamp": "2026-08-12T01:00:44.588Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Ventas del Mes BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496444544_rue31",
+    "timestamp": "2026-08-12T01:00:44.544Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496444538_rwify",
+    "timestamp": "2026-08-12T01:00:44.538Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496444457_51xeg",
+    "timestamp": "2026-08-12T01:00:44.457Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📊 Generando archivo Excel (.xlsx) con exceljs...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496444450_tgzyz",
+    "timestamp": "2026-08-12T01:00:44.450Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496428247_fd0xd",
+    "timestamp": "2026-08-12T01:00:28.247Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Ventas del Mes BO\"...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496428244_7zop6",
+    "timestamp": "2026-08-12T01:00:28.244Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Ventas del Mes BO\" (automatic)",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496428240_njlzg",
+    "timestamp": "2026-08-12T01:00:28.240Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Ventas del Mes BO\"...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496426163_rm5vk",
+    "timestamp": "2026-08-12T01:00:26.163Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Ventas del Mes BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496426159_3o070",
+    "timestamp": "2026-08-12T01:00:26.159Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496426155_0tzmv",
+    "timestamp": "2026-08-12T01:00:26.156Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496422486_rao9c",
+    "timestamp": "2026-08-12T01:00:22.486Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📊 Generando archivo Excel (.xlsx) con exceljs...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496422480_du4j6",
+    "timestamp": "2026-08-12T01:00:22.480Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496408645_40xlo",
+    "timestamp": "2026-08-12T01:00:08.645Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Ventas del Mes BO\"...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496408641_8ymbj",
+    "timestamp": "2026-08-12T01:00:08.641Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Ventas del Mes BO\" (automatic)",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786496408636_1235b",
+    "timestamp": "2026-08-12T01:00:08.636Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (20:00) encontrada para \"Ventas del Mes BO\". Iniciando flujo...",
+    "reportId": "6"
+  },
+  {
+    "id": "l_1786491043643_yqfhv",
+    "timestamp": "2026-08-11T23:30:43.643Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Instaladas Hoy\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491043618_rnjva",
+    "timestamp": "2026-08-11T23:30:43.618Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Instaladas Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491043615_bz0if",
+    "timestamp": "2026-08-11T23:30:43.615Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491043612_vge02",
+    "timestamp": "2026-08-11T23:30:43.612Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491043609_ieh3v",
+    "timestamp": "2026-08-11T23:30:43.609Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491043606_9q87i",
+    "timestamp": "2026-08-11T23:30:43.606Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491042408_bf8xo",
+    "timestamp": "2026-08-11T23:30:42.408Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491042405_xtdmw",
+    "timestamp": "2026-08-11T23:30:42.405Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491032654_3awx7",
+    "timestamp": "2026-08-11T23:30:32.654Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Instaladas Hoy\"...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491032652_xuxwd",
+    "timestamp": "2026-08-11T23:30:32.652Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Instaladas Hoy\" (automatic)",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491032649_30k3p",
+    "timestamp": "2026-08-11T23:30:32.649Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Instaladas Hoy\"...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491030622_vnyu4",
+    "timestamp": "2026-08-11T23:30:30.622Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Instaladas Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491030619_rp0e6",
+    "timestamp": "2026-08-11T23:30:30.619Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491030616_63xoc",
+    "timestamp": "2026-08-11T23:30:30.616Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491030614_vmllt",
+    "timestamp": "2026-08-11T23:30:30.614Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491030611_izloj",
+    "timestamp": "2026-08-11T23:30:30.611Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491029125_lsz5x",
+    "timestamp": "2026-08-11T23:30:29.125Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491029121_ksm8s",
+    "timestamp": "2026-08-11T23:30:29.121Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491018951_j67qi",
+    "timestamp": "2026-08-11T23:30:18.951Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Instaladas Hoy\"...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491018948_l0g1c",
+    "timestamp": "2026-08-11T23:30:18.948Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Instaladas Hoy\" (automatic)",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491018945_2nw05",
+    "timestamp": "2026-08-11T23:30:18.945Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Instaladas Hoy\"...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491016913_pbkil",
+    "timestamp": "2026-08-11T23:30:16.913Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Instaladas Hoy\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491016910_d4l1t",
+    "timestamp": "2026-08-11T23:30:16.910Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Jair Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491016906_9041u",
+    "timestamp": "2026-08-11T23:30:16.906Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Jair Dev\" via WHATSAPP (51952395679)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491016904_7kroy",
+    "timestamp": "2026-08-11T23:30:16.904Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491016902_2eygp",
+    "timestamp": "2026-08-11T23:30:16.902Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491015631_1kkgy",
+    "timestamp": "2026-08-11T23:30:15.631Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491015627_4edq3",
+    "timestamp": "2026-08-11T23:30:15.627Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491003483_d9p5n",
+    "timestamp": "2026-08-11T23:30:03.483Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Instaladas Hoy\"...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491003480_onpjl",
+    "timestamp": "2026-08-11T23:30:03.480Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Instaladas Hoy\" (automatic)",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786491003476_07u29",
+    "timestamp": "2026-08-11T23:30:03.476Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (18:30) encontrada para \"Instaladas Hoy\". Iniciando flujo...",
+    "reportId": "3"
+  },
+  {
+    "id": "l_1786489256279_n6p01",
+    "timestamp": "2026-08-11T23:00:56.279Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Seguimiento BO\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489256240_pbq1a",
+    "timestamp": "2026-08-11T23:00:56.240Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Seguimiento BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489256237_uvznv",
+    "timestamp": "2026-08-11T23:00:56.237Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489256234_f3tvv",
+    "timestamp": "2026-08-11T23:00:56.234Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489254869_xshjq",
+    "timestamp": "2026-08-11T23:00:54.869Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489254864_8gal2",
+    "timestamp": "2026-08-11T23:00:54.864Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489236782_1fd9b",
+    "timestamp": "2026-08-11T23:00:36.782Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Seguimiento BO\"...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489236780_gxlfv",
+    "timestamp": "2026-08-11T23:00:36.780Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Seguimiento BO\" (automatic)",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489236776_d7sw1",
+    "timestamp": "2026-08-11T23:00:36.776Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Seguimiento BO\"...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489234748_50079",
+    "timestamp": "2026-08-11T23:00:34.748Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Seguimiento BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489234746_ptagy",
+    "timestamp": "2026-08-11T23:00:34.746Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489234743_5mno9",
+    "timestamp": "2026-08-11T23:00:34.743Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489233360_dphhw",
+    "timestamp": "2026-08-11T23:00:33.360Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489233355_g219v",
+    "timestamp": "2026-08-11T23:00:33.355Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489218258_t9fd9",
+    "timestamp": "2026-08-11T23:00:18.258Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Seguimiento BO\"...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489218255_eci5v",
+    "timestamp": "2026-08-11T23:00:18.255Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Seguimiento BO\" (automatic)",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489218251_mazp7",
+    "timestamp": "2026-08-11T23:00:18.251Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Seguimiento BO\"...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489216173_ip68v",
+    "timestamp": "2026-08-11T23:00:16.173Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Seguimiento BO\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489216170_cyfxu",
+    "timestamp": "2026-08-11T23:00:16.170Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489216166_pc024",
+    "timestamp": "2026-08-11T23:00:16.166Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489214695_r1cuo",
+    "timestamp": "2026-08-11T23:00:14.695Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489214689_egy1c",
+    "timestamp": "2026-08-11T23:00:14.689Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489203251_u6y87",
+    "timestamp": "2026-08-11T23:00:03.251Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"Seguimiento BO\"...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489203247_yzgzb",
+    "timestamp": "2026-08-11T23:00:03.247Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Seguimiento BO\" (automatic)",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786489203244_v57u7",
+    "timestamp": "2026-08-11T23:00:03.244Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (18:00) encontrada para \"Seguimiento BO\". Iniciando flujo...",
+    "reportId": "2"
+  },
+  {
+    "id": "l_1786485810944_mlg9z",
+    "timestamp": "2026-08-11T22:03:30.944Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786485810554_2c5f8",
+    "timestamp": "2026-08-11T22:03:30.555Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Procesando captura 1/1: http://31.97.165.147/sales/sales",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786485809964_19pyk",
+    "timestamp": "2026-08-11T22:03:29.964Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Generando vista previa de capturas para \"Reporte Captura CRM DreamTeam\"...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786454019846_7ugqy",
+    "timestamp": "2026-08-11T13:13:39.846Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786454019698_lmod6",
+    "timestamp": "2026-08-11T13:13:39.698Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Procesando captura 1/1: http://31.97.165.147/sales/sales",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786454019518_y0ez7",
+    "timestamp": "2026-08-11T13:13:39.518Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Generando vista previa de capturas para \"Reporte Captura CRM DreamTeam\"...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453873322_njdv6",
+    "timestamp": "2026-08-11T13:11:13.322Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"Reporte Captura CRM DreamTeam\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453873279_2th73",
+    "timestamp": "2026-08-11T13:11:13.279Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Reporte Captura CRM DreamTeam\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453873276_3ovap",
+    "timestamp": "2026-08-11T13:11:13.276Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Pruebas Generales\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453873272_uyw5g",
+    "timestamp": "2026-08-11T13:11:13.272Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Pruebas Generales\" via WHATSAPP (51939290435)...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453843519_nvyxn",
+    "timestamp": "2026-08-11T13:10:43.519Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453843390_il59k",
+    "timestamp": "2026-08-11T13:10:43.390Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Procesando captura 1/1: http://31.97.165.147/sales/sales",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453843209_8o3sg",
+    "timestamp": "2026-08-11T13:10:43.209Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453843205_zxhqn",
+    "timestamp": "2026-08-11T13:10:43.205Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Reporte Captura CRM DreamTeam\" (automatic)",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453843201_xe9bo",
+    "timestamp": "2026-08-11T13:10:43.201Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"Reporte Captura CRM DreamTeam\"...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453841157_p0sjd",
+    "timestamp": "2026-08-11T13:10:41.157Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Reporte Captura CRM DreamTeam\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453841153_uobfc",
+    "timestamp": "2026-08-11T13:10:41.153Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Pruebas Generales\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453841149_8tns9",
+    "timestamp": "2026-08-11T13:10:41.149Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Pruebas Generales\" via WHATSAPP (51939290435)...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453811591_h58pj",
+    "timestamp": "2026-08-11T13:10:11.591Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453811473_xsv73",
+    "timestamp": "2026-08-11T13:10:11.473Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Procesando captura 1/1: http://31.97.165.147/sales/sales",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453811295_zm6ax",
+    "timestamp": "2026-08-11T13:10:11.295Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453811292_vfiev",
+    "timestamp": "2026-08-11T13:10:11.292Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Reporte Captura CRM DreamTeam\" (automatic)",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453811288_vk8wt",
+    "timestamp": "2026-08-11T13:10:11.288Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"Reporte Captura CRM DreamTeam\"...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453809253_nzhqj",
+    "timestamp": "2026-08-11T13:10:09.253Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"Reporte Captura CRM DreamTeam\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453809250_0bfk0",
+    "timestamp": "2026-08-11T13:10:09.250Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Pruebas Generales\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453809245_f1tgi",
+    "timestamp": "2026-08-11T13:10:09.245Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Pruebas Generales\" via WHATSAPP (51939290435)...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775611_2i9l8",
+    "timestamp": "2026-08-11T13:09:35.611Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775493_x10c4",
+    "timestamp": "2026-08-11T13:09:35.494Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "📸 Procesando captura 1/1: http://31.97.165.147/sales/sales",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775337_j62yn",
+    "timestamp": "2026-08-11T13:09:35.337Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775334_woca5",
+    "timestamp": "2026-08-11T13:09:35.334Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"Reporte Captura CRM DreamTeam\" (automatic)",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775331_tckun",
+    "timestamp": "2026-08-11T13:09:35.331Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (08:00) encontrada para \"Reporte Captura CRM DreamTeam\". Iniciando flujo...",
+    "reportId": "7"
+  },
+  {
+    "id": "l_1786453775328_h211f",
+    "timestamp": "2026-08-11T13:09:35.328Z",
+    "level": "error",
+    "source": "System",
+    "message": "🚨 Fallo crítico: Reporte \"PDT Instalar\" agotó todos los reintentos (3) sin éxito.",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453775295_n52ua",
+    "timestamp": "2026-08-11T13:09:35.296Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"PDT Instalar\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453775293_nfnwj",
+    "timestamp": "2026-08-11T13:09:35.293Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453775290_rcq51",
+    "timestamp": "2026-08-11T13:09:35.290Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453772703_tr592",
+    "timestamp": "2026-08-11T13:09:32.703Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453772699_4wj9d",
+    "timestamp": "2026-08-11T13:09:32.699Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453593269_apy4y",
+    "timestamp": "2026-08-11T13:06:33.269Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"PDT Instalar\"...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453593265_yln0l",
+    "timestamp": "2026-08-11T13:06:33.265Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"PDT Instalar\" (automatic)",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453593262_9rlsf",
+    "timestamp": "2026-08-11T13:06:33.262Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 3/3 para \"PDT Instalar\"...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453591226_o16gk",
+    "timestamp": "2026-08-11T13:06:31.226Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"PDT Instalar\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453591223_i6msj",
+    "timestamp": "2026-08-11T13:06:31.223Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453591220_p319s",
+    "timestamp": "2026-08-11T13:06:31.220Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453589906_46k3j",
+    "timestamp": "2026-08-11T13:06:29.906Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453589902_cgaz6",
+    "timestamp": "2026-08-11T13:06:29.902Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453362502_4ntrf",
+    "timestamp": "2026-08-11T13:02:42.502Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"PDT Instalar\"...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453362499_500xb",
+    "timestamp": "2026-08-11T13:02:42.499Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"PDT Instalar\" (automatic)",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453362495_i7byi",
+    "timestamp": "2026-08-11T13:02:42.495Z",
+    "level": "warning",
+    "source": "Scheduler",
+    "message": "🔄 Reintento de ejecución 2/3 para \"PDT Instalar\"...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453360410_amarp",
+    "timestamp": "2026-08-11T13:02:40.410Z",
+    "level": "error",
+    "source": "System",
+    "message": "❌ Error ejecutando reporte \"PDT Instalar\": No se pudo enviar el reporte a ningún destinatario debido a errores de envío o ventanas horarias.",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453360407_8o8zf",
+    "timestamp": "2026-08-11T13:02:40.407Z",
+    "level": "error",
+    "source": "Sender",
+    "message": "❌ Fallo al enviar a \"Dev\": Evolution API no responde (Fallo de conexión o API caída).",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453360402_49ngx",
+    "timestamp": "2026-08-11T13:02:40.403Z",
+    "level": "info",
+    "source": "Sender",
+    "message": " 🟣 Despachando a \"Dev\" via WHATSAPP (51929459788)...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453359074_2deoq",
+    "timestamp": "2026-08-11T13:02:39.074Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 📸 Convirtiendo HTML a imagen PNG usando Playwright...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453359066_1sbdq",
+    "timestamp": "2026-08-11T13:02:39.066Z",
+    "level": "info",
+    "source": "Renderer",
+    "message": " 🔵 Generando reporte en formato HTML...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453204241_eepzi",
+    "timestamp": "2026-08-11T13:00:04.241Z",
+    "level": "info",
+    "source": "CRM",
+    "message": " 🟡 Consultando y procesando datos en módulo \"PDT Instalar\"...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453204238_yxc59",
+    "timestamp": "2026-08-11T13:00:04.238Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": " 🟢 Iniciando ejecución de reporte: \"PDT Instalar\" (automatic)",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786453204231_rm2x3",
+    "timestamp": "2026-08-11T13:00:04.231Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "⏰ Hora programada coincidente (08:00) encontrada para \"PDT Instalar\". Iniciando flujo...",
+    "reportId": "1"
+  },
+  {
+    "id": "l_1786452535095_tcgvp",
+    "timestamp": "2026-08-11T12:48:55.095Z",
+    "level": "info",
+    "source": "Scheduler",
+    "message": "🔑 Navegando a página de login: http://31.97.165.147/login",
+    "reportId": "7"
+  }
+]
