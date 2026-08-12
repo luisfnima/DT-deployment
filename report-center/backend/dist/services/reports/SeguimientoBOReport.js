@@ -1,0 +1,118 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SeguimientoBOReport = void 0;
+const helpers_1 = require("./helpers");
+class SeguimientoBOReport {
+    async run(crmService) {
+        // 1. Fetch raw data from CRM API (which queries the live CRM)
+        const rawSales = await crmService.fetchData('Seguimiento BO');
+        // 2. Get today's date in 'yyyy-MM-dd' format in America/Lima timezone
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/Lima',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        const parts = formatter.formatToParts(new Date());
+        const year = parts.find(p => p.type === 'year')?.value;
+        const month = parts.find(p => p.type === 'month')?.value;
+        const day = parts.find(p => p.type === 'day')?.value;
+        const hoy = `${year}-${month}-${day}`;
+        // 3. Filter sales of the day (sale_date starts with hoy)
+        const ventasDia = rawSales.filter((s) => s.sale_date && s.sale_date.substring(0, 10) === hoy);
+        if (ventasDia.length === 0) {
+            throw new Error(`Sin ventas hoy (${hoy}) para reporte BO.`);
+        }
+        // 4. Group by supervisor using helper
+        const porSupervisorRaw = (0, helpers_1.agruparPor)(ventasDia, (v) => v.supervisor || 'Sin supervisor');
+        // 5. Calculate global metrics
+        let contraOK = 0;
+        let contraPendiente = 0;
+        let contraSinSeguimiento = 0;
+        let fideOK = 0;
+        let fidePendiente = 0;
+        let fideSinSeguimiento = 0;
+        const clasificarEstado = (val) => {
+            if (!val || val === 'Sin seguimiento')
+                return 'sin_seguimiento';
+            const upper = val.toUpperCase();
+            if (upper.includes('OK') || upper.includes('RECUPERADO'))
+                return 'OK';
+            return 'pendiente';
+        };
+        const checkIsSameLimaDay = (updatedAtStr, saleDateStr) => {
+            if (!updatedAtStr || !saleDateStr)
+                return false;
+            try {
+                const d1 = new Date(updatedAtStr);
+                const d2 = new Date(saleDateStr);
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    timeZone: 'America/Lima',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+                const p1 = formatter.formatToParts(d1);
+                const limaDate1 = `${p1.find(p => p.type === 'year')?.value}-${p1.find(p => p.type === 'month')?.value}-${p1.find(p => p.type === 'day')?.value}`;
+                const p2 = formatter.formatToParts(d2);
+                const limaDate2 = `${p2.find(p => p.type === 'year')?.value}-${p2.find(p => p.type === 'month')?.value}-${p2.find(p => p.type === 'day')?.value}`;
+                return limaDate1 === limaDate2;
+            }
+            catch (e) {
+                return false;
+            }
+        };
+        ventasDia.forEach((v) => {
+            const isSameDay = checkIsSameLimaDay(v.updated_at, v.sale_date);
+            if (!isSameDay) {
+                v.contraoferta_estado = 'Sin seguimiento';
+                v.fidelizacion_estado = 'Sin seguimiento';
+            }
+            // Contraoferta classification
+            const cCat = clasificarEstado(v.contraoferta_estado);
+            if (cCat === 'OK')
+                contraOK++;
+            else if (cCat === 'pendiente')
+                contraPendiente++;
+            else
+                contraSinSeguimiento++;
+            // Fidelizacion classification
+            const fCat = clasificarEstado(v.fidelizacion_estado);
+            if (fCat === 'OK')
+                fideOK++;
+            else if (fCat === 'pendiente')
+                fidePendiente++;
+            else
+                fideSinSeguimiento++;
+        });
+        // 6. Map grouped data with specific metrics per supervisor
+        const porSupervisor = {};
+        Object.entries(porSupervisorRaw).forEach(([supervisor, vs]) => {
+            const totContra = vs.filter((v) => v.contraoferta_estado !== 'Sin seguimiento').length;
+            const totFide = vs.filter((v) => v.fidelizacion_estado !== 'Sin seguimiento').length;
+            porSupervisor[supervisor] = {
+                totalVentas: vs.length,
+                totContra,
+                totFide,
+                registros: vs
+            };
+        });
+        return {
+            reportName: 'Seguimiento BO',
+            subTitle: 'Telefonía Izaguirre',
+            timestamp: new Date().toISOString(),
+            isSeguimientoBO: true,
+            metrics: {
+                'Ventas del Día': ventasDia.length,
+                'Contraofertas OK': contraOK,
+                'Contraofertas Pend.': contraPendiente,
+                'Contraofertas Sin Seg.': contraSinSeguimiento,
+                'Fidelizaciones OK': fideOK,
+                'Fidelizaciones Pend.': fidePendiente,
+                'Fidelizaciones Sin Seg.': fideSinSeguimiento
+            },
+            porSupervisor
+        };
+    }
+}
+exports.SeguimientoBOReport = SeguimientoBOReport;
