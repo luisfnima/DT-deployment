@@ -42,11 +42,38 @@ export class SeguimientoBOReport implements IReportModule {
     const clasificarEstado = (val: string): 'OK' | 'pendiente' | 'sin_seguimiento' => {
       if (!val || val === 'Sin seguimiento') return 'sin_seguimiento';
       const upper = val.toUpperCase();
-      if (upper.includes('PENDIENTE')) return 'pendiente';
-      return 'OK';
+      if (upper.includes('OK') || upper.includes('RECUPERADO')) return 'OK';
+      return 'pendiente';
+    };
+
+    const checkIsSameLimaDay = (updatedAtStr: string, saleDateStr: string): boolean => {
+      if (!updatedAtStr || !saleDateStr) return false;
+      try {
+        const d1 = new Date(updatedAtStr);
+        const d2 = new Date(saleDateStr);
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Lima',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        const p1 = formatter.formatToParts(d1);
+        const limaDate1 = `${p1.find(p => p.type === 'year')?.value}-${p1.find(p => p.type === 'month')?.value}-${p1.find(p => p.type === 'day')?.value}`;
+        const p2 = formatter.formatToParts(d2);
+        const limaDate2 = `${p2.find(p => p.type === 'year')?.value}-${p2.find(p => p.type === 'month')?.value}-${p2.find(p => p.type === 'day')?.value}`;
+        return limaDate1 === limaDate2;
+      } catch (e) {
+        return false;
+      }
     };
 
     ventasDia.forEach((v: any) => {
+      const isSameDay = checkIsSameLimaDay(v.updated_at, v.sale_date);
+      if (!isSameDay) {
+        v.contraoferta_estado = 'Sin seguimiento';
+        v.fidelizacion_estado = 'Sin seguimiento';
+      }
+
       // Contraoferta classification
       const cCat = clasificarEstado(v.contraoferta_estado);
       if (cCat === 'OK') contraOK++;
