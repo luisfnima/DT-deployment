@@ -15,19 +15,29 @@ export class EvolutionService implements IMessageProvider {
 
     // 3. Make HTTP request to Evolution API
     try {
-      const isMedia = !!content.imageBuffer;
+      const isMedia = !!content.imageBuffer || !!content.excelBuffer;
       const endpoint = isMedia ? 'sendMedia' : 'sendText';
       const url = `${env.EVOLUTION_API_URL}/message/${endpoint}/dreamteam`;
 
       let body: any = {};
-      if (isMedia && content.imageBuffer) {
-        body = {
-          number: cleanNumber,
-          mediatype: 'image',
-          media: content.imageBuffer.toString('base64'),
-          fileName: content.fileName || 'report.png',
-          caption: content.text || 'Reporte automático'
-        };
+      if (isMedia) {
+        if (content.excelBuffer) {
+          body = {
+            number: cleanNumber,
+            mediatype: 'document',
+            media: content.excelBuffer.toString('base64'),
+            fileName: content.fileName || 'report.xlsx',
+            caption: content.text || 'Reporte automático'
+          };
+        } else if (content.imageBuffer) {
+          body = {
+            number: cleanNumber,
+            mediatype: 'image',
+            media: content.imageBuffer.toString('base64'),
+            fileName: content.fileName || 'report.png',
+            caption: content.text || 'Reporte automático'
+          };
+        }
       } else {
         body = {
           number: cleanNumber,
