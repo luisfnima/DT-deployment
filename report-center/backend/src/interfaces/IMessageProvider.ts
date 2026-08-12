@@ -2,6 +2,7 @@ export interface IMessageContent {
   text?: string;
   html?: string;
   imageBuffer?: Buffer;
+  excelBuffer?: Buffer;
   fileName?: string;
 }
 
