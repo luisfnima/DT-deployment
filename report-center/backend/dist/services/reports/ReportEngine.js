@@ -89,7 +89,31 @@ class ReportEngine {
         }
         const module = this.modules[report.id];
         if (!module) {
-            throw new Error(`No hay un módulo de reporte registrado para el ID: ${report.id}`);
+            const targets = (report.screenshotTargets && report.screenshotTargets.length > 0)
+                ? report.screenshotTargets
+                : (report.targetUrls || []).map(url => ({
+                    url,
+                    loginUrl: report.loginUrl,
+                    username: report.username,
+                    password: report.password
+                }));
+            const targetsListHtml = targets.map((t, idx) => `
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px 18px; border-radius: 12px; margin-bottom: 12px;">
+          <div style="font-weight: bold; color: #ff3b30; font-size: 13px;">📸 Captura #${idx + 1}: ${t.url}</div>
+          ${t.loginUrl ? `<div style="font-size: 11px; color: #aaa; margin-top: 4px;">🔑 Autenticación en vivo: ${t.username || 'N/A'} @ ${t.loginUrl}</div>` : '<div style="font-size: 11px; color: #666; margin-top: 4px;">🔓 Navegación Directa (Sin Login)</div>'}
+        </div>
+      `).join('');
+            return `
+        <div style="padding: 24px; font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #f8fafc; border-radius: 12px;">
+          <h2 style="margin-top:0; margin-bottom: 8px; color: #38bdf8;">📷 ${report.name}</h2>
+          <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">${report.description || 'Reporte automatizado en vivo mediante CRM y Playwright.'}</p>
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: #cbd5e1;">URLs y Servidores Configurados (${targets.length}):</div>
+          ${targetsListHtml.length > 0 ? targetsListHtml : '<div style="color: #64748b; font-size: 12px;">Sin URLs configuradas aún.</div>'}
+          <div style="margin-top: 20px; font-size: 11px; color: #64748b; border-top: 1px solid #1e293b; padding-top: 12px; text-align: center;">
+            ⚡ Nota: En el servidor Render en la nube, las capturas PNG completas se generan al ejecutarse la tarea programada y se despachan directamente por WhatsApp.
+          </div>
+        </div>
+      `;
         }
         const reportData = await module.run(this.crmService);
         return this.htmlRenderer.render(reportData);
