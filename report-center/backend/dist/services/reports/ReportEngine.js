@@ -11,6 +11,7 @@ const InstaladasHoyReport_1 = require("./InstaladasHoyReport");
 const CanceladasHoyReport_1 = require("./CanceladasHoyReport");
 const ProcesoHoyReport_1 = require("./ProcesoHoyReport");
 const VentasMesBOReport_1 = require("./VentasMesBOReport");
+const ScreenshotReport_1 = require("./ScreenshotReport");
 const ImageRenderer_1 = require("../../renderers/ImageRenderer");
 class ReportEngine {
     constructor() {
@@ -26,6 +27,7 @@ class ReportEngine {
         this.registerModule('4', new CanceladasHoyReport_1.CanceladasHoyReport());
         this.registerModule('5', new ProcesoHoyReport_1.ProcesoHoyReport());
         this.registerModule('6', new VentasMesBOReport_1.VentasMesBOReport());
+        this.registerModule('7', new ScreenshotReport_1.ScreenshotReport());
     }
     registerModule(reportId, module) {
         this.modules[reportId] = module;
