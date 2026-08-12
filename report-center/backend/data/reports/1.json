@@ -14,8 +14,8 @@
   "retryCount": 3,
   "template": "default",
   "createdAt": "2026-07-07T22:08:00.865Z",
-  "nextExecutionAt": "2026-07-17T13:00:00.000Z",
-  "lastExecutedAt": "2026-07-17T09:29:24.863Z",
+  "nextExecutionAt": "2026-08-11T13:00:00.000Z",
+  "lastExecutedAt": "2026-07-17T13:00:35.352Z",
   "daysOfWeek": [
     0,
     1,
