@@ -197,7 +197,7 @@ export const Scheduler: React.FC<SchedulerProps> = ({ addToast }) => {
     setTemplate(report.template || 'default');
     setDaysOfWeek(report.daysOfWeek || [0, 1, 2, 3, 4, 5, 6]);
     
-    setIsScreenshot(!!report.isScreenshot);
+    setIsScreenshot(!!report.isScreenshot || report.template === 'screenshot');
     setLoginUrl(report.loginUrl || '');
     setUsername(report.username || '');
     setPassword(report.password || '');
