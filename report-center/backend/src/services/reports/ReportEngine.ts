@@ -417,9 +417,9 @@ export class ReportEngine {
       if (report.isScreenshot) {
         recordsCount = screenshotBuffers.length;
       } else if (reportData.isGrouped && reportData.porSupervisor) {
-        recordsCount = Object.values(reportData.porSupervisor).reduce((acc: number, vs: any) => acc + vs.length, 0);
+        recordsCount = (Object.values(reportData.porSupervisor) as any[]).reduce((acc: number, vs: any) => acc + (vs?.length || 0), 0);
       } else if (reportData.isSeguimientoBO && reportData.porSupervisor) {
-        recordsCount = Object.values(reportData.porSupervisor).reduce((acc: number, val: any) => acc + val.totalVentas, 0);
+        recordsCount = (Object.values(reportData.porSupervisor) as any[]).reduce((acc: number, val: any) => acc + (val?.totalVentas || 0), 0);
       } else if (reportData.rows) {
         recordsCount = reportData.rows.length;
       }
