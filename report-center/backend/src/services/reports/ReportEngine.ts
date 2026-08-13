@@ -55,9 +55,10 @@ export class ReportEngine {
       let buffers: Buffer[] = [];
       let screenshotError = '';
       try {
-        buffers = await this.takeScreenshots(report);
-        if (buffers.length === 0) {
-          screenshotError = (report as any)._lastScreenshotError || 'Playwright no pudo generar la captura en el servidor en la nube.';
+        const res = await this.takeScreenshots(report);
+        buffers = res.buffers;
+        if (res.error) {
+          screenshotError = res.error;
         }
       } catch (err: any) {
         screenshotError = err?.message || String(err);
@@ -167,9 +168,10 @@ export class ReportEngine {
 
       if (report.isScreenshot || report.template === 'screenshot') {
         ReportRepository.addLog('Scheduler', `${tagLabel} 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...`, 'info', report.id);
-        screenshotBuffers = await this.takeScreenshots(report);
+        const res = await this.takeScreenshots(report);
+        screenshotBuffers = res.buffers;
         if (screenshotBuffers.length === 0) {
-          throw new Error('No se pudo capturar ninguna de las pantallas especificadas.');
+          throw new Error(res.error || 'No se pudo capturar ninguna de las pantallas especificadas.');
         }
         content = `Reporte de capturas web "${report.name}" generado con éxito (${screenshotBuffers.length} imágenes).`;
       } else {
@@ -546,9 +548,11 @@ export class ReportEngine {
   /**
    * Automates login and captures screenshots of configured target URLs using Playwright.
    */
-  private async takeScreenshots(report: Report): Promise<Buffer[]> {
+  private async takeScreenshots(report: Report): Promise<{ buffers: Buffer[], error?: string }> {
     const { chromium } = require('playwright');
     let browser: any = null;
+    let lastError = '';
+
     try {
       browser = await chromium.launch({
         headless: true,
@@ -562,7 +566,13 @@ export class ReportEngine {
           '--disable-gpu'
         ]
       });
+    } catch (launchErr: any) {
+      const msg = launchErr?.message || String(launchErr);
+      console.error('Error launching Chromium in cloud:', msg);
+      return { buffers: [], error: `Navegador Chromium no disponible en Render: ${msg}` };
+    }
 
+    try {
       const context = await browser.newContext({
         viewport: { width: 1280, height: 800 }
       });
@@ -602,13 +612,14 @@ export class ReportEngine {
             const buf = await page.screenshot({ fullPage: true });
             buffers.push(buf);
           } catch (capErr: any) {
-            (report as any)._lastScreenshotError = capErr?.message || String(capErr);
+            lastError = capErr?.message || String(capErr);
             ReportRepository.addLog('Scheduler', `❌ Fallo al capturar la URL "${url}": ${capErr.message}`, 'error', report.id);
           } finally {
             await page.close().catch(() => {});
           }
         }
-        return buffers;
+        await browser.close().catch(() => {});
+        return { buffers, error: buffers.length === 0 ? (lastError || 'No se pudo generar la imagen de captura.') : undefined };
       }
 
       // Legacy / Default single-login flow (targetUrls)
@@ -640,10 +651,10 @@ export class ReportEngine {
         }
       }
 
-      return buffers;
+      return { buffers, error: buffers.length === 0 ? (lastError || 'No se pudo generar la imagen de captura.') : undefined };
     } catch (err: any) {
       ReportRepository.addLog('Scheduler', `❌ Error general en Playwright para capturas: ${err.message}`, 'error', report.id);
-      return [];
+      return { buffers: [], error: err?.message || String(err) };
     } finally {
       if (browser) {
         await browser.close().catch(() => {});
