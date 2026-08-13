@@ -4,7 +4,7 @@
   "description": "Backend API for DreamTeam Report Center MVP",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --skipLibCheck || true",
+    "build": "npx playwright install chromium && tsc --skipLibCheck || true",
     "postinstall": "npx playwright install chromium || true",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
