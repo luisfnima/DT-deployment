@@ -53,9 +53,11 @@ export class ReportEngine {
     if (report.isScreenshot || report.template === 'screenshot') {
       ReportRepository.addLog('Scheduler', `📸 Generando vista previa de capturas para "${report.name}"...`, 'info', report.id);
       let buffers: Buffer[] = [];
+      let screenshotError = '';
       try {
         buffers = await this.takeScreenshots(report);
       } catch (err: any) {
+        screenshotError = err.message || String(err);
         console.error('Error taking screenshots for preview:', err);
       }
 
@@ -80,11 +82,9 @@ export class ReportEngine {
           <div style="padding: 24px; font-family: system-ui, -apple-system, sans-serif; background: #0f1117; color: #f8fafc; border-radius: 12px;">
             <h2 style="margin-top:0; margin-bottom: 8px; color: #38bdf8;">📷 ${report.name}</h2>
             <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">${report.description || 'Reporte de captura automatizada en vivo mediante CRM y Playwright.'}</p>
+            ${screenshotError ? `<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 12px 16px; border-radius: 8px; font-size: 12px; margin-bottom: 16px;"><strong>⚠️ Diagnóstico Playwright:</strong> ${screenshotError}</div>` : ''}
             <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: #cbd5e1;">URLs y Servidores Configurados (${targets.length}):</div>
             ${targetsListHtml}
-            <div style="margin-top: 20px; font-size: 11px; color: #64748b; border-top: 1px solid #1e293b; padding-top: 12px; text-align: center;">
-              ⚡ Nota: En el servidor Render en la nube, las capturas PNG completas se generan al ejecutarse la tarea programada y se despachan directamente por WhatsApp.
-            </div>
           </div>
         `;
       }
