@@ -56,6 +56,9 @@ export class ReportEngine {
       let screenshotError = '';
       try {
         buffers = await this.takeScreenshots(report);
+        if (buffers.length === 0 && (report as any)._lastScreenshotError) {
+          screenshotError = (report as any)._lastScreenshotError;
+        }
       } catch (err: any) {
         screenshotError = err.message || String(err);
         console.error('Error taking screenshots for preview:', err);
@@ -599,6 +602,7 @@ export class ReportEngine {
             const buf = await page.screenshot({ fullPage: true });
             buffers.push(buf);
           } catch (capErr: any) {
+            (report as any)._lastScreenshotError = capErr?.message || String(capErr);
             ReportRepository.addLog('Scheduler', `❌ Fallo al capturar la URL "${url}": ${capErr.message}`, 'error', report.id);
           } finally {
             await page.close().catch(() => {});
