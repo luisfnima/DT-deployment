@@ -46,12 +46,12 @@ class ReportEngine {
             let screenshotError = '';
             try {
                 buffers = await this.takeScreenshots(report);
-                if (buffers.length === 0 && report._lastScreenshotError) {
-                    screenshotError = report._lastScreenshotError;
+                if (buffers.length === 0) {
+                    screenshotError = report._lastScreenshotError || 'Playwright no pudo generar la captura en el servidor en la nube.';
                 }
             }
             catch (err) {
-                screenshotError = err.message || String(err);
+                screenshotError = err?.message || String(err);
                 console.error('Error taking screenshots for preview:', err);
             }
             const targets = (report.screenshotTargets && report.screenshotTargets.length > 0)
