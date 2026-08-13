@@ -46,6 +46,9 @@ class ReportEngine {
             let screenshotError = '';
             try {
                 buffers = await this.takeScreenshots(report);
+                if (buffers.length === 0 && report._lastScreenshotError) {
+                    screenshotError = report._lastScreenshotError;
+                }
             }
             catch (err) {
                 screenshotError = err.message || String(err);
@@ -542,6 +545,7 @@ class ReportEngine {
                         buffers.push(buf);
                     }
                     catch (capErr) {
+                        report._lastScreenshotError = capErr?.message || String(capErr);
                         ReportRepository_1.ReportRepository.addLog('Scheduler', `❌ Fallo al capturar la URL "${url}": ${capErr.message}`, 'error', report.id);
                     }
                     finally {
