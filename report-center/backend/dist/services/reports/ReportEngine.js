@@ -517,8 +517,30 @@ class ReportEngine {
         }
         catch (launchErr) {
             const msg = launchErr?.message || String(launchErr);
-            console.error('Error launching Chromium in cloud:', msg);
-            return { buffers: [], error: `Navegador Chromium no disponible en Render: ${msg}` };
+            if (msg.includes("doesn't exist") || msg.includes("npx playwright install")) {
+                try {
+                    console.log('Downloading Playwright Chromium binary on demand...');
+                    require('child_process').execSync('npx playwright install chromium', { stdio: 'ignore' });
+                    browser = await chromium.launch({
+                        headless: true,
+                        args: [
+                            '--no-sandbox',
+                            '--disable-setuid-sandbox',
+                            '--disable-dev-shm-usage',
+                            '--disable-accelerated-2d-canvas',
+                            '--no-first-run',
+                            '--no-zygote',
+                            '--disable-gpu'
+                        ]
+                    });
+                }
+                catch (autoErr) {
+                    return { buffers: [], error: `Navegador Chromium no disponible en Render: ${autoErr.message || msg}` };
+                }
+            }
+            else {
+                return { buffers: [], error: `Navegador Chromium no disponible en Render: ${msg}` };
+            }
         }
         try {
             const context = await browser.newContext({
