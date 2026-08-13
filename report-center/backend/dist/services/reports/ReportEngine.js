@@ -45,9 +45,10 @@ class ReportEngine {
             let buffers = [];
             let screenshotError = '';
             try {
-                buffers = await this.takeScreenshots(report);
-                if (buffers.length === 0) {
-                    screenshotError = report._lastScreenshotError || 'Playwright no pudo generar la captura en el servidor en la nube.';
+                const res = await this.takeScreenshots(report);
+                buffers = res.buffers;
+                if (res.error) {
+                    screenshotError = res.error;
                 }
             }
             catch (err) {
@@ -144,9 +145,10 @@ class ReportEngine {
             let reportData = {};
             if (report.isScreenshot || report.template === 'screenshot') {
                 ReportRepository_1.ReportRepository.addLog('Scheduler', `${tagLabel} 📸 Tomando capturas de pantalla de las URLs configuradas con Playwright...`, 'info', report.id);
-                screenshotBuffers = await this.takeScreenshots(report);
+                const res = await this.takeScreenshots(report);
+                screenshotBuffers = res.buffers;
                 if (screenshotBuffers.length === 0) {
-                    throw new Error('No se pudo capturar ninguna de las pantallas especificadas.');
+                    throw new Error(res.error || 'No se pudo capturar ninguna de las pantallas especificadas.');
                 }
                 content = `Reporte de capturas web "${report.name}" generado con éxito (${screenshotBuffers.length} imágenes).`;
             }
@@ -498,6 +500,7 @@ class ReportEngine {
     async takeScreenshots(report) {
         const { chromium } = require('playwright');
         let browser = null;
+        let lastError = '';
         try {
             browser = await chromium.launch({
                 headless: true,
@@ -511,6 +514,13 @@ class ReportEngine {
                     '--disable-gpu'
                 ]
             });
+        }
+        catch (launchErr) {
+            const msg = launchErr?.message || String(launchErr);
+            console.error('Error launching Chromium in cloud:', msg);
+            return { buffers: [], error: `Navegador Chromium no disponible en Render: ${msg}` };
+        }
+        try {
             const context = await browser.newContext({
                 viewport: { width: 1280, height: 800 }
             });
@@ -545,14 +555,15 @@ class ReportEngine {
                         buffers.push(buf);
                     }
                     catch (capErr) {
-                        report._lastScreenshotError = capErr?.message || String(capErr);
+                        lastError = capErr?.message || String(capErr);
                         ReportRepository_1.ReportRepository.addLog('Scheduler', `❌ Fallo al capturar la URL "${url}": ${capErr.message}`, 'error', report.id);
                     }
                     finally {
                         await page.close().catch(() => { });
                     }
                 }
-                return buffers;
+                await browser.close().catch(() => { });
+                return { buffers, error: buffers.length === 0 ? (lastError || 'No se pudo generar la imagen de captura.') : undefined };
             }
             // Legacy / Default single-login flow (targetUrls)
             const page = await context.newPage();
@@ -581,11 +592,11 @@ class ReportEngine {
                     ReportRepository_1.ReportRepository.addLog('Scheduler', `❌ Fallo al capturar la URL "${url}": ${capErr.message}`, 'error', report.id);
                 }
             }
-            return buffers;
+            return { buffers, error: buffers.length === 0 ? (lastError || 'No se pudo generar la imagen de captura.') : undefined };
         }
         catch (err) {
             ReportRepository_1.ReportRepository.addLog('Scheduler', `❌ Error general en Playwright para capturas: ${err.message}`, 'error', report.id);
-            return [];
+            return { buffers: [], error: err?.message || String(err) };
         }
         finally {
             if (browser) {
