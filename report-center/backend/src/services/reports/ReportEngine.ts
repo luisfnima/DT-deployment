@@ -519,25 +519,55 @@ export class ReportEngine {
   private async performLogin(page: any, loginUrl: string, username?: string, password?: string, uSel?: string, pSel?: string, sSel?: string, reportId?: string) {
     if (!loginUrl || loginUrl.trim() === '') return;
     ReportRepository.addLog('Scheduler', `🔑 Navegando a página de login: ${loginUrl}`, 'info', reportId);
-    await page.goto(loginUrl, { waitUntil: 'domcontentloaded' }).catch(() => {});
+    
+    // 1. Navigate to loginUrl
+    await page.goto(loginUrl, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => {});
+    await page.waitForTimeout(1000);
+
+    // 2. Check if already logged in / redirected past login
+    if (!page.url().includes('/login')) {
+      ReportRepository.addLog('Scheduler', `ℹ️ Redirigido automáticamente fuera de /login. Sesión activa.`, 'info', reportId);
+      return;
+    }
 
     if (username && password) {
-      const userSel = uSel && uSel.trim() ? uSel : 'input[type="email"], input[type="text"]';
-      const passSel = pSel && pSel.trim() ? pSel : 'input[type="password"]';
-      const submitSel = sSel && sSel.trim() ? sSel : 'button[type="submit"]';
+      const userSel = uSel && uSel.trim() ? uSel : 'input[type="email"], input[type="text"], input[name="email"], input[name="username"]';
+      const passSel = pSel && pSel.trim() ? pSel : 'input[type="password"], input[name="password"]';
+      const submitSel = sSel && sSel.trim() ? sSel : 'button[type="submit"], input[type="submit"], button:has-text("Iniciar"), button:has-text("Login"), button:has-text("Ingresar")';
 
       try {
         const userLoc = page.locator(userSel).first();
         const passLoc = page.locator(passSel).first();
 
-        await userLoc.focus().catch(() => {});
-        await userLoc.pressSequentially(username, { delay: 20 });
+        // Wait up to 10s for username input to be visible
+        await userLoc.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
 
-        await passLoc.focus().catch(() => {});
-        await passLoc.pressSequentially(password, { delay: 20 });
+        // Clear and fill username
+        await userLoc.fill('').catch(() => {});
+        await userLoc.fill(username).catch(async () => {
+          await userLoc.pressSequentially(username, { delay: 20 });
+        });
 
-        await page.click(submitSel);
-        await page.waitForURL((u: any) => !u.href.includes('/login'), { timeout: 10000 }).catch(() => {});
+        // Clear and fill password
+        await passLoc.fill('').catch(() => {});
+        await passLoc.fill(password).catch(async () => {
+          await passLoc.pressSequentially(password, { delay: 20 });
+        });
+
+        await page.waitForTimeout(500);
+
+        // Try clicking submit button OR pressing Enter
+        const submitLoc = page.locator(submitSel).first();
+        if (await submitLoc.isVisible().catch(() => false)) {
+          await submitLoc.click().catch(async () => {
+            await passLoc.press('Enter');
+          });
+        } else {
+          await passLoc.press('Enter');
+        }
+
+        // Wait for URL change or navigation
+        await page.waitForURL((u: any) => !u.href.includes('/login'), { timeout: 15000 }).catch(() => {});
         await page.waitForTimeout(3000);
       } catch (loginErr: any) {
         ReportRepository.addLog('Scheduler', `⚠️ Advertencia durante el login: ${loginErr.message}`, 'warning', reportId);
