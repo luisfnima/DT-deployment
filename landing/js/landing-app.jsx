@@ -1,4 +1,4 @@
-/* ── MAIN ── */
+/* ── MAIN (v20260814.1) ── */
 function App() {
   const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
   const primary = tweaks.primaryColor;
