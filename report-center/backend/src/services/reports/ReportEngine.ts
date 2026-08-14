@@ -654,11 +654,9 @@ export class ReportEngine {
             const cleanTarget = url.replace(/\/$/, '');
             const cleanCurrent = currentUrl.replace(/\/$/, '');
             if (cleanCurrent !== cleanTarget && !cleanCurrent.endsWith(cleanTarget)) {
-              await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 }).catch(async () => {
-                await page.goto(url, { waitUntil: 'domcontentloaded' });
-              });
+              await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 }).catch(() => {});
             }
-            await page.waitForTimeout(3000);
+            await page.waitForTimeout(1500);
             const buf = await page.screenshot({ fullPage: true });
             buffers.push(buf);
           } catch (capErr: any) {
