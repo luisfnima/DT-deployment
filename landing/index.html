@@ -147,15 +147,41 @@
   src: url("fonts/asset_60623e81.woff2") format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("fonts/asset_fde339a5.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("fonts/asset_60623e81.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 </style>
 
-  <!-- React & Babel -->
-  <script src="js/asset_494d6283.js" crossorigin=""></script>
-  <script src="js/asset_52a9378a.js" crossorigin=""></script>
+  <!-- React + Babel -->
+  <script src="js/asset_607e302c.js"></script>
+  <script src="js/asset_494d6283.js"></script>
+  <script src="js/asset_a5f6134c.js"></script>
+
+  <script type="text/babel" src="js/asset_29e2844a.jsx"></script>
+  <script src="js/animation.js?v=10007"></script>
+  <link rel="stylesheet" href="css/styles_v2.css?v=99999922">
+  <script src="js/theme.js?v=10007"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="js/asset_52a9378a.js"></script>
   <script src="js/asset_572b297b.js"></script>
 
   <!-- Sound, Activities & Theme Configs -->
-  <script src="js/sound.js"></script>
   <script src="js/p5-theme.js"></script>
   <script src="js/hero-config.js"></script>
   <script src="js/hero-slideshow.js"></script>
@@ -169,14 +195,8 @@
 
   <!-- Global Styles -->
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/styles_v2.css">
 </head>
 <body>
   <div id="root"></div>
-
-  <!-- Component Logic -->
-  <script type="text/babel" src="js/asset_29e2844a.jsx"></script>
-  <script type="text/babel" src="js/asset_607e302c.js"></script>
-  <script type="text/babel" src="js/asset_a5f6134c.js"></script>
 </body>
 </html>
