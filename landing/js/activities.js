@@ -117,7 +117,7 @@
           line-height:.92;letter-spacing:1px;text-transform:uppercase;
           color:#f3efe6;margin:0}
         #actividades .act-main-title em{color:#e60013;font-style:italic;padding-right:8px}
-        #actividades .act-subtitle{font-family:'Barlow Semi Condensed','DM Sans',sans-serif;font-size:15px;color:rgba(243,239,230,.88) !important;line-height:1.55;max-width:340px;margin:0 0 8px}
+        #actividades .act-subtitle{font-family:'Barlow Semi Condensed','DM Sans',sans-serif;font-size:15px;color:rgba(243,239,230,.6);line-height:1.55;max-width:340px;margin:0 0 8px}
 
         /* ═══ FILTROS — botones paralelogramo P5 ═══ */
         #actividades .act-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:38px}
@@ -222,6 +222,16 @@
           #act-detail-modal #adm-gallery{min-height:260px !important}
           #act-detail-modal #adm-info{width:100% !important}
         }
+        /* ═══ BOTÓN VER MÁS ACTIVIDADES ═══ */
+        #actividades .act-load-more-wrap{display:flex;justify-content:center;margin-top:40px;width:100%}
+        #actividades .act-load-more-btn{
+          font-family:'Oswald',sans-serif !important;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;
+          background:#e60013 !important;color:#fff !important;border:none !important;padding:14px 36px;cursor:pointer;
+          transform:skewX(-12deg);box-shadow:6px 6px 0 #000;transition:transform .2s,background .2s,box-shadow .2s;
+        }
+        #actividades .act-load-more-btn>span{transform:skewX(12deg);display:inline-flex;align-items:center;gap:8px}
+        #actividades .act-load-more-btn:hover{background:#ff1a2d !important;transform:skewX(-12deg) translateY(-2px);box-shadow:8px 8px 0 #000}
+        #actividades .act-load-more-btn.act-load-less{background:#1a1a1a !important;border:1px solid rgba(243,239,230,.3) !important}
       </style>
 
       <div class="act-slash-band">
@@ -239,6 +249,7 @@
 
         <div class="act-filters" id="act-filters"></div>
         <div class="act-grid" id="act-grid"></div>
+        <div class="act-load-more-wrap" id="act-load-more-wrap"></div>
       </div>
     `;
     return sec;
@@ -257,20 +268,50 @@
     }).join('');
   }
 
+  let isExpanded = false;
+
   // ── Render grid ────────────────────────────────────────────────
   function renderGrid() {
     const grid = document.getElementById('act-grid');
+    const loadMoreContainer = document.getElementById('act-load-more-wrap');
     if (!grid) return;
 
     if (!filtered.length) {
       grid.innerHTML = '<div class="act-empty">No hay actividades en esta categoría</div>';
+      if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       return;
     }
 
     // La destacada (featured) va primero para ocupar la esquina sup-izq
     const sorted = [...filtered].sort((a, b) => (b.featured === true) - (a.featured === true));
 
-    grid.innerHTML = sorted.map((a, i) => cardHTML(a, i)).join('');
+    // Si no está expandido y estamos en 'Todas' o con más de 4 actividades, limitar a 4
+    const LIMIT = 4;
+    const itemsToDisplay = isExpanded ? sorted : sorted.slice(0, LIMIT);
+
+    grid.innerHTML = itemsToDisplay.map((a, i) => cardHTML(a, i)).join('');
+
+    // Mostrar u ocultar botón de "Ver más"
+    if (loadMoreContainer) {
+      if (!isExpanded && sorted.length > LIMIT) {
+        const remaining = sorted.length - LIMIT;
+        loadMoreContainer.style.display = 'flex';
+        loadMoreContainer.innerHTML = `
+          <button class="act-load-more-btn" onclick="window.__actToggleExpand()">
+            <span>VER MÁS ACTIVIDADES (${remaining}+) ↓</span>
+          </button>
+        `;
+      } else if (isExpanded && sorted.length > LIMIT) {
+        loadMoreContainer.style.display = 'flex';
+        loadMoreContainer.innerHTML = `
+          <button class="act-load-more-btn act-load-less" onclick="window.__actToggleExpand()">
+            <span>VER MENOS ↑</span>
+          </button>
+        `;
+      } else {
+        loadMoreContainer.style.display = 'none';
+      }
+    }
   }
 
   // ── Card HTML ──────────────────────────────────────────────────
@@ -370,9 +411,17 @@
   // ── Exponer en window ──────────────────────────────────────────
   window.__actFilter = (cat) => {
     currentCat = cat;
+    isExpanded = false;
     filtered = cat === 'all' ? [...acts] : acts.filter(a => a.category === cat);
     renderFilters();
     renderGrid();
+  };
+  window.__actToggleExpand = () => {
+    isExpanded = !isExpanded;
+    renderGrid();
+    if (!isExpanded) {
+      document.getElementById('actividades')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   window.__actOpenDetail  = (id) => openDetail(id);
   window.__actCloseDetail = () => {
