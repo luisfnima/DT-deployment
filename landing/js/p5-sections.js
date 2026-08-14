@@ -108,24 +108,20 @@
       opacity: .22;
       mix-blend-mode: multiply;
     }
-    .p5-hero-hidden { display: none !important; }
+    .p5-hero-section {
+      min-height: 100vh;
+      background-image: linear-gradient(rgba(10, 10, 10, 0.78), rgba(10, 10, 10, 0.88)), url('images/hero_office_bg.jpg') !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
+    @media (max-width: 900px) { .p5-hero-section { min-height: auto !important; } }
 
-    /* zona de la foto del hero: escalado adaptativo fluido */
-    .p5-photo-zone { transform: scale(1.45); transform-origin: center center; transition: transform .3s ease; }
-    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.25); } }
-    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.1); } }
-    @media (max-width: 768px) {
-      .p5-photo-zone {
-        transform: scale(0.85);
-        margin: 20px 0 30px 0;
-      }
-    }
-    @media (max-width: 480px) {
-      .p5-photo-zone {
-        transform: scale(0.72);
-        margin: 10px 0 20px 0;
-      }
-    }
+    /* Zona de la foto del hero alineada a escala fluida */
+    .p5-photo-zone { transform: scale(1.15); transform-origin: center center; }
+    @media (max-width: 1280px) { .p5-photo-zone { transform: scale(1.05); } }
+    @media (max-width: 1080px) { .p5-photo-zone { transform: scale(1.0); } }
+    @media (max-width: 900px)  { .p5-photo-zone { transform: scale(0.98); } }
 
     /* etiqueta "// TALENTO REAL" */
     .p5-tag2 {
@@ -137,7 +133,125 @@
       box-shadow: 4px 4px 0 #000;
       pointer-events: none;
     }
-    /* badge "TAKE YOUR HEART" */
+    /* burbuja cómic ovalada (izquierda) elástica auto-ajustable con flechita */
+    .p5-speech-bubble {
+      position: absolute !important;
+      bottom: 90px !important; left: -140px !important; z-index: 99 !important;
+      min-width: 190px !important; max-width: 250px !important; width: max-content !important;
+      background: #ffffff !important; color: #000000 !important;
+      border: 4px solid #000000 !important; border-radius: 50% / 45% !important;
+      padding: 22px 28px !important; box-shadow: 6px 6px 0 #000000 !important;
+      transform: rotate(-4deg) !important; text-align: center !important;
+      pointer-events: none !important; overflow: visible !important;
+      transition: opacity 0.4s ease, transform 0.4s ease !important;
+    }
+    .p5-bubble-arrow {
+      right: -36px !important;
+      bottom: 12px !important;
+      top: auto !important;
+      transform: none !important;
+    }
+
+    /* notepad pergamino largo (derecha) */
+    .p5-notepad {
+      position: absolute !important;
+      top: 80px !important; right: -120px !important; z-index: 99 !important;
+      width: 190px !important; background: #ffffff !important; color: #000000 !important;
+      border: 3.5px solid #000000 !important; border-radius: 3px !important;
+      padding: 14px 16px !important; box-shadow: 6px 6px 0 #000000 !important;
+      transform: rotate(4deg) !important; pointer-events: none !important;
+      transition: opacity 0.4s ease, transform 0.4s ease !important;
+    }
+
+    /* Reglas responsive para maquetación del Hero en móviles */
+    @media (max-width: 1080px) {
+      .p5-speech-bubble { left: -40px !important; bottom: 30px !important; transform: rotate(-4deg) scale(0.85) !important; }
+      .p5-notepad { right: -30px !important; top: 110px !important; transform: rotate(4deg) scale(0.85) !important; }
+    }
+    @media (max-width: 900px) {
+      .hero-image-wrapper {
+        padding-top: 0 !important;
+        margin-top: -120px !important;
+      }
+      section#inicio {
+        min-height: auto !important;
+        padding-top: 0 !important;
+        padding-bottom: 20px !important;
+      }
+      section#inicio > div {
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 10px 14px 20px 14px !important;
+        gap: 12px !important;
+      }
+      section#inicio div[style*="flex: 1 1 650px"] {
+        max-width: 100% !important;
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      section#inicio h1, section#inicio p {
+        margin-bottom: 8px !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .p5-photo-zone {
+        width: 100% !important;
+        max-width: 310px !important;
+        margin: 0 auto 0 45px !important;
+        transform: scale(0.88) !important;
+        transform-origin: center top !important;
+      }
+      .p5-frame {
+        margin: 0 auto !important;
+      }
+      .p5-tag2 {
+        right: -8px !important; left: auto !important;
+        top: -16px !important; font-size: 14px !important;
+        padding: 9px 16px !important; z-index: 140 !important;
+        box-shadow: 4px 4px 0 #000 !important;
+        background: #f3efe6 !important; color: #000 !important;
+      }
+      .p5-notepad {
+        right: -145px !important; top: 75px !important;
+        background: #ffffff !important; opacity: 1 !important;
+        transform: rotate(4deg) scale(0.82) !important;
+        z-index: 130 !important; transform-origin: right top !important;
+        box-shadow: 5px 5px 0 #000000 !important;
+      }
+      .p5-speech-bubble {
+        left: -35px !important; bottom: -32px !important;
+        background: #ffffff !important; opacity: 1 !important;
+        transform: rotate(-3deg) scale(0.80) !important; z-index: 135 !important;
+        box-shadow: 5px 5px 0 #000000 !important;
+      }
+      .p5-bubble-arrow {
+        top: -28px !important; bottom: auto !important;
+        right: 28px !important; left: auto !important;
+        transform: rotate(-90deg) scaleY(-1) !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .p5-photo-zone {
+        max-width: 290px !important;
+        margin: 0 auto -10px 40px !important;
+        transform: scale(0.84) !important;
+      }
+      .p5-tag2 {
+        right: -6px !important; left: auto !important;
+        top: -14px !important; font-size: 13.5px !important;
+        padding: 8px 14px !important; z-index: 140 !important;
+      }
+      .p5-notepad {
+        right: -135px !important; top: 80px !important;
+        background: #ffffff !important; opacity: 1 !important;
+        transform: rotate(4deg) scale(0.78) !important; z-index: 130 !important;
+      }
+      .p5-speech-bubble {
+        left: -30px !important; bottom: -35px !important;
+        background: #ffffff !important; opacity: 1 !important;
+        transform: rotate(-3deg) scale(0.76) !important; z-index: 135 !important;
+      }
+    }
     .p5-badge-tyh {
       position: absolute; bottom: 12px; left: -2px; z-index: 6;
       background: #000; color: #fff;
@@ -147,6 +261,14 @@
       transform: rotate(-5deg) skewX(-6deg);
       box-shadow: 6px 6px 0 ${RED};
       pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .p5-badge-tyh {
+        bottom: -22px !important;
+        left: -12px !important;
+        transform: rotate(-5deg) scale(0.72) !important;
+        z-index: 5 !important;
+      }
     }
     .p5-badge-tyh i { color: ${RED}; font-style: normal; }
     /* destellos P5 (sparkle de 4 puntas) con parpadeo animado */
@@ -162,117 +284,6 @@
     .p5-star-s1 { width: 62px; height: 62px; top: 60px; left: -8px; background: ${RED}; }
     .p5-star-s2 { width: 30px; height: 30px; bottom: 96px; right: 2px; background: ${PAPER}; opacity: .9;
       animation-delay: 1.4s; animation-duration: 4.2s; }
-
-    /* ────────── BURBUJA INTERACTIVA CAMBIANTE (SPEECH BUBBLE) ────────── */
-    .p5-speech-bubble {
-      position: absolute;
-      bottom: 60px;
-      left: -120px;
-      z-index: 10;
-      background: #ffffff;
-      color: #0b0b0b;
-      border: 3px solid #0b0b0b;
-      border-radius: 50px;
-      padding: 14px 22px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 1.35;
-      text-align: center;
-      max-width: 230px;
-      box-shadow: 4px 4px 0 #000;
-      transform: rotate(-4deg);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    /* Flecha curvada hacia la foto */
-    .p5-speech-bubble::after {
-      content: '';
-      position: absolute;
-      right: -24px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 12 Q 14 2, 22 12' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 8 L 22 12 L 18 18' stroke='%230b0b0b' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    /* ────────── NOTITA CHECKLIST CAMBIANTE (CON FLECHA AMARILLA) ────────── */
-    .p5-notepad {
-      position: absolute;
-      top: 40px;
-      right: -145px;
-      z-index: 10;
-      background: #ffffff;
-      color: #111827;
-      border: 2px solid #0b0b0b;
-      border-radius: 8px;
-      padding: 16px 18px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      line-height: 1.6;
-      width: 175px;
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.8);
-      transform: rotate(3deg);
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    .p5-notepad-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-    .p5-notepad-item i {
-      color: ${RED};
-      font-style: normal;
-      font-weight: 800;
-    }
-    /* Flecha amarilla indicadora hacia la nota */
-    .p5-notepad::before {
-      content: '';
-      position: absolute;
-      top: -24px;
-      left: -28px;
-      width: 36px;
-      height: 36px;
-      background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4 Q 18 8, 26 24' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 22 L 26 24 L 24 16' stroke='%23eab308' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    /* ────────── OLA ROJA INFERIOR DEL HERO Y CORONA BLANCA ────────── */
-    .p5-hero-wave {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 420px;
-      height: 140px;
-      z-index: 3;
-      pointer-events: none;
-    }
-    .p5-hero-crown {
-      position: absolute;
-      bottom: 45px;
-      left: 60px;
-      z-index: 4;
-      width: 38px;
-      height: 30px;
-      pointer-events: none;
-    }
-
-    /* Responsive behavior for speech bubble and notepad */
-    @media (max-width: 1200px) {
-      .p5-speech-bubble { left: -60px; max-width: 180px; font-size: 12px; padding: 10px 16px; }
-      .p5-notepad { right: -70px; width: 140px; font-size: 11px; padding: 12px; }
-    }
-    @media (max-width: 900px) {
-      .p5-speech-bubble, .p5-notepad { display: none !important; }
-    }
 
     /* ────────── ESTRELLAS ACOMPAÑANTES (siguen el scroll) ────────── */
     .p5-companion {
@@ -425,270 +436,275 @@
   /* ═══════════════════════════════════════════════════════════════
      1. HERO — marco polaroid + decoraciones + stats
   ═══════════════════════════════════════════════════════════════ */
-  function applyHeroP5() {
-    var heroSec = document.querySelector('section#inicio');
-    if (!heroSec) return;
+  function styleHero() {
+    var sec = document.querySelector('section#inicio');
+    if (!sec) return false;
 
-    // Buscar tarjeta principal (la foto)
-    var photoWrap = heroSec.querySelector('div[style*="rotate(-4deg)"]');
-    if (!photoWrap) {
-      var img = heroSec.querySelector('img[alt="Agente de contact center"]');
-      if (img && img.parentNode) photoWrap = img.parentNode;
+    /* encontrar la foto principal (no avatares) */
+    var mainImg = null;
+    var imgs = sec.querySelectorAll('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var alt = (imgs[i].getAttribute('alt') || '').toLowerCase();
+      if (alt === 'avatar') continue;
+      var r = imgs[i].getBoundingClientRect();
+      if (r.width > 150 && r.height > 150) { mainImg = imgs[i]; break; }
     }
+    if (!mainImg) return false;
 
-    if (photoWrap && !photoWrap.classList.contains('p5-frame')) {
-      photoWrap.classList.add('p5-frame');
+    var mainCard  = mainImg.parentElement;          // tarjeta con rotate(-4deg)
+    var container = mainCard.parentElement;         // contenedor flex 400×500
+    if (container.dataset.p5hero === '1') return true;
+    container.dataset.p5hero = '1';
 
-      var parent = photoWrap.parentNode;
-      if (parent) {
-        parent.style.position = 'relative';
+    /* marco P5 + zona agrandada 45% */
+    mainCard.classList.add('p5-frame');
+    container.classList.add('p5-photo-zone');
 
-        // Etiqueta // TALENTO REAL
-        if (!parent.querySelector('.p5-tag-tr')) {
-          var tag = document.createElement('div');
-          tag.className = 'p5-tag-tr';
-          tag.innerHTML = '// TALENTO REAL';
-          parent.appendChild(tag);
-        }
-
-        /*
-        // Badge TAKE YOUR HEART
-        if (!parent.querySelector('.p5-badge-tyh')) {
-          var badge = document.createElement('div');
-          badge.className = 'p5-badge-tyh';
-          badge.innerHTML = 'TAKE <i>♥</i> YOUR HEART';
-          parent.appendChild(badge);
-        }
-        */
-       
-        // Estrellas decorativas
-        if (!parent.querySelector('.p5-star-s1')) {
-          var s1 = document.createElement('div');
-          s1.className = 'p5-star-deco p5-star-s1';
-          parent.appendChild(s1);
-        }
-        if (!parent.querySelector('.p5-star-s2')) {
-          var s2 = document.createElement('div');
-          s2.className = 'p5-star-deco p5-star-s2';
-          parent.appendChild(s2);
-        }
-
-        // Burbuja interactiva cambiante (Speech bubble)
-        if (!parent.querySelector('.p5-speech-bubble')) {
-          var bubble = document.createElement('div');
-          bubble.className = 'p5-speech-bubble';
-          var quotes = [
-            '¡Terminé mi carrera mientras trabajaba aquí!',
-            '¡Los mejores incentivos y ambiente de trabajo!',
-            '¡Crecí profesionalmente desde el primer mes!',
-            '¡Comisiones sin techo y pagos siempre puntuales!'
-          ];
-          var qIdx = 0;
-          bubble.textContent = quotes[0];
-          parent.appendChild(bubble);
-
-          setInterval(function() {
-            qIdx = (qIdx + 1) % quotes.length;
-            bubble.style.opacity = '0';
-            bubble.style.transform = 'rotate(-4deg) translateY(6px)';
-            setTimeout(function() {
-              bubble.textContent = quotes[qIdx];
-              bubble.style.opacity = '1';
-              bubble.style.transform = 'rotate(-4deg) translateY(0)';
-            }, 400);
-          }, 4500);
-        }
-
-        // Notita checklist fija con flecha amarilla
-        if (!parent.querySelector('.p5-notepad')) {
-          var note = document.createElement('div');
-          note.className = 'p5-notepad';
-          note.innerHTML = `
-            <div class="p5-notepad-item"><i>✓</i> Capacitaciones constantes</div>
-            <div class="p5-notepad-item"><i>✓</i> Línea de carrera</div>
-            <div class="p5-notepad-item"><i>✓</i> Comisiones sin techo</div>
-            <div class="p5-notepad-item"><i>✓</i> Excelente clima laboral</div>
-          `;
-          parent.appendChild(note);
-        }
+    /* ocultar las "hojas" rojas apiladas detrás (diseño anterior) */
+    Array.prototype.forEach.call(container.children, function (ch) {
+      if (ch === mainCard || ch.classList.contains('p5-speech-bubble') || ch.classList.contains('p5-notepad')) return;
+      var st = ch.getAttribute('style') || '';
+      if (st.indexOf('position: absolute') >= 0 && st.indexOf('border-radius') >= 0) {
+        ch.classList.add('p5-hero-hidden');
       }
-    }
+    });
 
-    // Inyectar Ola Roja e Icono Corona Reina en la esquina inferior izquierda de la sección Hero
-    if (!heroSec.querySelector('.p5-hero-wave')) {
-      var wave = document.createElement('div');
-      wave.className = 'p5-hero-wave';
-      wave.innerHTML = `<svg viewBox="0 0 420 140" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:100%;"><path d="M0 140 C 140 140, 240 40, 420 70 L 420 140 Z" fill="#e60013"/></svg>`;
-      heroSec.appendChild(wave);
-    }
-    if (!heroSec.querySelector('.p5-hero-crown')) {
-      var crown = document.createElement('div');
-      crown.className = 'p5-hero-crown';
-      crown.innerHTML = `<svg viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><path d="M2 28 L6 8 L14 18 L19 2 L24 18 L32 8 L36 28 Z" fill="#ffffff" stroke="#000000" stroke-width="2" stroke-linejoin="round"/></svg>`;
-      heroSec.appendChild(crown);
-    }
+    /* halftone rojo sobre la foto */
+    var dots = document.createElement('div');
+    dots.className = 'p5-frame-dots';
+    mainCard.appendChild(dots);
 
-    // Adaptar Stats a fuente Anton P5
-    var statNumbers = heroSec.querySelectorAll('div[style*="fontFamily: \'Sora\'"], div[style*="font-family: Sora"]');
-    statNumbers.forEach(function (el) {
-      if (/^\d+\+?$/.test(el.textContent.trim())) {
+    /* decoraciones alrededor del marco */
+    var tag = document.createElement('div');
+    tag.className = 'p5-tag2';
+    tag.textContent = '// Talento Real';
+
+    var badge = document.createElement('div');
+    badge.className = 'p5-badge-tyh';
+    badge.innerHTML = 'TAKE<br>YOUR <i>HEART</i>';
+
+    var s1 = document.createElement('div');
+    s1.className = 'p5-star-deco p5-star-s1';
+    var s2 = document.createElement('div');
+    s2.className = 'p5-star-deco p5-star-s2';
+
+    /* estrellas detrás del marco, etiquetas por encima */
+    container.insertBefore(s1, mainCard);
+    container.insertBefore(s2, mainCard);
+    container.appendChild(tag);
+    container.appendChild(badge);
+
+    /* stats "10+ / 24/7 / ∞" → Anton rojo */
+    var nodes = sec.querySelectorAll('div, span');
+    Array.prototype.forEach.call(nodes, function (el) {
+      if (el.childElementCount > 1) return;
+      var txt = (el.textContent || '').trim();
+      if (!txt || txt.length > 6) return;
+      if (!/[0-9∞]/.test(txt)) return;
+      var fs = parseFloat(getComputedStyle(el).fontSize);
+      if (fs >= 26 && fs <= 64) {
         el.classList.add('p5-hstat');
-        if (el.nextElementSibling) {
-          el.nextElementSibling.classList.add('p5-hstat-label');
+        /* la etiqueta pequeña que acompaña al número */
+        var sib = el.nextElementSibling;
+        if (sib && (sib.textContent || '').trim().length > 4) {
+          sib.classList.add('p5-hstat-label');
         }
       }
     });
+
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     2. REEMPLAZO DE LA SECCIÓN CTA (#unete) A P5
+     2. SECCIÓN ÚNETE — split foto duotono + copy P5
   ═══════════════════════════════════════════════════════════════ */
-  function applyCtaP5() {
-    var originalCta = document.querySelector('section#unete');
-    if (!originalCta) return;
+  function buildUnete() {
+    return true; // Disabled duplicate P5 layout replacement to allow React CV Form to display
+    var old = document.getElementById('unete');
+    if (!old || old.dataset.p5built === '1') return !!document.querySelector('#unete .up5-grid');
+    if (old.querySelector('.up5-grid')) return true;
 
-    if (originalCta.querySelector('.up5-grid')) return;
+    /* recuperar la imagen de fondo del CTA original */
+    var oldImg = old.querySelector('img');
+    var photoSrc = oldImg ? oldImg.src :
+      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1600&q=80&fit=crop&crop=center';
 
-    var bgImg = (window.__resources && window.__resources.ctaBg)
-      || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80&fit=crop";
+    /* ocultar el original y ceder el ancla #unete a la nueva sección */
+    old.dataset.p5built = '1';
+    old.id = 'unete-legacy';
+    old.style.display = 'none';
 
-    var newContent = document.createElement('div');
-    newContent.className = 'up5-grid';
-    newContent.innerHTML = `
-      <div class="up5-photo">
-        <img src="${bgImg}" alt="Equipo DreamTeam P5">
-        <div class="up5-half"></div>
-        <div class="up5-clip"></div>
-      </div>
-      <div class="up5-copy">
-        <div class="p5-star-deco"></div>
-        <span class="up5-eyebrow">// Únete a DreamTeam</span>
-        <h2>¿BUSCAS CRECER <span>DE VERDAD?</span></h2>
-        <p class="up5-lead">
-          No buscamos empleados convencionales. Incorporamos talento con hambre de superación, pasión por las ventas y visión de futuro.
-        </p>
-        <div class="up5-bullets">
-          <div class="up5-bullet"><i>✓</i> Comisiones sin techo + bonificaciones diarias</div>
-          <div class="up5-bullet"><i>✓</i> Capacitación continua en neuroventas y persuasión</div>
-          <div class="up5-bullet"><i>✓</i> Línea de carrera real en una compañía en constante expansión</div>
-          <div class="up5-bullet"><i>✓</i> Cultura de alto rendimiento y reconocimiento constante</div>
+    var sec = document.createElement('section');
+    sec.id = 'unete';
+    sec.innerHTML = `
+      <div class="up5-grid">
+        <div class="up5-photo p5-rv-l">
+          <img src="${photoSrc}" alt="Equipo DreamTeam trabajando">
+          <div class="up5-half"></div>
+          <div class="up5-clip"></div>
         </div>
-        <a href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener" class="up5-btn">
-          POSTULAR AHORA ➔
-        </a>
-      </div>
-    `;
+        <div class="up5-copy">
+          <div class="p5-star-deco"></div>
+          <div class="up5-eyebrow p5-rv"><span><span class="tri"></span>Únete al Equipo</span></div>
+          <h2 class="up5-title p5-rv">¿Buscas crecer <span class="red">de verdad?</span></h2>
+          <p class="p5-rv">En DreamTeam no fichamos empleados: incorporamos talento que quiere marcar la diferencia. Si tienes hambre de crecer, este es tu sitio.</p>
+          <div class="up5-perks p5-rv">
+            <div class="up5-perk"><span><i>↑</i>Crecimiento profesional</span></div>
+            <div class="up5-perk"><span><i>◈</i>Equipo diverso</span></div>
+            <div class="up5-perk"><span><i>✦</i>Beneficios competitivos</span></div>
+          </div>
+          <a class="up5-btn p5-rv" href="https://forms.gle/9AWQbTY2SBmc3Yg77" target="_blank" rel="noopener"><span>Quiero unirme →</span></a>
+        </div>
+      </div>`;
 
-    originalCta.innerHTML = '';
-    originalCta.appendChild(newContent);
+    old.parentNode.insertBefore(sec, old);
+
+    /* stagger para los elementos del copy */
+    var rvs = sec.querySelectorAll('.p5-rv');
+    Array.prototype.forEach.call(rvs, function (el, i) {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     3. ANIMACIONES DE ENTRADA SCROLL
+     3. REVEAL ON SCROLL
   ═══════════════════════════════════════════════════════════════ */
-  function initScrollReveals() {
-    var sobreCards = document.querySelectorAll('#sobre-nosotros [style*="gridColumn"]');
-    sobreCards.forEach(function (c, i) {
-      if (!c.classList.contains('p5-rv')) {
-        c.classList.add(i % 2 === 0 ? 'p5-rv-l' : 'p5-rv-r');
-      }
-    });
+  var observer = null;
 
-    var procCards = document.querySelectorAll('#como-trabajamos [style*="gridTemplateColumns"] > div');
-    procCards.forEach(function (c, i) {
-      if (!c.classList.contains('p5-rv')) {
-        c.classList.add('p5-rv');
-        c.style.transitionDelay = (i * 0.12) + 's';
-      }
-    });
-
-    var actCards = document.querySelectorAll('#actividades .p5-card');
-    actCards.forEach(function (c, i) {
-      if (!c.classList.contains('p5-rv')) {
-        c.classList.add('p5-rv');
-        c.style.transitionDelay = (i * 0.1) + 's';
-      }
-    });
-
-    var heroSec = document.querySelector('section#inicio');
-    if (heroSec) {
-      var heroEls = heroSec.querySelectorAll('h1, .fade-up-1, .fade-up-3, .fade-up-4, .fade-up-5, .p5-frame');
-      heroEls.forEach(function (el, i) {
-        if (!el.classList.contains('p5-rv')) {
-          el.classList.add('p5-rv');
-          el.style.transitionDelay = (i * 0.08) + 's';
+  function getObserver() {
+    if (observer) return observer;
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('p5-in');
+          observer.unobserve(en.target);
         }
       });
-    }
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    return observer;
+  }
 
-    var allReveals = document.querySelectorAll('.p5-rv, .p5-rv-l, .p5-rv-r');
-    if ('IntersectionObserver' in window) {
-      var obs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('p5-in');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15 });
+  /* Selectores de elementos que se animan al entrar en pantalla */
+  var RV_SELECTORS = [
+    /* Nosotros: tarjetas bento + encabezado */
+    'section#sobre-nosotros [style*="grid-column"]',
+    /* Cómo trabajamos: pasos */
+    '[style*="grid-template-columns: repeat(4, 1fr)"] > div',
+    /* Actividades */
+    '#actividades .act-eyebrow',
+    '#actividades .act-main-title',
+    '#actividades .act-subtitle',
+    '#actividades .act-filters',
+    '#actividades .p5-card',
+    /* Footer: columnas */
+    'footer [style*="grid-template-columns"] > div',
+  ];
 
-      allReveals.forEach(function (el) {
-        obs.observe(el);
+  function scanReveals() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    var obs = getObserver();
+
+    RV_SELECTORS.forEach(function (sel) {
+      var els;
+      try { els = document.querySelectorAll(sel); } catch (e) { return; }
+      Array.prototype.forEach.call(els, function (el, i) {
+        if (el.dataset.p5rv === '1') return;
+        el.dataset.p5rv = '1';
+
+        /* si ya está visible en pantalla, no ocultarlo (evita parpadeo) */
+        var r = el.getBoundingClientRect();
+        var inView = r.top < window.innerHeight * 0.9 && r.bottom > 0;
+
+        if (!inView) {
+          el.classList.add('p5-rv');
+          el.style.transitionDelay = ((i % 6) * 0.08) + 's';
+          obs.observe(el);
+        }
       });
-    } else {
-      allReveals.forEach(function (el) {
-        el.classList.add('p5-in');
-      });
-    }
+    });
+
+    /* elementos .p5-rv añadidos por buildUnete */
+    var manual = document.querySelectorAll('.p5-rv:not([data-p5rv]), .p5-rv-l:not([data-p5rv]), .p5-rv-r:not([data-p5rv])');
+    Array.prototype.forEach.call(manual, function (el) {
+      el.dataset.p5rv = '1';
+      obs.observe(el);
+    });
   }
 
   /* ═══════════════════════════════════════════════════════════════
      4. ESTRELLAS ACOMPAÑANTES
+     Dos estrellas P5 fijas en pantalla que giran lentamente y
+     "acompañan" el scroll: se mueven con un retardo elástico
+     (lerp) y derivan en trayectorias suaves según cuánto bajas.
   ═══════════════════════════════════════════════════════════════ */
   function initCompanions() {
     if (document.getElementById('p5-comp-1')) return;
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    } catch (e) {}
 
-    var c1 = document.createElement('div');
-    c1.id = 'p5-comp-1';
-    c1.className = 'p5-companion';
-    c1.innerHTML = '<span class="shape"></span>';
-    document.body.appendChild(c1);
+    function makeStar(id) {
+      var el = document.createElement('div');
+      el.className = 'p5-companion';
+      el.id = id;
+      var shape = document.createElement('span');
+      shape.className = 'shape';
+      el.appendChild(shape);
+      document.body.appendChild(el);
+      return el;
+    }
+    var c1 = makeStar('p5-comp-1');
+    var c2 = makeStar('p5-comp-2');
 
-    var c2 = document.createElement('div');
-    c2.id = 'p5-comp-2';
-    c2.className = 'p5-companion';
-    c2.innerHTML = '<span class="shape"></span>';
-    document.body.appendChild(c2);
+    var cur = 0;   // scroll suavizado (persigue al scroll real con retardo)
 
-    window.addEventListener('scroll', function () {
-      var sc = window.scrollY || document.documentElement.scrollTop;
-      c1.style.transform = 'translateY(' + (sc * 0.06) + 'px)';
-      c2.style.transform = 'translateY(' + (-sc * 0.04) + 'px)';
-    }, { passive: true });
+    function loop() {
+      var target = window.scrollY || document.documentElement.scrollTop || 0;
+      cur += (target - cur) * 0.06;          // lerp → efecto de arrastre elástico
+
+      /* trayectorias onduladas dependientes del scroll suavizado */
+      var x1 = Math.sin(cur * 0.0016) * 22;
+      var y1 = Math.sin(cur * 0.0024) * 30 + (target - cur) * 0.18;
+      var x2 = Math.sin(cur * 0.0012 + 2.1) * 26;
+      var y2 = Math.cos(cur * 0.0019) * 38 + (target - cur) * 0.26;
+      var rot = (cur * 0.04) % 360;
+
+      c1.style.transform = 'translate(' + x1.toFixed(1) + 'px,' + y1.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
+      c2.style.transform = 'translate(' + x2.toFixed(1) + 'px,' + y2.toFixed(1) + 'px) rotate(' + (-rot * 0.7).toFixed(1) + 'deg)';
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     INICIALIZACIÓN CONTINUA
+     INIT — con reintentos para el contenido que React/otros scripts
+     renderizan tarde (hero, actividades)
   ═══════════════════════════════════════════════════════════════ */
-  function boot() {
+  var attempts = 0;
+
+  function tick() {
+    var heroOk  = styleHero();
+    var uneteOk = buildUnete();
+    scanReveals();
+    /* re-escanear hasta que todo exista (máx ~12 s) */
+    if ((!heroOk || !uneteOk || attempts < 6) && attempts < 24) {
+      attempts++;
+      setTimeout(tick, 500);
+    }
+  }
+
+  function init() {
     injectCSS();
-    applyHeroP5();
-    applyCtaP5();
-    initScrollReveals();
     initCompanions();
+    setTimeout(tick, 250);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
+  if (document.readyState !== 'loading') {
+    init();
   } else {
-    boot();
+    document.addEventListener('DOMContentLoaded', init);
   }
-
-  var count = 0;
-  var timer = setInterval(function () {
-    boot();
-    count++;
-    if (count > 30) clearInterval(timer);
-  }, 300);
-
 })();
