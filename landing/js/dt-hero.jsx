@@ -166,22 +166,22 @@ function HeroNotepad({ slideIndex }) {
   const currentData = DOODLE_DATA[slideIndex % DOODLE_DATA.length];
   return (
     <div className="p5-notepad" style={{
-      position: 'absolute', top: 80, right: -120, zIndex: 99,
-      width: 190, background: '#ffffff', color: '#000000',
+      position: 'absolute', top: 35, right: -85, zIndex: 110,
+      width: 195, background: '#ffffff', color: '#000000',
       border: '3.5px solid #000000', borderRadius: '3px',
-      padding: '14px 16px', boxShadow: '6px 6px 0 #000000',
+      padding: '12px 14px', boxShadow: '5px 5px 0 #000000',
       transform: 'rotate(4deg)', pointerEvents: 'none',
-      transition: 'opacity 0.4s ease, transform 0.4s ease'
+      transition: 'opacity 0.35s ease, transform 0.35s ease'
     }}>
       <div style={{
         fontFamily: "'Caveat', 'Comic Sans MS', cursive, sans-serif",
-        fontSize: 16, fontWeight: 700, fontStyle: 'italic',
-        display: 'flex', flexDirection: 'column', gap: 8
+        fontSize: 15, fontWeight: 700, fontStyle: 'italic',
+        display: 'flex', flexDirection: 'column', gap: 6
       }}>
         {currentData.notes.map((item, i) => (
           <div key={i} className="p5-notepad-item" style={{
             display: 'flex', alignItems: 'center', gap: 6,
-            ...(i === currentData.notes.length - 1 ? { borderBottom: '2.5px solid #e60013', paddingBottom: 4 } : {})
+            ...(i === currentData.notes.length - 1 ? { borderBottom: '2.5px solid #e60013', paddingBottom: 3 } : {})
           }}>
             <i style={{ color: '#e60013', fontStyle: 'normal', fontWeight: 800 }}>✓</i> {item}
           </div>
@@ -195,48 +195,39 @@ function HeroSpeechBubble({ slideIndex }) {
   const currentData = DOODLE_DATA[slideIndex % DOODLE_DATA.length];
   return (
     <div className="p5-speech-bubble" style={{
-      position: 'absolute', bottom: 90, left: -145, zIndex: 99,
-      minWidth: 195, maxWidth: 250, width: 'max-content',
-      padding: '24px 28px',
+      position: 'absolute', bottom: 35, left: -105, zIndex: 120,
+      minWidth: 180, maxWidth: 230, width: 'max-content',
+      background: '#ffffff', color: '#000000',
+      border: '3.5px solid #000000', borderRadius: '40px',
+      padding: '12px 20px', boxShadow: '5px 5px 0 #000000',
       transform: 'rotate(-4deg)', textAlign: 'center',
       pointerEvents: 'none', overflow: 'visible',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      transition: 'opacity 0.4s ease, transform 0.4s ease, width 0.3s ease, height 0.3s ease',
-      filter: 'drop-shadow(6px 6px 0 rgba(0,0,0,1))'
+      transition: 'opacity 0.35s ease, transform 0.35s ease'
     }}>
-      {/* Fondo SVG vectorial de Óvalo Cerrado continuo 360° elástico */}
-      <svg viewBox="0 0 200 100" preserveAspectRatio="none" style={{
-        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-        overflow: 'visible', zIndex: 0, pointerEvents: 'none'
+      {/* Flechita manuscrita curva apuntando hacia el comercial */}
+      <svg className="p5-bubble-arrow" width="36" height="26" viewBox="0 0 36 26" fill="none" style={{
+        position: 'absolute', right: -22, bottom: 8, zIndex: 2, pointerEvents: 'none', overflow: 'visible'
       }}>
-        <ellipse cx="100" cy="50" rx="98" ry="48" fill="#ffffff" stroke="#000000" strokeWidth="4.5" vectorEffect="non-scaling-stroke" />
-      </svg>
-
-      {/* Flechita manuscrita curva apuntando hacia el pecho del comercial con borde blanco protector */}
-      <svg className="p5-bubble-arrow" width="50" height="35" viewBox="0 0 50 35" fill="none" style={{
-        position: 'absolute', zIndex: 2, pointerEvents: 'none', overflow: 'visible'
-      }}>
-        {/* Contorno blanco exterior protector */}
-        <path d="M 5 5 Q 28 12 42 26" stroke="#ffffff" strokeWidth="8" strokeLinecap="round" fill="none" />
-        <path d="M 30 22 L 44 28 L 38 12" stroke="#ffffff" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        {/* Trazo negro principal */}
-        <path d="M 5 5 Q 28 12 42 26" stroke="#000000" strokeWidth="4" strokeLinecap="round" fill="none" />
-        <path d="M 30 22 L 44 28 L 38 12" stroke="#000000" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M 4 4 Q 18 10 30 20" stroke="#ffffff" strokeWidth="7" strokeLinecap="round" fill="none" />
+        <path d="M 20 18 L 32 22 L 26 8" stroke="#ffffff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M 4 4 Q 18 10 30 20" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+        <path d="M 20 18 L 32 22 L 26 8" stroke="#000000" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
 
       {/* Texto manuscrito del testimonio */}
       <span style={{
         position: 'relative', zIndex: 1,
         fontFamily: "'Caveat', 'Comic Sans MS', cursive, sans-serif",
-        fontSize: 18, fontWeight: 700, fontStyle: 'italic', color: '#000000',
-        lineHeight: 1.2, display: 'block', wordBreak: 'break-word'
+        fontSize: 16, fontWeight: 700, fontStyle: 'italic', color: '#000000',
+        lineHeight: 1.25, display: 'block'
       }}>
         {currentData.bubble}
       </span>
       <div style={{
         position: 'relative', zIndex: 1,
-        width: '75%', height: '3.5px', background: '#e60013',
-        marginTop: 6, borderRadius: '2px', flexShrink: 0
+        width: '70%', height: '3px', background: '#e60013',
+        marginTop: 5, borderRadius: '2px', flexShrink: 0
       }} />
     </div>
   );
@@ -244,8 +235,8 @@ function HeroSpeechBubble({ slideIndex }) {
 
 /* ── Hero Image Panel ── */
 function HeroImage({ primary, secondary, slideIndex }) {
-  const cardW = 410;
-  const cardH = 515;
+  const cardW = 390;
+  const cardH = 490;
 
   return (
     <div style={{
@@ -256,40 +247,23 @@ function HeroImage({ primary, secondary, slideIndex }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       flexShrink: 0
     }}>
-      {/* Nubes decorativas adicionales de cómic */}
+      {/* Globos y Pergaminos decorativos de cómic P5 */}
       <HeroNotepad slideIndex={slideIndex} />
       <HeroSpeechBubble slideIndex={slideIndex} />
-      {/* Tarjetas traseras de adorno apiladas estrictamente detrás de la foto */}
-      <div style={{
-        position: 'absolute', top: 15, right: 15,
-        width: '100%', height: '100%',
-        borderRadius: '0px',
-        border: `3px solid ${primary || '#fe0002'}40`,
-        background: `${primary || '#fe0002'}10`,
-        transform: 'rotate(-4deg)',
-        zIndex: 0,
-        pointerEvents: 'none'
-      }} />
-      <div style={{
-        position: 'absolute', top: 25, right: 25,
-        width: '100%', height: '100%',
-        borderRadius: '0px',
-        border: `3px solid ${secondary || '#000'}30`,
-        background: `${primary || '#fe0002'}08`,
-        transform: 'rotate(3deg)',
-        zIndex: 0,
-        pointerEvents: 'none'
-      }} />
 
-      {/* Main card */}
+      {/* Main Polaroid card */}
       <div
+        className="p5-frame"
         style={{
           position: 'relative',
           width: cardW, height: cardH,
           overflow: 'hidden',
           flexShrink: 0,
           cursor: 'pointer',
-          borderRadius: '0px',
+          border: '12px solid #e60013',
+          background: '#e60013',
+          boxShadow: '14px 14px 0 rgba(0,0,0,0.6)',
+          transform: 'rotate(2.5deg)',
           zIndex: 2
         }}>
         <img
@@ -298,8 +272,7 @@ function HeroImage({ primary, secondary, slideIndex }) {
           style={{
             width: '100%', height: '100%',
             objectFit: 'cover', objectPosition: 'top center',
-            display: 'block',
-            borderRadius: '0px'
+            display: 'block'
           }} />
       </div>
     </div>
