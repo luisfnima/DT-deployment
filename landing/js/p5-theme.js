@@ -427,6 +427,15 @@
     [data-theme="light"] footer a:hover {
       color: var(--p5-red) !important;
     }
+    [data-theme="light"] footer a[href*="whatsapp"],
+    [data-theme="light"] footer a[href*="api.whatsapp.com"] {
+      color: #FFFFFF !important;
+      background: var(--p5-red) !important;
+    }
+    [data-theme="light"] footer a[href*="whatsapp"]:hover,
+    [data-theme="light"] footer a[href*="api.whatsapp.com"]:hover {
+      color: #FFFFFF !important;
+    }
     [data-theme="light"] footer div {
       color: #111827 !important;
     }
