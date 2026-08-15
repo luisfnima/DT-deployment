@@ -30,7 +30,7 @@
     '  display: none;',
     '}',
 
-    '@media (max-width: 768px) {',
+    '@media (max-width: 1024px) {',
 
     /* ─── NAV ───────────────────────────────────────────────────────────── */
     /* Reduce nav inner padding on mobile */
@@ -88,15 +88,18 @@
     '  #dt-mobile-drawer.dt-open { transform: translateY(0) !important; }',
     '  #dt-mobile-drawer a {',
     '    display: block;',
-    '    padding: 14px 0;',
-    '    font-family: "DM Sans", sans-serif;',
-    '    font-size: 18px; font-weight: 600;',
-    '    color: #1a1a1a;',
+    '    padding: 16px 0;',
+    '    font-family: "Oswald", "Sora", sans-serif !important;',
+    '    font-size: 20px !important; font-weight: 700 !important;',
+    '    color: #ffffff !important;',
+    '    text-transform: uppercase !important;',
+    '    letter-spacing: 1.5px !important;',
     '    text-decoration: none;',
-    '    border-bottom: 1px solid rgba(0,0,0,0.06);',
+    '    border-bottom: 1px solid rgba(255,255,255,0.12) !important;',
+    '    opacity: 1 !important;',
     '    transition: color 0.2s, padding-left 0.2s;',
     '  }',
-    '  #dt-mobile-drawer a:hover { color: #FE0002; padding-left: 8px; }',
+    '  #dt-mobile-drawer a:hover { color: #FE0002 !important; padding-left: 8px; }',
     '  #dt-mobile-drawer a.dt-drawer-cta {',
     '    display: inline-flex !important;',
     '    margin-top: 20px;',
@@ -301,6 +304,29 @@
       drawer.appendChild(a);
     });
 
+    /* Contenedor de acciones (Tema + Colaboradores) */
+    var actionsRow = document.createElement('div');
+    actionsRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);';
+
+    /* Botón cambiar tema */
+    var themeBtn = document.createElement('button');
+    themeBtn.id = 'dt-mobile-theme-btn';
+    themeBtn.style.cssText = 'background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 16px; font-family: "Oswald", sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; gap: 8px; transform: skewX(-8deg); box-shadow: 3px 3px 0 #000;';
+    
+    function updateThemeBtnText() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      themeBtn.innerHTML = isDark ? '<span>☀️ Modo Claro</span>' : '<span>🌙 Modo Oscuro</span>';
+    }
+    updateThemeBtnText();
+
+    themeBtn.addEventListener('click', function () {
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtnText();
+    });
+
     /* CTA "Únete" */
     var cta = document.createElement('a');
     cta.href = 'https://forms.gle/9AWQbTY2SBmc3Yg77';
@@ -309,7 +335,10 @@
     cta.textContent = 'Únete al Equipo →';
     cta.className = 'dt-drawer-cta';
     cta.addEventListener('click', closeDrawer);
-    drawer.appendChild(cta);
+
+    actionsRow.appendChild(themeBtn);
+    actionsRow.appendChild(cta);
+    drawer.appendChild(actionsRow);
 
     /* ── State ── */
     var isOpen = false;
@@ -381,3 +410,5 @@
   }
 
 })();
+
+
