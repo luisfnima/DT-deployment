@@ -52,37 +52,17 @@
       --p5-ink:   #F9FAFB;
       --p5-ink2:  #FFFFFF;
       --p5-paper: #111827;
-      --p5-text-muted: #374151;
-      --p5-text-muted-more: #4B5563;
+      --p5-text-muted: #4B5563;
+      --p5-text-muted-more: #6B7280;
       --p5-brand-brightness: 0.25;
-
-      --footer-bg: #FFFFFF;
-      --footer-text: #374151;
-      --footer-title: #111827;
-      --footer-muted: #4B5563;
-      --footer-border: rgba(0, 0, 0, 0.08);
-      --footer-social-bg: rgba(0, 0, 0, 0.05);
-      --footer-social-border: rgba(0, 0, 0, 0.1);
-      --footer-social-color: #374151;
-      --footer-logo-filter: none;
     }
     [data-theme="dark"] {
       --p5-ink:   #0a0a0a;
       --p5-ink2:  #141414;
       --p5-paper: #f3efe6;
-      --p5-text-muted: #D1D5DB;
-      --p5-text-muted-more: #9CA3AF;
+      --p5-text-muted: rgba(243,239,230,0.65);
+      --p5-text-muted-more: rgba(243,239,230,0.5);
       --p5-brand-brightness: 1;
-
-      --footer-bg: #0A0A0A;
-      --footer-text: #D1D5DB;
-      --footer-title: #F9FAFB;
-      --footer-muted: #9CA3AF;
-      --footer-border: rgba(255, 255, 255, 0.08);
-      --footer-social-bg: rgba(255, 255, 255, 0.06);
-      --footer-social-border: rgba(255, 255, 255, 0.1);
-      --footer-social-color: #E5E7EB;
-      --footer-logo-filter: brightness(0) invert(1);
     }
     ::selection { background: var(--p5-red); color: #fff; }
 
@@ -90,37 +70,48 @@
     html, body { background: var(--p5-ink) !important; }
     #root > div { background: var(--p5-ink) !important; }
 
-    /* ── Secciones principales → fondo oscuro ─────────────────────── */
-    section#inicio {
-      background: var(--p5-ink) !important;
-      position: relative !important;
+    /* ── Secciones principales → fondo adaptable según tema ────────── */
+    [data-theme="light"] section#inicio {
+      background-image: linear-gradient(rgba(249, 250, 251, 0.55), rgba(249, 250, 251, 0.70)), url('images/hero_office_bg.jpg') !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
     }
-    section#inicio::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('images/ctaBg.jpg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.12;
-      filter: grayscale(0.6) contrast(1.1);
-      pointer-events: none;
-      z-index: 0;
-    }
-    section#inicio > div {
-      position: relative;
-      z-index: 2;
+    [data-theme="dark"] section#inicio {
+      background-image: linear-gradient(rgba(10, 10, 10, 0.75), rgba(10, 10, 10, 0.85)), url('images/hero_office_bg.jpg') !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
     }
     section#sobre-nosotros   { background: var(--p5-ink2) !important; }
     section#sobre-nosotros > div { background: transparent !important; }
     #como-trabajamos > section { background: #0f0f0f !important; }
 
-    /* BrandsCarousel → fondo oscuro */
-    div[style*="background: white"],
-    div[style*="background: rgb(255, 255, 255)"],
-    div[style*="background:white"] {
+    /* BrandsCarousel → fondo oscuro (excluyendo pergamino p5-notepad y burbuja p5-speech-bubble) */
+    div[style*="background: white"]:not(.p5-notepad):not(.p5-speech-bubble),
+    div[style*="background: rgb(255, 255, 255)"]:not(.p5-notepad):not(.p5-speech-bubble),
+    div[style*="background:white"]:not(.p5-notepad):not(.p5-speech-bubble) {
       background: var(--p5-ink2) !important;
       border-color: rgba(255,255,255,0.08) !important;
+    }
+
+    /* ── Excepción de Integridad: Pergamino Notita y Burbuja Cómica ────────── */
+    .p5-notepad,
+    .p5-speech-bubble {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+    }
+    .p5-notepad *,
+    .p5-speech-bubble * {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #000000 !important;
+    }
+    .p5-notepad i,
+    .p5-notepad-item i {
+      color: #e60013 !important;
     }
 
     /* ── Texto global → crema ─────────────────────────────────────── */
@@ -128,8 +119,13 @@
     p  { color: var(--p5-text-muted) !important; }
     small, span[style*="opacity: 0.5"],
     span[style*="opacity: 0.4"],
-    div[style*="opacity: 0.5"],
-    div[style*="opacity: 0.4"]  { color: var(--p5-text-muted-more) !important; }
+    div[style*="opacity: 0.5"]:not(.p5-watermark-num),
+    div[style*="opacity: 0.4"]:not(.p5-watermark-num)  { color: var(--p5-text-muted-more) !important; }
+
+    .p5-watermark-num {
+      opacity: 0.03 !important;
+      color: rgba(243, 239, 230, 0.15) !important;
+    }
 
     /* ── Fuentes P5 ──────────────────────────────────────────────────
        Anton → H1 hero (impacto visual máximo)
@@ -234,15 +230,33 @@
     }
     #dt-ham-btn.open { background: #000 !important; }
     #dt-mobile-drawer {
-      background: rgba(10,10,10,0.97) !important;
+      background: #0d0d0d !important;
       border-bottom: 3px solid var(--p5-red) !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.8) !important;
     }
-    #dt-mobile-drawer a { color: var(--p5-paper) !important; }
+    #dt-mobile-drawer a,
+    #dt-mobile-drawer a:visited {
+      color: #ffffff !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1.5px !important;
+      font-size: 20px !important;
+      border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    #dt-mobile-drawer a:hover {
+      color: var(--p5-red) !important;
+    }
     #dt-mobile-drawer a.dt-drawer-cta {
       background: var(--p5-red) !important;
+      color: #ffffff !important;
       border-radius: 0 !important;
       transform: skewX(-8deg) !important;
       box-shadow: 4px 4px 0 #000 !important;
+      font-family: 'Oswald', sans-serif !important;
+      font-size: 16px !important;
     }
 
     /* ── HERO ────────────────────────────────────────────────────────── */
@@ -366,47 +380,68 @@
     /* Ya es oscuro (secondary) — solo ajustar el color de texto */
 
     /* ── FOOTER ───────────────────────────────────────────────────── */
-    footer {
-      background: var(--footer-bg, #0A0A0A) !important;
-      border-top: 3px solid var(--p5-red) !important;
-      color: var(--footer-text, #D1D5DB) !important;
-      transition: background 0.3s, color 0.3s !important;
+    footer { border-top: 3px solid var(--p5-red) !important; transition: background 0.3s, color 0.3s !important; }
+    
+    /* Modo Oscuro Footer */
+    [data-theme="dark"] footer {
+      background: #0b0b0b !important;
     }
-    footer h5, footer [data-anim="footer-col"] > div:first-child {
-      font-family: 'Oswald', sans-serif !important;
-      text-transform: uppercase !important;
-      letter-spacing: 2px !important;
-      color: var(--footer-title, #F9FAFB) !important;
+    [data-theme="dark"] footer img[alt="DreamTeam"] {
+      filter: brightness(0) invert(1) !important;
     }
-    footer a {
-      color: var(--footer-text, #D1D5DB) !important;
-      opacity: 1 !important;
-      transition: color 0.2s !important;
+    [data-theme="dark"] footer p {
+      color: rgba(243,239,230,0.65) !important;
     }
-    footer a:hover {
+    [data-theme="dark"] footer a {
+      color: rgba(243,239,230,0.7) !important;
+    }
+    [data-theme="dark"] footer a:hover {
       color: var(--p5-red) !important;
-      opacity: 1 !important;
     }
-    footer p, footer span, footer div, footer small {
-      color: var(--footer-muted, #9CA3AF) !important;
+    [data-theme="dark"] footer div[style*="textTransform: 'uppercase'"] {
+      color: rgba(243,239,230,0.45) !important;
     }
-    footer p {
-      color: var(--footer-text, #D1D5DB) !important;
+    [data-theme="dark"] footer span {
+      color: rgba(243,239,230,0.4) !important;
     }
-    footer .footer-logo-img, footer img[alt="DreamTeam"] {
-      filter: var(--footer-logo-filter, brightness(0) invert(1)) !important;
-      transition: filter 0.3s !important;
+    [data-theme="dark"] footer a[title] {
+      background: rgba(255,255,255,0.06) !important;
+      border-color: rgba(255,255,255,0.1) !important;
+      color: rgba(243,239,230,0.7) !important;
     }
 
-    /* ── ACTIVITIES SECTION ──────────────────────────────────────── */
-    #actividades .act-subtitle,
-    #actividades p,
-    #actividades .act-main-title {
-      color: #f3efe6 !important;
+    /* Modo Claro Footer */
+    [data-theme="light"] footer {
+      background: #F3F4F6 !important;
+      border-top: 3px solid var(--p5-red) !important;
     }
-    #actividades .act-subtitle {
-      color: rgba(243, 239, 230, 0.88) !important;
+    [data-theme="light"] footer img[alt="DreamTeam"] {
+      filter: none !important;
     }
+    [data-theme="light"] footer p {
+      color: #374151 !important;
+    }
+    [data-theme="light"] footer a {
+      color: #4B5563 !important;
+    }
+    [data-theme="light"] footer a:hover {
+      color: var(--p5-red) !important;
+    }
+    [data-theme="light"] footer div {
+      color: #111827 !important;
+    }
+    [data-theme="light"] footer span {
+      color: #4B5563 !important;
+    }
+    [data-theme="light"] footer a[title] {
+      background: #FFFFFF !important;
+      border-color: #E5E7EB !important;
+      color: #111827 !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+    }
+
+    /* ── ACTIVITIES SECTION ────────────────────────────────────────
+       activities.js ya trae su propio diseño P5 nativo — sin overrides */
 
     /* ── BADGES / EYEBROWS (etiquetas P5 con rojo sesgado) ─────────── */
     /* Contador animado de la sección "pros" */
