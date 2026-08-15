@@ -343,3 +343,27 @@ window.ACTIVITIES_CONFIG = [
   }
 
 ];
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PLANTILLA — copia este bloque (sin la barra-asterisco) y pégalo arriba
+   dentro de ACTIVITIES_CONFIG. Cambia los valores por los tuyos.
+
+      // ─────────────────────────────────────────────────────────────
+      {
+        id:          'act-008',                          // único, sin espacios
+        title:       'Título de la nueva actividad',
+        category:    'deportivas',                       // ver categorías arriba
+        date:        '2026-07-20',                       // YYYY-MM-DD
+        location:    'Dónde ocurrió',
+        description: 'Una descripción breve de qué pasó en la actividad.',
+        image:       'mi-foto.jpg',                      // JPG 4:5 (1080×1350) en images/activities/
+        author:      'Nombre Apellido',                  // aparece con chip de iniciales
+        featured:    false,                              // true = tarjeta GRANDE (solo una)
+      },
+
+   ────────────────────────────────────────────────────────────────────────────
+   PARA ELIMINAR  →  borra el bloque entero (de  {  hasta  },  inclusive).
+   PARA REORDENAR →  no hace falta: la sección ordena por fecha (más reciente
+                     primero) y la destacada siempre va en la esquina grande.
+   ════════════════════════════════════════════════════════════════════════════ */
