@@ -16,10 +16,9 @@
     }
   }
 
-  // Check saved theme or use browser dark mode preference
+  // Check saved theme or default to dark (Persona 5 aesthetic)
   var savedTheme = localStorage.getItem('dt_theme');
-  var systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  var initialTheme = savedTheme || 'light';
+  var initialTheme = savedTheme || 'dark';
   
   // Set initial theme on HTML node immediately to prevent page flashing
   document.documentElement.setAttribute('data-theme', initialTheme);
