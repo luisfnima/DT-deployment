@@ -43,25 +43,24 @@
 
 window.HERO_SLIDES = {
 
-  duration:   8,      // ← cada foto dura 8 segundos
+  duration:   4,      // ← cada foto dura 4 segundos para dinamismo fluido
 
-  transition: 1.4,    // ← fundido de 1.4 segundos entre fotos
+  transition: 1.0,    // ← fundido de 1.0 segundos entre fotos
 
   images: [
     'asesor 1.png',
-    'asesor 16.png',
     'asesor 2.png',
-    'asesor 11.png',
     'asesor 3.png',
-    'asesor 10.png',
-    'asesor 9.png',
-    'asesor 13.png',
     'asesor 5.png',
-    'asesor 6.png'
-    // 👇 escribe aquí tus fotos (una por línea, entre comillas y con coma)
-    // 'asesor-1.jpg',
-    // 'asesor-2.jpg',
-    // 'asesor-3.jpg',
+    'asesor 6.png',
+    'asesor 9.png',
+    'asesor 10.png',
+    'asesor 11.png',
+    'asesor 12.png',
+    'asesor 13.png',
+    'asesor 15.png',
+    'asesor 16.png',
+    'asesor 17.png'
   ],
 
 };
