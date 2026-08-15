@@ -6,6 +6,11 @@
       const theme = localStorage.getItem('dt_theme') || 'light';
       document.documentElement.setAttribute('data-theme', theme);
     })();
+    // ⚙️ CONFIGURACIÓN DE URLS DE PRODUCCIÓN (VERCEL / DOMINIO OFICIAL)
+    window.APP_CONFIG = {
+      tarifarioUrl: 'https://dt-tarifario-smart.vercel.app', // Reemplazar por tu URL de Vercel del Tarifario
+      reportsUrl: 'https://dt-report-center.vercel.app'     // Reemplazar por tu URL de Vercel de Reportes
+    };
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -382,7 +387,7 @@
     <main class="dashboard-grid">
       
       <!-- Card 1: Tarifario -->
-      <a href="https://tarifario.dreamteam.com.pe/" class="dashboard-card" id="tarifario-link" target="_blank" rel="noopener noreferrer">
+      <a href="http://localhost:3000" class="dashboard-card" id="tarifario-link" target="_blank" rel="noopener noreferrer">
         <div class="card-ill-wrapper">
           <img src="images/tarifario_ill.png" alt="Tarifario Inteligente" class="card-ill">
         </div>
@@ -415,73 +420,8 @@
         </div>
       </a>
 
-      <!-- Card 3: Correo Corporativo (Público) -->
-      <a href="https://witcher.mxrouting.net/roundcube/?_task=mail&_mbox=INBOX" class="dashboard-card" target="_blank" rel="noopener noreferrer">
-        <div class="card-ill-wrapper">
-          <img src="images/webmail_ill.jpg" alt="Correo Corporativo" class="card-ill">
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">Correo Corporativo</h3>
-          <p class="card-desc">Acceso al buzón institucional de Roundcube para la gestión de comunicaciones oficiales y correo del personal.</p>
-          <div class="card-action">
-            Abrir Webmail
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Card 4: Dashboard General (Solo Admin - Dynamic Unlock) -->
-      <a id="dashboard-card" class="dashboard-card card-locked" href="https://script.google.com/macros/s/AKfycbwWaw8oZha1QVh4RRCBez8ANPuLbnz11xtO3MZe5zVxnDZlfOZ0G3QKw1URJOEwQ7FwpQ/exec">
-        <div class="lock-overlay" id="dashboard-lock">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          Bloqueado
-        </div>
-        <div class="card-ill-wrapper">
-          <img src="images/dashboard_ill.jpg" alt="Dashboard General" class="card-ill">
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">Dashboard General</h3>
-          <p class="card-desc">Visualización de métricas de rendimiento, paneles de control operativo y análisis de indicadores clave en tiempo real.</p>
-          <div class="card-action" id="dashboard-action-text" style="color: var(--text-muted);">
-            No Disponible
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Card 5: Portal RRHH (Solo Admin - Dynamic Unlock) -->
-      <a id="rrhh-card" class="dashboard-card card-locked" href="https://script.google.com/macros/s/AKfycbxN7BPg2Wi8ZNn26-tMflP_ha7moifdt50ON1xUq7vcvKiJCx99BOe0hyBZx58W8Koj/exec">
-        <div class="lock-overlay" id="rrhh-lock">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          Bloqueado
-        </div>
-        <div class="card-ill-wrapper">
-          <img src="images/rrhh_ill.jpg" alt="Portal RRHH" class="card-ill">
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">Recursos Humanos</h3>
-          <p class="card-desc">Gestión de personal, trámites internos, asistencias y portal de atención a colaboradores de DreamTeam.</p>
-          <div class="card-action" id="rrhh-action-text" style="color: var(--text-muted);">
-            No Disponible
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </a>
-
-      <!-- Card 6: Centro de Reportes (Solo Admin - Dynamic Unlock) -->
-      <a id="reports-card" class="dashboard-card card-locked" href="https://reportes.dreamteam.com.pe/">
+      <!-- Card 3: Centro de Reportes (Dynamic Unlock) -->
+      <a id="reports-card" class="dashboard-card card-locked">
         <div class="lock-overlay" id="reports-lock">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -504,7 +444,7 @@
         </div>
       </a>
 
-      <!-- Card 7: Soporte (Locked) -->
+      <!-- Card 4: Soporte (Locked) -->
       <div class="dashboard-card card-locked">
         <div class="lock-overlay">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -546,75 +486,56 @@
       document.getElementById('welcome-title').textContent = '¡Hola, ' + (activeName || 'Colaborador') + '!';
       
       const badge = document.getElementById('role-badge');
+      const reportsCard = document.getElementById('reports-card');
+      const reportsLock = document.getElementById('reports-lock');
+      const reportsActionText = document.getElementById('reports-action-text');
 
-      // Admin-restricted cards array
-      const adminCards = [
-        {
-          card: document.getElementById('reports-card'),
-          lock: document.getElementById('reports-lock'),
-          actionText: document.getElementById('reports-action-text'),
-          url: 'https://reportes.dreamteam.com.pe/',
-          actionLabel: 'Acceder al Sistema'
-        },
-        {
-          card: document.getElementById('dashboard-card'),
-          lock: document.getElementById('dashboard-lock'),
-          actionText: document.getElementById('dashboard-action-text'),
-          url: 'https://script.google.com/macros/s/AKfycbwWaw8oZha1QVh4RRCBez8ANPuLbnz11xtO3MZe5zVxnDZlfOZ0G3QKw1URJOEwQ7FwpQ/exec',
-          actionLabel: 'Abrir Dashboard'
-        },
-        {
-          card: document.getElementById('rrhh-card'),
-          lock: document.getElementById('rrhh-lock'),
-          actionText: document.getElementById('rrhh-action-text'),
-          url: 'https://script.google.com/macros/s/AKfycbxN7BPg2Wi8ZNn26-tMflP_ha7moifdt50ON1xUq7vcvKiJCx99BOe0hyBZx58W8Koj/exec',
-          actionLabel: 'Acceder a RRHH'
-        }
-      ];
+      // Resolucion de URLs dinamicas (Localhost vs Vercel / Produccion)
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const cfg = window.APP_CONFIG || {};
+      const tarifarioBase = isLocal ? 'http://localhost:3000' : (cfg.tarifarioUrl || 'http://localhost:3000');
+      const reportsBase = isLocal ? 'http://localhost:3002/' : (cfg.reportsUrl || 'http://localhost:3002/');
 
       if (activeRole === 'admin') {
         badge.textContent = 'SUPERVISOR / ADMIN';
         badge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
         badge.style.color = '#f87171';
 
-        // Unlock all admin-only cards
-        adminCards.forEach(item => {
-          if (item.card) {
-            item.card.classList.remove('card-locked');
-            item.card.href = item.url;
-            item.card.setAttribute('target', '_blank');
-            item.card.setAttribute('rel', 'noopener noreferrer');
-          }
-          if (item.lock) {
-            item.lock.style.display = 'none';
-          }
-          if (item.actionText) {
-            item.actionText.innerHTML = `
-              ${item.actionLabel}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            `;
-            item.actionText.style.color = 'var(--text-white)';
-          }
-        });
+        // Unlock reports card for admin
+        if (reportsCard) {
+          reportsCard.classList.remove('card-locked');
+          reportsCard.href = reportsBase;
+          reportsCard.setAttribute('target', '_blank');
+          reportsCard.setAttribute('rel', 'noopener noreferrer');
+        }
+        if (reportsLock) {
+          reportsLock.style.display = 'none';
+        }
+        if (reportsActionText) {
+          reportsActionText.innerHTML = `
+            Acceder al Sistema
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          `;
+          reportsActionText.style.color = 'var(--text-white)';
+        }
       } else {
         badge.textContent = 'ASESOR COMERCIAL';
         badge.style.borderColor = 'rgba(52, 211, 153, 0.3)';
         badge.style.color = '#34d399';
 
-        // Ensure admin-only cards are locked and have no href for advisors
-        adminCards.forEach(item => {
-          if (item.card) {
-            item.card.removeAttribute('href');
-          }
-        });
+        // Ensure reports card is locked and has no link for advisors
+        if (reportsCard) {
+          reportsCard.removeAttribute('href');
+        }
       }
 
       // SSO parameter forwarding for Tarifario
       const tarifarioLink = document.getElementById('tarifario-link');
       if (tarifarioLink) {
-        tarifarioLink.href = 'https://tarifario.dreamteam.com.pe/?role=' + activeRole;
+        const sep = tarifarioBase.includes('?') ? '&' : '?';
+        tarifarioLink.href = tarifarioBase + sep + 'role=' + activeRole;
       }
     }
 
