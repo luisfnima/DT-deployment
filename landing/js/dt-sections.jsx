@@ -532,20 +532,57 @@ function CTAJoin({ primary, secondary }) {
 
   return (
     <section id="unete" style={{ background: '#0a0a0a', position: 'relative', overflow: 'hidden' }}>
-      <div className="up5-grid">
+      <div className="up5-grid" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+        minHeight: '580px',
+        position: 'relative'
+      }}>
         {/* Left Side: Photo with duotone and clip path */}
-        <div className="up5-photo p5-rv-l">
-          <img src={photoSrc} alt="Equipo DreamTeam trabajando" />
-          <div className="up5-clip" />
+        <div className="up5-photo p5-rv-l" style={{
+          position: 'relative',
+          overflow: 'hidden',
+          minHeight: '400px',
+          width: '100%',
+          height: '100%'
+        }}>
+          <img
+            src={photoSrc}
+            alt="Equipo DreamTeam trabajando"
+            style={{
+              position: 'absolute',
+              top: 0, left: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              filter: 'grayscale(1) contrast(1.2) brightness(0.85)'
+            }}
+          />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(120deg, rgba(230,0,19,0.55), rgba(10,10,10,0.2) 60%)',
+            mixBlendMode: 'multiply', pointerEvents: 'none'
+          }} />
+          <div className="up5-half" style={{
+            position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1.5px)',
+            backgroundSize: '8px 8px', opacity: 0.14
+          }} />
+          <div className="up5-clip" style={{
+            position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
+            background: '#0a0a0a',
+            clipPath: 'polygon(78% 0, 100% 0, 100% 100%, 92% 100%)'
+          }} />
         </div>
 
         {/* Right Side: Copy and Form */}
         <div className="up5-copy" style={{
-          padding: 'clamp(40px, 5vw, 72px) clamp(20px, 3.5vw, 56px)',
+          padding: 'clamp(36px, 4vw, 56px) clamp(20px, 3.5vw, 48px)',
           position: 'relative',
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           alignItems: 'flex-start',
-          background: '#0a0a0a'
+          background: '#0a0a0a',
+          zIndex: 4
         }}>
           <div className="p5-star-deco" style={{ width: 44, height: 44, top: 24, right: 32, background: 'var(--p5-red)', opacity: 0.9 }} />
           
