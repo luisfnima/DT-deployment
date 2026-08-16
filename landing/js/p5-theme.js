@@ -442,6 +442,13 @@
     [data-theme="light"] footer div {
       color: #374151 !important;
     }
+    [data-theme="light"] footer [style*="color: rgba(255,255,255"],
+    [data-theme="light"] footer [style*="color: rgba(255, 255, 255"] {
+      color: #4B5563 !important;
+    }
+    [data-theme="light"] footer a[href*="whatsapp"],
+    [data-theme="light"] footer a[href*="api.whatsapp.com"],
+    [data-theme="light"] footer .footer-whatsapp-btn,
     [data-theme="light"] footer a[href*="whatsapp"] span,
     [data-theme="light"] footer a[href*="api.whatsapp.com"] span,
     [data-theme="light"] footer .footer-whatsapp-btn span {
