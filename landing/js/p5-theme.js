@@ -439,6 +439,9 @@
     [data-theme="light"] footer span {
       color: #4B5563 !important;
     }
+    [data-theme="light"] footer div {
+      color: #374151 !important;
+    }
     [data-theme="light"] footer a[href*="whatsapp"] span,
     [data-theme="light"] footer a[href*="api.whatsapp.com"] span,
     [data-theme="light"] footer .footer-whatsapp-btn span {
