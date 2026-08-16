@@ -39,11 +39,21 @@
     '    padding-right: 16px !important;',
     '  }',
     /* Logo: slightly smaller */
-    '  nav img { height: 36px !important; }',
+    '  nav img { height: 34px !important; }',
     /* Hide the nav pill (links) */
     '  [data-comment-anchor="296348093c-div-73-7"] { display: none !important; }',
-    /* Hide the CTA button group (Intranet link + Únete button) */
-    '  nav > div > div:last-child { display: none !important; }',
+    /* Show Theme toggle + Colaboradores button before the hamburger button */
+    '  nav > div > div:last-child {',
+    '    display: flex !important;',
+    '    align-items: center !important;',
+    '    gap: 8px !important;',
+    '    margin-right: 46px !important;',
+    '  }',
+    '  #colaboradores-btn {',
+    '    padding: 7px 14px !important;',
+    '    font-size: 11px !important;',
+    '    letter-spacing: 0.5px !important;',
+    '  }',
 
     /* ─── HAMBURGER BUTTON (visible on mobile) ──────────────────────────── */
     '  #dt-ham-btn {',
@@ -280,6 +290,7 @@
     { label: 'Proceso',         href: '#como-trabajamos' },
     { label: 'Actividades',     href: '#actividades' },
     { label: 'Únete al Equipo', href: '#unete' },
+    { label: 'Colaboradores 🔒', href: '#colaboradores', isColab: true },
   ];
 
   function buildHamburger() {
@@ -300,7 +311,22 @@
       var a = document.createElement('a');
       a.href = l.href;
       a.textContent = l.label;
-      a.addEventListener('click', closeDrawer);
+      if (l.isColab) {
+        a.id = 'dt-drawer-colab-btn';
+        a.style.cssText = 'color: #fe0002 !important; font-weight: 800 !important; letter-spacing: 2px !important;';
+      }
+      a.addEventListener('click', function (e) {
+        closeDrawer();
+        if (l.isColab) {
+          e.preventDefault();
+          var colabBtn = document.getElementById('colaboradores-btn');
+          if (colabBtn) {
+            colabBtn.click();
+          } else {
+            window.location.href = 'colaboradores.html';
+          }
+        }
+      });
       drawer.appendChild(a);
     });
 
