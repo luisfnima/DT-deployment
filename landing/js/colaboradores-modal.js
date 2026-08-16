@@ -16,9 +16,9 @@
       if (document.getElementById('dt-login-dropdown')) return;
 
       var rect = btnEl.getBoundingClientRect();
-      var dropdownWidth = 320;
+      var dropdownWidth = Math.min(320, window.innerWidth - 24);
       var topPos = rect.bottom + 14 + window.scrollY;
-      var leftPos = rect.right - dropdownWidth + window.scrollX;
+      var leftPos = Math.max(12, Math.min(rect.right - dropdownWidth + window.scrollX, window.innerWidth - dropdownWidth - 12));
 
       // Create the dropdown card container
       var dropdown = document.createElement('div');
