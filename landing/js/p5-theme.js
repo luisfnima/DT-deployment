@@ -410,6 +410,30 @@
       color: rgba(243,239,230,0.7) !important;
     }
 
+    /* WhatsApp Button Universal Contrast (Light & Dark) */
+    footer a[href*="whatsapp"],
+    footer a[href*="api.whatsapp.com"],
+    footer .footer-whatsapp-btn,
+    footer a[href*="whatsapp"] span,
+    footer a[href*="api.whatsapp.com"] span,
+    footer .footer-whatsapp-btn span,
+    [data-theme="dark"] footer a[href*="whatsapp"],
+    [data-theme="dark"] footer a[href*="api.whatsapp.com"],
+    [data-theme="dark"] footer .footer-whatsapp-btn,
+    [data-theme="dark"] footer a[href*="whatsapp"] span,
+    [data-theme="dark"] footer a[href*="api.whatsapp.com"] span,
+    [data-theme="dark"] footer .footer-whatsapp-btn span,
+    [data-theme="light"] footer a[href*="whatsapp"],
+    [data-theme="light"] footer a[href*="api.whatsapp.com"],
+    [data-theme="light"] footer .footer-whatsapp-btn,
+    [data-theme="light"] footer a[href*="whatsapp"] span,
+    [data-theme="light"] footer a[href*="api.whatsapp.com"] span,
+    [data-theme="light"] footer .footer-whatsapp-btn span {
+      color: #FFFFFF !important;
+      fill: #FFFFFF !important;
+      opacity: 1 !important;
+    }
+
     /* Modo Claro Footer */
     [data-theme="light"] footer {
       background: #F3F4F6 !important;
@@ -427,15 +451,6 @@
     [data-theme="light"] footer a:hover {
       color: var(--p5-red) !important;
     }
-    [data-theme="light"] footer a[href*="whatsapp"],
-    [data-theme="light"] footer a[href*="api.whatsapp.com"] {
-      color: #FFFFFF !important;
-      background: var(--p5-red) !important;
-    }
-    [data-theme="light"] footer a[href*="whatsapp"]:hover,
-    [data-theme="light"] footer a[href*="api.whatsapp.com"]:hover {
-      color: #FFFFFF !important;
-    }
     [data-theme="light"] footer span {
       color: #4B5563 !important;
     }
@@ -445,14 +460,6 @@
     [data-theme="light"] footer [style*="color: rgba(255,255,255"],
     [data-theme="light"] footer [style*="color: rgba(255, 255, 255"] {
       color: #4B5563 !important;
-    }
-    [data-theme="light"] footer a[href*="whatsapp"],
-    [data-theme="light"] footer a[href*="api.whatsapp.com"],
-    [data-theme="light"] footer .footer-whatsapp-btn,
-    [data-theme="light"] footer a[href*="whatsapp"] span,
-    [data-theme="light"] footer a[href*="api.whatsapp.com"] span,
-    [data-theme="light"] footer .footer-whatsapp-btn span {
-      color: #FFFFFF !important;
     }
     [data-theme="light"] footer a[title] {
       background: #FFFFFF !important;
