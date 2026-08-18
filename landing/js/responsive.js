@@ -184,6 +184,18 @@
     '    justify-content: center !important;',
     '    align-items: center !important;',
     '    align-self: center !important;',
+    '    overflow: hidden !important;',
+    '  }',
+    '  .hero-image-wrapper, .p5-photo-zone {',
+    '    max-width: 100% !important;',
+    '    box-sizing: border-box !important;',
+    '  }',
+    '  #p5-slash-1, #p5-slash-2 {',
+    '    display: none !important;',
+    '  }',
+    '  .p5-notepad {',
+    '    right: -10px !important;',
+    '    max-width: 160px !important;',
     '  }',
 
     /* ─── NOSOTROS BENTO GRID ────────────────────────────────────────────── */
