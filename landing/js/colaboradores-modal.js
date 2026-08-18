@@ -30,31 +30,31 @@
         '<div style="position: absolute; top: -7px; right: 35px; width: 12px; height: 12px; background: #000000; border-top: 1px solid rgba(255, 255, 255, 0.15); border-left: 1px solid rgba(255, 255, 255, 0.15); transform: rotate(45deg); z-index: 1;"></div>' +
         
         '<div style="text-align: center; margin-bottom: 18px; position: relative; z-index: 2;">' +
-          '<h3 style="font-size: 16px; font-weight: 700; color: #ffffff; letter-spacing: -0.3px;">Acceso Asesores</h3>' +
-          '<p style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Ingresa tus credenciales comerciales</p>' +
+          '<h3 style="font-size: 16px; font-weight: 700; color: #ffffff !important; letter-spacing: -0.3px; margin: 0 0 4px 0;">Acceso Asesores</h3>' +
+          '<p style="font-size: 12px; color: #cbd5e1 !important; margin: 0;">Ingresa tus credenciales comerciales</p>' +
         '</div>' +
         
         '<div id="dt-dropdown-error" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; padding: 8px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 14px; text-align: center; position: relative; z-index: 2;">Credenciales incorrectas.</div>' +
         
         '<form id="dt-dropdown-form" style="display: flex; flex-direction: column; gap: 12px; width: 100%; box-sizing: border-box; position: relative; z-index: 2;">' +
           '<div style="display: flex; flex-direction: column; gap: 4px;">' +
-            '<label style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; text-align: left;">Usuario</label>' +
-            '<input type="text" id="dt-dropdown-user" placeholder="ej. asesor" required style="width: 100%; background: #111111; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #ffffff; outline: none; transition: border-color 0.2s; box-sizing: border-box;">' +
+            '<label style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #cbd5e1 !important; text-align: left;">Usuario</label>' +
+            '<input type="text" id="dt-dropdown-user" placeholder="ej. asesor" required style="width: 100%; background: #111111; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #ffffff; outline: none; transition: border-color 0.2s; box-sizing: border-box;">' +
           '</div>' +
           
           '<div style="display: flex; flex-direction: column; gap: 4px;">' +
-            '<label style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; text-align: left;">Contraseña</label>' +
-            '<input type="password" id="dt-dropdown-pass" placeholder="••••••••" required style="width: 100%; background: #111111; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #ffffff; outline: none; transition: border-color 0.2s; box-sizing: border-box;">' +
+            '<label style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #cbd5e1 !important; text-align: left;">Contraseña</label>' +
+            '<input type="password" id="dt-dropdown-pass" placeholder="••••••••" required style="width: 100%; background: #111111; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #ffffff; outline: none; transition: border-color 0.2s; box-sizing: border-box;">' +
           '</div>' +
           
           '<div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 2px; box-sizing: border-box;">' +
-            '<label style="display: flex; align-items: center; gap: 4px; color: #94a3b8; cursor: pointer; user-select: none;">' +
+            '<label style="display: flex; align-items: center; gap: 4px; color: #cbd5e1 !important; cursor: pointer; user-select: none;">' +
               '<input type="checkbox" style="accent-color: #cc181e; cursor: pointer;"> Recordar' +
             '</label>' +
-            '<a href="#" id="dt-dropdown-forgot" style="color: #cc181e; text-decoration: none; font-weight: 600;">¿Olvidó clave?</a>' +
+            '<a href="#" id="dt-dropdown-forgot" style="color: #fe0002 !important; text-decoration: none; font-weight: 700;">¿Olvidó clave?</a>' +
           '</div>' +
           
-          '<button type="submit" style="width: 100%; background: #cc181e; color: white; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 4px; box-sizing: border-box;">Ingresar</button>' +
+          '<button type="submit" style="width: 100%; background: #fe0002; color: white !important; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 4px; box-sizing: border-box;">Ingresar</button>' +
         '</form>' +
         
         '<style>' +
