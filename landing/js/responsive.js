@@ -32,25 +32,35 @@
 
     '@media (max-width: 1024px) {',
 
-    /* ─── NAV ───────────────────────────────────────────────────────────── */
-    /* Reduce nav inner padding on mobile */
+    /* Prevent horizontal overflow on mobile */
+    '  html, body {',
+    '    max-width: 100vw !important;',
+    '    overflow-x: hidden !important;',
+    '  }',
+    '  nav {',
+    '    max-width: 100vw !important;',
+    '    box-sizing: border-box !important;',
+    '  }',
     '  nav > div {',
-    '    padding-left: 16px !important;',
-    '    padding-right: 16px !important;',
+    '    max-width: 100% !important;',
+    '    padding-left: 12px !important;',
+    '    padding-right: 12px !important;',
+    '    box-sizing: border-box !important;',
     '  }',
     /* Logo: slightly smaller */
-    '  nav img { height: 34px !important; }',
+    '  nav img { height: 32px !important; }',
     /* Hide the nav pill (links) */
     '  [data-comment-anchor="296348093c-div-73-7"] { display: none !important; }',
-    /* Show Theme toggle + Colaboradores button before the hamburger button */
+    /* Hide navbar theme icon on mobile (it is in the drawer) */
+    '  nav > div > div:last-child > div:first-child { display: none !important; }',
+    /* Show Colaboradores button before the hamburger button */
     '  nav > div > div:last-child {',
     '    display: flex !important;',
     '    align-items: center !important;',
-    '    gap: 8px !important;',
-    '    margin-right: 46px !important;',
+    '    margin-right: 48px !important;',
     '  }',
     '  #colaboradores-btn {',
-    '    padding: 7px 14px !important;',
+    '    padding: 6px 13px !important;',
     '    font-size: 11px !important;',
     '    letter-spacing: 0.5px !important;',
     '  }',
@@ -59,15 +69,15 @@
     '  #dt-ham-btn {',
     '    display: flex !important;',
     '    position: fixed;',
-    '    top: 14px; right: 16px;',
+    '    top: 11px; right: 12px;',
     '    z-index: 10002;',
-    '    width: 40px; height: 40px;',
+    '    width: 36px; height: 36px;',
     '    align-items: center; justify-content: center;',
     '    background: rgba(255,255,255,0.92);',
     '    border: 1px solid rgba(0,0,0,0.1);',
     '    border-radius: 50%;',
     '    cursor: pointer;',
-    '    box-shadow: 0 2px 12px rgba(0,0,0,0.1);',
+    '    box-shadow: 0 2px 10px rgba(0,0,0,0.1);',
     '    -webkit-backdrop-filter: blur(12px);',
     '    backdrop-filter: blur(12px);',
     '    transition: background 0.2s, color 0.2s, transform 0.2s;',
