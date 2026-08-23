@@ -71,7 +71,8 @@ export interface Operator {
 }
 
 export const OPERATORS: Operator[] = [
-  {\n    id: 'yoigo',
+  {
+    id: 'yoigo',
     name: 'Yoigo',
     colorTheme: {
       primary: 'bg-fuchsia-600',
@@ -83,7 +84,8 @@ export const OPERATORS: Operator[] = [
     },
     slogan: 'Pienso, luego Yoigo. Sencillez, ahorro y la red más rápida.',
   },
-  {\n    id: 'orange',
+  {
+    id: 'orange',
     name: 'Orange',
     colorTheme: {
       primary: 'bg-orange-600',
@@ -95,7 +97,8 @@ export const OPERATORS: Operator[] = [
     },
     slogan: 'Conectamos a las personas con lo que más quieren. Tecnología premium.',
   },
-  {\n    id: 'vodafone',
+  {
+    id: 'vodafone',
     name: 'Vodafone',
     colorTheme: {
       primary: 'bg-red-600',
@@ -107,7 +110,8 @@ export const OPERATORS: Operator[] = [
     },
     slogan: 'El futuro es apasionante. Ready? Red 5G líder y máxima fiabilidad.',
   },
-  {\n    id: 'lowi',
+  {
+    id: 'lowi',
     name: 'Lowi',
     colorTheme: {
       primary: 'bg-[#E50015]',
@@ -119,7 +123,8 @@ export const OPERATORS: Operator[] = [
     },
     slogan: 'Simple, acumulable y sin complicaciones. La red de Vodafone al mejor precio.',
   },
-  {\n    id: 'win',
+  {
+    id: 'win',
     name: 'WIN',
     colorTheme: {
       primary: 'bg-[#FF5A00]',
