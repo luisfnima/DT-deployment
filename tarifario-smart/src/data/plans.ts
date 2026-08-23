@@ -283,7 +283,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         beneficio: isCheap 
           ? 'Ahorro inmediato en el presupuesto familiar garantizando 2 líneas móviles ilimitadas y fibra simétrica.'
           : 'Gran volumen de servicios adicionales bajo una infraestructura robusta y la facturación más sencilla del sector.',
-        fraseCliente: `\"Señor cliente, con esta tarifa de Yoigo usted se asegura un precio fijo de ${totalPrice} € al mes, con fibra simétrica de alta velocidad y llamadas ilimitadas. Lo que contrata hoy es lo que pagará.\"`,
+        fraseCliente: `"Señor cliente, con esta tarifa de Yoigo usted se asegura un precio fijo de ${totalPrice} € al mes, con fibra simétrica de alta velocidad y llamadas ilimitadas. Lo que contrata hoy es lo que pagará."`,
         objecionSugerida: 'Si el cliente duda de la permanencia: recalcar la alta satisfacción de cliente de Yoigo que hace que no necesiten retener a la fuerza.',
         rebuttalOptions: [
           {
@@ -313,7 +313,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         beneficio: hasAddons 
           ? 'Descuento convergente óptimo: al agrupar la televisión y los adicionales en Orange se paga mucho menos que por separado.'
           : 'Conectividad móvil 5G de máxima velocidad en España y equipamiento de enrutamiento WiFi de última generación.',
-        fraseCliente: `\"Con Orange no solo se lleva una excelente conexión de fibra, sino un pack completo de entretenimiento y televisión para su hogar por ${totalPrice} € al mes. Toda la familia estará conectada y disfrutando de series, cine y datos 5G ilimitados.\"`,
+        fraseCliente: `"Con Orange no solo se lleva una excelente conexión de fibra, sino un pack completo de entretenimiento y televisión para su hogar por ${totalPrice} € al mes. Toda la familia estará conectada y disfrutando de series, cine y datos 5G ilimitados."`,
         objecionSugerida: 'Si encuentra el precio elevado: desglosar el coste del deco 4K y de los canales de TV que ya vienen incluidos sin coste extra.',
         rebuttalOptions: [
           {
@@ -341,7 +341,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         headline: 'WIN: El Internet de los Winners',
         gancho: 'Fibra 100% simétrica con latencia ultra baja, ideal para gaming y teletrabajo.',
         beneficio: 'Equipamiento WiFi 6 de última generación con Mesh y WINBOX, y planes Gamer con ExitLag gratis.',
-        fraseCliente: `\"Señor cliente, con WIN se asegura una conexión de Fibra Óptica 100% simétrica real por solo S/ ${totalPrice.toFixed(2)} al mes. Con la tecnología de los Winners, navegará a la máxima velocidad y sin caídas.\"`,
+        fraseCliente: `"Señor cliente, con WIN se asegura una conexión de Fibra Óptica 100% simétrica real por solo S/ ${totalPrice.toFixed(2)} al mes. Con la tecnología de los Winners, navegará a la máxima velocidad y sin caídas."`,
         objecionSugerida: 'Destacar la simetría y los beneficios exclusivos de latencia (ExitLag) en comparación con el cable coaxial (HFC) de otros operadores.',
         rebuttalOptions: [
           {
@@ -371,7 +371,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         beneficio: totalPrice < 60 
           ? 'Acceso inmediato a la red móvil 5G número 1 del país por una cuota de entrada de tan solo 39€/49€ al mes.'
           : 'La máxima velocidad de fibra y conectividad total móvil con soporte prioritario para familias exigentes.',
-        fraseCliente: `\"Aproveche la promoción de Vodafone: pagará una cuota reducida los primeros meses y disfrutará de roaming completo y la mejor red móvil del país. Es la oportunidad ideal para ahorrar desde el primer día.\"`,
+        fraseCliente: `"Aproveche la promoción de Vodafone: pagará una cuota reducida los primeros meses y disfrutará de roaming completo y la mejor red móvil del país. Es la oportunidad ideal para ahorrar desde el primer día."`,
         objecionSugerida: 'Si le preocupa el precio después de la promo: hacer el cálculo anual promedio para demostrarle que el ahorro de los primeros meses compensa holgadamente el precio regular.',
         rebuttalOptions: [
           {
@@ -399,7 +399,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         headline: 'Conectividad Total Garantizada',
         gancho: 'Tarifa a la medida del cliente sin pagar de más por servicios que no va a utilizar.',
         beneficio: 'Fibra de alta velocidad simétrica y cobertura móvil nacional garantizada.',
-        fraseCliente: `\"Este paquete le ofrece exactamente lo que necesita para estar comunicado en casa y en movilidad por un total mensual de ${totalPrice} €.\"`,
+        fraseCliente: `"Este paquete le ofrece exactamente lo que necesita para estar comunicado en casa y en movilidad por un total mensual de ${totalPrice} €."`,
         objecionSugerida: 'Validar la cobertura geográfica para asegurar el cierre inmediato.',
         rebuttalOptions: [
           {

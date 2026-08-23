@@ -229,11 +229,11 @@ export default function Home() {
   useEffect(() => {
     setShowOnlySelectedPlan(false);
   }, [planFilter]);
-  
+
   // Estado de navegación en Sidebar
   const [activeTab, setActiveTab] = useState<string>('cotizador');
-  const [globalPlans, setGlobalPlans] = useState<Plan[]>([]);
-  const [globalAddons, setGlobalAddons] = useState<Addon[]>([]);
+  const [globalPlans, setGlobalPlans] = useState<Plan[]>(PLANS_DEFAULT);
+  const [globalAddons, setGlobalAddons] = useState<Addon[]>(ADDONS_DEFAULT);
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
   const [showPermisoModal, setShowPermisoModal] = useState<boolean>(false);
   const [showAdminModal, setShowAdminModal] = useState<boolean>(false);
@@ -317,18 +317,37 @@ export default function Home() {
         }
       }
       
-      // Cargar planes y añadidos de localStorage
-      const savedPlans = localStorage.getItem('custom_plans');
-      const savedAddons = localStorage.getItem('custom_addons');
-      if (savedPlans) {
-        setGlobalPlans(JSON.parse(savedPlans));
-      } else {
+      // Control de versión de datos para asegurar catálogo actualizado
+      const DATA_VERSION = '2026_lowi_v4';
+      const savedVersion = localStorage.getItem('tarifario_data_version');
+      
+      if (savedVersion !== DATA_VERSION) {
+        localStorage.removeItem('custom_plans');
+        localStorage.removeItem('custom_addons');
+        localStorage.setItem('tarifario_data_version', DATA_VERSION);
         setGlobalPlans(PLANS_DEFAULT);
-      }
-      if (savedAddons) {
-        setGlobalAddons(JSON.parse(savedAddons));
-      } else {
         setGlobalAddons(ADDONS_DEFAULT);
+      } else {
+        const savedPlans = localStorage.getItem('custom_plans');
+        const savedAddons = localStorage.getItem('custom_addons');
+        if (savedPlans) {
+          try {
+            setGlobalPlans(JSON.parse(savedPlans));
+          } catch (e) {
+            setGlobalPlans(PLANS_DEFAULT);
+          }
+        } else {
+          setGlobalPlans(PLANS_DEFAULT);
+        }
+        if (savedAddons) {
+          try {
+            setGlobalAddons(JSON.parse(savedAddons));
+          } catch (e) {
+            setGlobalAddons(ADDONS_DEFAULT);
+          }
+        } else {
+          setGlobalAddons(ADDONS_DEFAULT);
+        }
       }
 
       // Cargar configuración de IP local
@@ -1358,6 +1377,24 @@ export default function Home() {
         return plans.filter(p => p.category === 'fibra_movil_empresa');
       }
     }
+
+    if (selectedOperatorId === 'lowi') {
+      if (planFilter === 'fibra-movil') {
+        return plans.filter(p => p.category === 'fibra_movil');
+      }
+      if (planFilter === 'multilinea') {
+        return plans.filter(p => p.mobileLines === 2 || p.id.includes('multilinea'));
+      }
+      if (planFilter === 'fibra-tv') {
+        return plans.filter(p => p.category === 'fibra_tv');
+      }
+      if (planFilter === 'solo-movil') {
+        return plans.filter(p => p.category === 'solo_movil');
+      }
+      if (planFilter === 'solo-fibra') {
+        return plans.filter(p => p.category === 'solo_fibra');
+      }
+    }
     
     return plans;
   }, [selectedOperatorId, planFilter, portabilityOrigin]);
@@ -1584,6 +1621,13 @@ export default function Home() {
 
   // Renderizar mockup de plan
   const renderPlanMockup = (plan: Plan) => {
+    if (plan.category === 'solo_movil') {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950">
+          <AddonSmartphoneVisual />
+        </div>
+      );
+    }
     if (plan.id.includes('1gb')) {
       return <RouterTvComboVisual color={operatorColor} />;
     }
@@ -1791,7 +1835,7 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-black text-[#f1f5f9] relative overflow-hidden font-sans">
+      <div className="min-h-screen w-full flex items-center justify-center bg-black text-[#f1f5f9] relative overflow-hidden font-sans" suppressHydrationWarning>
         <TelecomVisual />
         <div className="absolute inset-0 bg-gradient-to-tr from-red-950/10 via-transparent to-red-950/25 pointer-events-none" />
         
@@ -1856,7 +1900,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F9FAFB] dark:bg-black text-[#0F172A] dark:text-[#f1f5f9] font-sans antialiased relative overflow-x-hidden selection:bg-red-500/20">
+    <div className="flex min-h-screen bg-[#F9FAFB] dark:bg-black text-[#0F172A] dark:text-[#f1f5f9] font-sans antialiased relative overflow-x-hidden selection:bg-red-500/20" suppressHydrationWarning>
       
 
 
@@ -2391,6 +2435,30 @@ export default function Home() {
                     ))}
                   </>
                 )}
+
+                {selectedOperatorId === 'lowi' && (
+                  <>
+                    {[
+                      { id: 'fibra-movil', label: 'Fibra + Móvil' },
+                      { id: 'multilinea', label: 'Multilínea (2x25GB)' },
+                      { id: 'fibra-tv', label: 'Fibra + Lowi TV' },
+                      { id: 'solo-movil', label: 'Solo Móvil' },
+                      { id: 'solo-fibra', label: 'Solo Fibra' }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setPlanFilter(tab.id)}
+                        className={`text-[10px] font-bold px-3 py-1.5 rounded-xl border transition-all duration-200 ${
+                          planFilter === tab.id
+                            ? 'bg-[#E50015] border-[#E50015] text-white shadow-sm'
+                            : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-650'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredPlans
@@ -2478,6 +2546,12 @@ export default function Home() {
                         
                         {/* Badges del plan */}
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                          {plan.operatorId === 'lowi' && (
+                            <span className="text-[9px] px-2.5 py-1 bg-gradient-to-r from-amber-500 via-orange-500 to-[#E50015] text-white rounded-md font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 border border-amber-300/40">
+                              <Sun className="h-3.5 w-3.5 fill-amber-200 text-amber-100 stroke-[2.5px] animate-pulse" />
+                              <span className="font-extrabold tracking-wide drop-shadow-sm">300GB EXTRA</span>
+                            </span>
+                          )}
                           {plan.operatorId === 'yoigo' && (plan.price === 25 || plan.price === 31 || plan.price === 45) && (
                             <span className="text-[8px] px-2 py-0.5 bg-emerald-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
                               TARIFA RESIDENCIAL
@@ -2840,6 +2914,17 @@ export default function Home() {
                       <div className="flex justify-between items-center text-xs">
                         <span className="font-extrabold text-slate-800 truncate max-w-[170px]">{activePlan.name}</span>
                         <div className="flex items-center gap-1 shrink-0">
+                          {selectedOperatorId === 'lowi' && (
+                            <span className="text-[8px] bg-gradient-to-r from-amber-500 to-[#E50015] px-1.5 py-0.5 rounded font-black text-white flex items-center gap-1">
+                              <Sun className="h-2.5 w-2.5 fill-amber-200 text-amber-100" />
+                              300GB EXTRA
+                            </span>
+                          )}
+                          {(selectedOperatorId === 'yoigo' || selectedOperatorId === 'vodafone') && (
+                            <span className="text-[8px] bg-emerald-600 px-1.5 py-0.5 rounded font-black text-white">
+                              RESIDENCIAL
+                            </span>
+                          )}
                           {(selectedOperatorId === 'yoigo' || selectedOperatorId === 'vodafone' || selectedOperatorId === 'lowi') && (
                             <span className="text-[8px] bg-slate-100 border border-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">
                               IVA INCLUIDO
