@@ -320,38 +320,52 @@ export default function Home() {
           setIsAuthenticated(true);
         }
       }
-      
-      // Carga persistente de tarifas personalizadas guardadas por el administrador
+
+      // Carga persistente de tarifas con control de versión de catálogo oficial
       try {
-        const customPlansRaw = localStorage.getItem('smart_custom_plans') || localStorage.getItem('custom_plans');
-        if (customPlansRaw) {
-          const parsed = JSON.parse(customPlansRaw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setGlobalPlans(parsed);
+        const CURRENT_CATALOG_VERSION = '2026.08.26-v2';
+        const savedVersion = localStorage.getItem('smart_catalog_version');
+
+        if (savedVersion !== CURRENT_CATALOG_VERSION) {
+          // Limpiar datos obsoletos de versiones anteriores y cargar el catálogo nuevo oficial
+          localStorage.removeItem('custom_plans');
+          localStorage.removeItem('smart_custom_plans');
+          localStorage.removeItem('custom_addons');
+          localStorage.removeItem('smart_custom_addons');
+          localStorage.setItem('smart_catalog_version', CURRENT_CATALOG_VERSION);
+          setGlobalPlans(PLANS_DEFAULT);
+          setGlobalAddons(ADDONS_DEFAULT);
+        } else {
+          const customPlansRaw = localStorage.getItem('smart_custom_plans');
+          if (customPlansRaw) {
+            const parsed = JSON.parse(customPlansRaw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setGlobalPlans(parsed);
+            } else {
+              setGlobalPlans(PLANS_DEFAULT);
+            }
           } else {
             setGlobalPlans(PLANS_DEFAULT);
           }
-        } else {
-          setGlobalPlans(PLANS_DEFAULT);
-        }
 
-        const customAddonsRaw = localStorage.getItem('smart_custom_addons') || localStorage.getItem('custom_addons');
-        if (customAddonsRaw) {
-          const parsed = JSON.parse(customAddonsRaw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setGlobalAddons(parsed);
+          const customAddonsRaw = localStorage.getItem('smart_custom_addons');
+          if (customAddonsRaw) {
+            const parsed = JSON.parse(customAddonsRaw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setGlobalAddons(parsed);
+            } else {
+              setGlobalAddons(ADDONS_DEFAULT);
+            }
           } else {
             setGlobalAddons(ADDONS_DEFAULT);
           }
-        } else {
-          setGlobalAddons(ADDONS_DEFAULT);
         }
-      } catch (err) {
-        console.error('Error loading custom catalog:', err);
+      } catch (e) {
+        console.error('Error loading custom plans:', e);
         setGlobalPlans(PLANS_DEFAULT);
         setGlobalAddons(ADDONS_DEFAULT);
       }
-
+      
       // Cargar configuración de IP local
       const localIpRestriction = localStorage.getItem('ip_restriction_enabled') === 'true';
       const localAllowedIps = JSON.parse(localStorage.getItem('allowed_ips') || '[]');
