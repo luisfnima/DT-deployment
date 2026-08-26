@@ -41,7 +41,8 @@ import {
   Lock,
   Zap,
   Sun,
-  Moon
+  Moon,
+  Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -208,11 +209,14 @@ export default function Home() {
   // Estados de cotización
   const [selectedOperatorId, setSelectedOperatorId] = useState<string>('yoigo');
   const [selectedPlanId, setSelectedPlanId] = useState<string>('yoigo-600');
+  const [taxType, setTaxType] = useState<'none' | 'iva' | 'igic'>('none');
   const [selectedAddonIds, setSelectedAddonIds] = useState<Set<string>>(new Set());
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const [mobileLinesCount, setMobileLinesCount] = useState<number>(1);
   const [planFilter, setPlanFilter] = useState<string>('all');
   const [showOnlySelectedPlan, setShowOnlySelectedPlan] = useState<boolean>(false);
+  const [hasIberdrolaAlliance, setHasIberdrolaAlliance] = useState<boolean>(false);
+  const [daznSegment, setDaznSegment] = useState<'nuevo' | 'cartera' | 'nba'>('nuevo');
 
   
   // Reiniciar filtro de planes al cambiar de operador
@@ -220,23 +224,29 @@ export default function Home() {
     setPlanFilter('all');
     setPortabilityOrigin('all');
     setShowOnlySelectedPlan(false);
+    setTaxType('none');
+    setHasIberdrolaAlliance(false);
+    setDaznSegment('nuevo');
   }, [selectedOperatorId]);
 
   // Restablecer vista completa cuando cambia la categoría del filtro
   useEffect(() => {
     setShowOnlySelectedPlan(false);
   }, [planFilter]);
-  
+
   // Estado de navegación en Sidebar
   const [activeTab, setActiveTab] = useState<string>('cotizador');
-  const [globalPlans, setGlobalPlans] = useState<Plan[]>([]);
-  const [globalAddons, setGlobalAddons] = useState<Addon[]>([]);
+  const [globalPlans, setGlobalPlans] = useState<Plan[]>(PLANS_DEFAULT);
+  const [globalAddons, setGlobalAddons] = useState<Addon[]>(ADDONS_DEFAULT);
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
   const [showPermisoModal, setShowPermisoModal] = useState<boolean>(false);
   const [showAdminModal, setShowAdminModal] = useState<boolean>(false);
   const [adminPasswordInput, setAdminPasswordInput] = useState<string>('');
   const [adminError, setAdminError] = useState<string>('');
   const [clientIp, setClientIp] = useState<string>('');
+  const [ipRestrictionEnabled, setIpRestrictionEnabled] = useState<boolean>(false);
+  const [allowedIps, setAllowedIps] = useState<string[]>([]);
+  const [ipBypassGranted, setIpBypassGranted] = useState<boolean>(false);
 
   // Estados de cliente y asesor
   const [clientName, setClientName] = useState<string>('');
@@ -253,6 +263,10 @@ export default function Home() {
   // Estados de conexión QR automatizada
   const [wspConnectionState, setWspConnectionState] = useState<'open' | 'close' | 'connecting' | 'loading'>('loading');
   const [qrCodeBase64, setQrCodeBase64] = useState<string>('');
+
+  // Estados de conexión QR para Contraofertas
+  const [wspConnectionStateContra, setWspConnectionStateContra] = useState<'open' | 'close' | 'connecting' | 'loading'>('loading');
+  const [qrCodeBase64Contra, setQrCodeBase64Contra] = useState<string>('');
 
   // Estados de Imagen de Propuesta
   const [showImageModal, setShowImageModal] = useState<boolean>(false);
@@ -307,21 +321,62 @@ export default function Home() {
         }
       }
       
-      // Cargar planes y añadidos de localStorage
-      const savedPlans = localStorage.getItem('smart_custom_plans') || localStorage.getItem('custom_plans');
-      const savedAddons = localStorage.getItem('smart_custom_addons') || localStorage.getItem('custom_addons');
-      if (savedPlans) {
-        setGlobalPlans(JSON.parse(savedPlans));
-      } else {
+      // Carga persistente de tarifas personalizadas guardadas por el administrador
+      try {
+        const customPlansRaw = localStorage.getItem('smart_custom_plans') || localStorage.getItem('custom_plans');
+        if (customPlansRaw) {
+          const parsed = JSON.parse(customPlansRaw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setGlobalPlans(parsed);
+          } else {
+            setGlobalPlans(PLANS_DEFAULT);
+          }
+        } else {
+          setGlobalPlans(PLANS_DEFAULT);
+        }
+
+        const customAddonsRaw = localStorage.getItem('smart_custom_addons') || localStorage.getItem('custom_addons');
+        if (customAddonsRaw) {
+          const parsed = JSON.parse(customAddonsRaw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setGlobalAddons(parsed);
+          } else {
+            setGlobalAddons(ADDONS_DEFAULT);
+          }
+        } else {
+          setGlobalAddons(ADDONS_DEFAULT);
+        }
+      } catch (err) {
+        console.error('Error loading custom catalog:', err);
         setGlobalPlans(PLANS_DEFAULT);
-      }
-      if (savedAddons) {
-        setGlobalAddons(JSON.parse(savedAddons));
-      } else {
         setGlobalAddons(ADDONS_DEFAULT);
       }
 
-      // Obtener IP pública del cliente para el bypass
+      // Cargar configuración de IP local
+      const localIpRestriction = localStorage.getItem('ip_restriction_enabled') === 'true';
+      const localAllowedIps = JSON.parse(localStorage.getItem('allowed_ips') || '[]');
+      setIpRestrictionEnabled(localIpRestriction);
+      setAllowedIps(localAllowedIps);
+
+      // Sincronizar con el backend de Python si está disponible
+      fetch('http://localhost:5005/api/config')
+        .then(res => {
+          if (!res.ok) throw new Error();
+          return res.json();
+        })
+        .then(data => {
+          if (data.ip_restriction_enabled !== undefined) {
+            setIpRestrictionEnabled(data.ip_restriction_enabled);
+            localStorage.setItem('ip_restriction_enabled', String(data.ip_restriction_enabled));
+          }
+          if (data.allowed_ips !== undefined) {
+            setAllowedIps(data.allowed_ips);
+            localStorage.setItem('allowed_ips', JSON.stringify(data.allowed_ips));
+          }
+        })
+        .catch(() => {});
+
+      // Obtener IP pública del cliente con redundancia (api.ipify.org -> ipapi.co)
       fetch('https://api.ipify.org?format=json')
         .then(res => res.json())
         .then(data => {
@@ -332,7 +387,15 @@ export default function Home() {
             sessionStorage.setItem('admin_mode', 'true');
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          // Fallback a ipapi
+          fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+              setClientIp(data.ip || '');
+            })
+            .catch(() => {});
+        });
 
       const savedAdminMode = sessionStorage.getItem('admin_mode');
       if (savedAdminMode === 'true') {
@@ -351,16 +414,50 @@ export default function Home() {
     }
   }, []);
 
+  // Función auxiliar de fetch con reintentos para soportar caídas/inactividad de Render
+  const fetchWithRetry = async (url: string, options: RequestInit, retries = 3, delay = 3500): Promise<Response> => {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok && retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return fetchWithRetry(url, options, retries - 1, delay);
+      }
+      return res;
+    } catch (err) {
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return fetchWithRetry(url, options, retries - 1, delay);
+      }
+      throw err;
+    }
+  };
+
+  // Wake up Render Evolution API on page load (prevents cold start delay)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && evolutionUrl) {
+      console.log('⚡ [Evolution API] Mandando ping de despertar a Render...');
+      // Despertar propuestas
+      fetch(`${evolutionUrl}/instance/connectionState/smart-telco`, {
+        headers: { 'apikey': evolutionApiKey }
+      }).catch(() => {});
+      // Despertar contraofertas
+      fetch(`${evolutionUrl}/instance/connectionState/contraofertas-dreamteam`, {
+        headers: { 'apikey': evolutionApiKey }
+      }).catch(() => {});
+    }
+  }, [evolutionUrl, evolutionApiKey]);
+
   // Verificar estado de conexión de WhatsApp periódicamente
   useEffect(() => {
     let interval: any;
     const checkStatus = async () => {
+      if (!evolutionUrl || !evolutionInstance || !evolutionApiKey) return;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 6000);
 
       try {
-        const response = await fetch(`${evolutionUrl}/instance/connectionState/smart-telco`, {
-          headers: { 'apikey': 'NEXO_SECRET_KEY_2026' },
+        const response = await fetch(`${evolutionUrl}/instance/connectionState/${evolutionInstance}`, {
+          headers: { 'apikey': evolutionApiKey },
           signal: controller.signal
         });
         clearTimeout(timeoutId);
@@ -385,11 +482,156 @@ export default function Home() {
       interval = setInterval(checkStatus, 10000);
     }, 1500);
 
+  }, [evolutionUrl, evolutionApiKey, evolutionInstance]);
+
+  // Verificar estado de conexión de WhatsApp Contraofertas periódicamente
+  useEffect(() => {
+    let interval: any;
+    const checkStatusContra = async () => {
+      if (!evolutionUrl || !evolutionApiKey) return;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+      try {
+        const response = await fetch(`${evolutionUrl}/instance/connectionState/contraofertas-dreamteam`, {
+          headers: { 'apikey': evolutionApiKey },
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.instance?.state === 'open') {
+            setWspConnectionStateContra('open');
+            setQrCodeBase64Contra('');
+          } else {
+            setWspConnectionStateContra(prev => prev === 'connecting' ? 'connecting' : 'close');
+          }
+        } else {
+          setWspConnectionStateContra('close');
+        }
+      } catch (err) {
+        setWspConnectionStateContra('close');
+      }
+    };
+
+    const timer = setTimeout(() => {
+      checkStatusContra();
+      interval = setInterval(checkStatusContra, 10000);
+    }, 2000);
+
     return () => {
       clearTimeout(timer);
       if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [evolutionUrl, evolutionApiKey]);
+
+  const handleConnectWSPContra = async () => {
+    setWspConnectionStateContra('connecting');
+    try {
+      // 1. Intentar crear la instancia si no existe
+      await fetch(`${evolutionUrl}/instance/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': evolutionApiKey
+        },
+        body: JSON.stringify({
+          instanceName: 'contraofertas-dreamteam',
+          token: evolutionApiKey,
+          qrcode: true,
+          integration: 'WHATSAPP-BAILEYS'
+        })
+      });
+
+      // 2. Pedir el código QR
+      const qrResponse = await fetch(`${evolutionUrl}/instance/connect/contraofertas-dreamteam`, {
+        headers: { 'apikey': evolutionApiKey }
+      });
+      if (qrResponse.ok) {
+        const qrData = await qrResponse.json();
+        if (qrData.base64) {
+          setQrCodeBase64Contra(qrData.base64);
+          setWspConnectionStateContra('close'); // render QR in UI
+        } else {
+          setWspConnectionStateContra('close');
+        }
+      } else {
+        setWspConnectionStateContra('close');
+      }
+    } catch (err) {
+      alert('Error de conexión con la Evolution API de Contraofertas.');
+      setWspConnectionStateContra('close');
+    }
+  };
+
+  const handleDisconnectWSPContra = async () => {
+    try {
+      await fetch(`${evolutionUrl}/instance/logout/contraofertas-dreamteam`, {
+        method: 'POST',
+        headers: { 'apikey': evolutionApiKey }
+      });
+      setWspConnectionStateContra('close');
+      setQrCodeBase64Contra('');
+    } catch (err) {
+      alert('Error al desconectar la instancia de Contraofertas.');
+    }
+  };
+
+  const handleResetWSPContra = async () => {
+    setWspConnectionStateContra('connecting');
+    setQrCodeBase64Contra('');
+    try {
+      // Logout
+      await fetch(`${evolutionUrl}/instance/logout/contraofertas-dreamteam`, {
+        method: 'POST',
+        headers: { 'apikey': evolutionApiKey }
+      }).catch(() => {});
+      
+      // Delete
+      await fetch(`${evolutionUrl}/instance/delete/contraofertas-dreamteam`, {
+        method: 'DELETE',
+        headers: { 'apikey': evolutionApiKey }
+      }).catch(() => {});
+
+      // Recreate
+      const createRes = await fetch(`${evolutionUrl}/instance/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': evolutionApiKey
+        },
+        body: JSON.stringify({
+          instanceName: 'contraofertas-dreamteam',
+          token: evolutionApiKey,
+          qrcode: true,
+          integration: 'WHATSAPP-BAILEYS'
+        })
+      });
+
+      if (!createRes.ok) {
+        throw new Error('No se pudo recrear la instancia.');
+      }
+
+      // Connect (QR)
+      const qrResponse = await fetch(`${evolutionUrl}/instance/connect/contraofertas-dreamteam`, {
+        headers: { 'apikey': evolutionApiKey }
+      });
+      if (qrResponse.ok) {
+        const qrData = await qrResponse.json();
+        if (qrData.base64) {
+          setQrCodeBase64Contra(qrData.base64);
+          setWspConnectionStateContra('close');
+        } else {
+          setWspConnectionStateContra('close');
+        }
+      } else {
+        setWspConnectionStateContra('close');
+      }
+    } catch (err) {
+      alert('Error al restablecer la conexión de Contraofertas.');
+      setWspConnectionStateContra('close');
+    }
+  };
 
   const handleConnectWSP = async () => {
     setWspConnectionState('connecting');
@@ -399,19 +641,19 @@ export default function Home() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': 'NEXO_SECRET_KEY_2026'
+          'apikey': evolutionApiKey
         },
         body: JSON.stringify({
-          instanceName: 'smart-telco',
-          token: 'NEXO_SECRET_KEY_2026',
+          instanceName: evolutionInstance,
+          token: evolutionApiKey,
           qrcode: true,
           integration: 'WHATSAPP-BAILEYS'
         })
       });
 
       // 2. Solicitar el código QR
-      const qrResponse = await fetch(`${evolutionUrl}/instance/connect/smart-telco`, {
-        headers: { 'apikey': 'NEXO_SECRET_KEY_2026' }
+      const qrResponse = await fetch(`${evolutionUrl}/instance/connect/${evolutionInstance}`, {
+        headers: { 'apikey': evolutionApiKey }
       });
       if (qrResponse.ok) {
         const qrData = await qrResponse.json();
@@ -426,7 +668,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error(err);
-      alert('Error de conexión con la Evolution API local. ¿Está encendido el servidor?');
+      alert('Error de conexión con la Evolution API. ¿Está encendido el servidor?');
       setWspConnectionState('close');
     }
   };
@@ -434,14 +676,76 @@ export default function Home() {
   const handleDisconnectWSP = async () => {
     if (confirm('¿Estás seguro de que deseas desconectar WhatsApp y cerrar la sesión?')) {
       try {
-        await fetch(`${evolutionUrl}/instance/logout/smart-telco`, {
+        await fetch(`${evolutionUrl}/instance/logout/${evolutionInstance}`, {
           method: 'DELETE',
-          headers: { 'apikey': 'NEXO_SECRET_KEY_2026' }
+          headers: { 'apikey': evolutionApiKey }
         });
         setWspConnectionState('close');
         setQrCodeBase64('');
       } catch (err) {
         console.error(err);
+      }
+    }
+  };
+
+  const handleResetWSP = async () => {
+    if (confirm('¿Deseas restablecer y reiniciar la instancia de WhatsApp? Esto eliminará sesiones colgadas y generará un QR fresco.')) {
+      setWspConnectionState('connecting');
+      setQrCodeBase64('');
+      try {
+        // 1. Forzar logout/delete para limpiar la sesión rota de Baileys
+        try {
+          await fetch(`${evolutionUrl}/instance/logout/${evolutionInstance}`, {
+            method: 'DELETE',
+            headers: { 'apikey': evolutionApiKey }
+          });
+        } catch (e) {}
+
+        try {
+          await fetch(`${evolutionUrl}/instance/delete/${evolutionInstance}`, {
+            method: 'DELETE',
+            headers: { 'apikey': evolutionApiKey }
+          });
+        } catch (e) {}
+
+        // 2. Crear una instancia totalmente limpia
+        const createRes = await fetch(`${evolutionUrl}/instance/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': evolutionApiKey
+          },
+          body: JSON.stringify({
+            instanceName: evolutionInstance,
+            token: evolutionApiKey,
+            qrcode: true,
+            integration: 'WHATSAPP-BAILEYS'
+          })
+        });
+
+        if (!createRes.ok) {
+          throw new Error('No se pudo recrear la instancia en la Evolution API.');
+        }
+
+        // 3. Solicitar el código QR
+        const qrResponse = await fetch(`${evolutionUrl}/instance/connect/${evolutionInstance}`, {
+          headers: { 'apikey': evolutionApiKey }
+        });
+        if (qrResponse.ok) {
+          const qrData = await qrResponse.json();
+          if (qrData.base64) {
+            setQrCodeBase64(qrData.base64);
+          } else {
+            alert('No se pudo obtener la imagen base64 del código QR.');
+            setWspConnectionState('close');
+          }
+        } else {
+          setWspConnectionState('close');
+        }
+      } catch (err: any) {
+        console.error(err);
+        alert(`Error al reiniciar la instancia: ${err.message}`);
+        setWspConnectionState('close');
       }
     }
   };
@@ -488,6 +792,18 @@ export default function Home() {
     localStorage.setItem('evolutionInstance', inst);
   };
 
+  // Función para obtener el nombre comercial limpio del plan para el cliente (sin prefijos internos de empresa/negocio/residencial)
+  const getClientFacingPlanName = (name: string) => {
+    return name
+      .replace(/^Mi Negocio Pro \([^)]+\) - /i, '')
+      .replace(/^Digital Pro - /i, '')
+      .replace(/^Segunda Residencia: /i, '')
+      .replace(/^Vodafone TV Bares \([^)]+\) \+ /i, 'Vodafone TV Bares + ')
+      .replace(/^Oferta Flash [^:]+: /i, '')
+      .replace(/ \(Residencia Principal\)/i, '')
+      .trim();
+  };
+
   // Función para generar la propuesta gráfica usando HTML5 Canvas (100% Gratis y Local)
   const generateProposalImage = () => {
     const canvas = document.createElement('canvas');
@@ -505,7 +821,7 @@ export default function Home() {
     } else if (selectedOperatorId === 'lowi') {
       brandColor = '#E50015';
     } else if (selectedOperatorId === 'win') {
-      brandColor = '#FF5A00';
+      brandColor = '#FFCC00';
     }
 
     // 1. Fondo general
@@ -593,8 +909,8 @@ export default function Home() {
     } else if (selectedOperatorId === 'win') {
       ctx.save();
       ctx.translate(30, 38);
-      ctx.fillStyle = '#FFFFFF';
-      ctx.strokeStyle = '#FFFFFF';
+      ctx.fillStyle = '#0F172A';
+      ctx.strokeStyle = '#0F172A';
       ctx.lineWidth = 5.5;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -616,12 +932,12 @@ export default function Home() {
     ctx.restore();
 
     // 4. Texto del Encabezado
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = selectedOperatorId === 'win' ? '#0F172A' : '#FFFFFF';
     ctx.font = '900 24px Inter, sans-serif';
     ctx.textAlign = 'right';
     ctx.fillText('PROPUESTA COMERCIAL', 770, 52);
     ctx.font = 'bold 12px Inter, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.fillStyle = selectedOperatorId === 'win' ? 'rgba(15,23,42,0.7)' : 'rgba(255,255,255,0.8)';
     ctx.fillText('SOLUCIONES DE CONECTIVIDAD SMART TELCO', 770, 75);
 
     // 5. Card principal de la propuesta
@@ -656,7 +972,7 @@ export default function Home() {
     ctx.fillStyle = '#0F172A';
     ctx.font = '900 15px Inter, sans-serif';
     
-    const planName = activePlan ? activePlan.name : 'Plan Base';
+    const planName = activePlan ? getClientFacingPlanName(activePlan.name) : 'Plan Base';
     let bulletPointsY = 288;
     
     const words = planName.split(' ');
@@ -751,14 +1067,32 @@ export default function Home() {
     ctx.roundRect ? ctx.roundRect(400, 370, 340, 68, 14) : ctx.rect(400, 370, 340, 68);
     ctx.fill();
 
-    ctx.fillStyle = '#FFFFFF';
+    ctx.fillStyle = selectedOperatorId === 'win' ? '#0F172A' : '#FFFFFF';
     ctx.textAlign = 'center';
     ctx.font = '900 9px Inter, sans-serif';
-    ctx.fillText('CUOTA MENSUAL TOTAL (IVA INC.)', 570, 392);
+    
+    const isBusinessPlan = activePlan?.category === 'fibra_movil_empresa' || 
+                           activePlan?.tags?.includes('Empresa') || 
+                           activePlan?.tags?.includes('TV Bares') || 
+                           activePlan?.tags?.includes('HORECA') ||
+                           activePlan?.id.includes('empresa') ||
+                           activePlan?.id.includes('mi-negocio') ||
+                           activePlan?.id.includes('tv-bares');
+
+    let quotaTaxHeader = 'CUOTA MENSUAL TOTAL (IVA INC.)';
+    if (selectedOperatorId === 'win') {
+      quotaTaxHeader = 'CUOTA MENSUAL TOTAL (IGV INC.)';
+    } else if (selectedOperatorId === 'orange') {
+      quotaTaxHeader = taxType === 'iva' ? 'CUOTA TOTAL (IVA 21% INC.)' : (taxType === 'igic' ? 'CUOTA TOTAL (IGIC 7% INC.)' : 'CUOTA MENSUAL (SIN IMPUESTOS)');
+    } else if (isBusinessPlan) {
+      quotaTaxHeader = 'CUOTA MENSUAL TOTAL (SIN IVA)';
+    }
+    ctx.fillText(quotaTaxHeader, 570, 392);
 
     const priceText = selectedOperatorId === 'win'
       ? `S/ ${(hasPromo ? totalPricePromo : totalPriceNormal).toFixed(2)}/mes`
       : `${hasPromo ? totalPricePromo : totalPriceNormal} €/mes`;
+    ctx.fillStyle = selectedOperatorId === 'win' ? '#0F172A' : '#FFFFFF';
     ctx.font = '900 24px Inter, sans-serif';
     ctx.fillText(priceText, 570, 420);
 
@@ -804,7 +1138,8 @@ export default function Home() {
         return selectedOperatorId === 'win' ? `S/ ${price.toFixed(2)}` : `${price} €`;
       };
 
-      captionText += `*Plan Base:* ${activePlan?.name} (${formatPrice(basePrice)}/mes)\n`;
+      const clientPlanName = activePlan ? getClientFacingPlanName(activePlan.name) : 'Plan Base';
+      captionText += `*Plan Base:* ${clientPlanName} (${formatPrice(basePrice)}/mes)\n`;
       captionText += `*Velocidad Fibra:* ${activePlan?.speed}\n`;
       captionText += `*Móvil:* ${activePlan?.mobile}\n`;
       if (activePlan?.tv) {
@@ -825,11 +1160,30 @@ export default function Home() {
         captionText += `\n`;
       }
 
+      const getTaxLabel = () => {
+        if (selectedOperatorId === 'win') return '(IGV Inc.)';
+        if (selectedOperatorId === 'orange') {
+          if (taxType === 'iva') return '(IVA Inc. 21%)';
+          if (taxType === 'igic') return '(IGIC Inc. 7%)';
+          return '(Sin Impuestos)';
+        }
+        const isBusiness = activePlan?.category === 'fibra_movil_empresa' || 
+                           activePlan?.tags?.includes('Empresa') || 
+                           activePlan?.tags?.includes('TV Bares') || 
+                           activePlan?.tags?.includes('HORECA') ||
+                           activePlan?.id.includes('empresa') ||
+                           activePlan?.id.includes('mi-negocio') ||
+                           activePlan?.id.includes('tv-bares');
+        return isBusiness ? '(Sin IVA)' : '(IVA Inc.)';
+      };
+
+      const taxLabel = getTaxLabel();
+
       if (hasPromo) {
-        captionText += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes* (${activePlan?.promoLabel})\n`;
-        captionText += `*Precio Regular posterior:* *${formatPrice(totalPriceNormal)}/mes*\n`;
+        captionText += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes* ${taxLabel} (${activePlan?.promoLabel})\n`;
+        captionText += `*Precio Regular posterior:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
       } else {
-        captionText += `*TOTAL MENSUAL:* *${formatPrice(totalPriceNormal)}/mes*\n`;
+        captionText += `*TOTAL MENSUAL:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
       }
       
       captionText += `${separatorLine}\n`;
@@ -900,6 +1254,35 @@ export default function Home() {
     }
   };
 
+  const handleSaveSecurityConfig = async (enabled: boolean, ips: string[]) => {
+    setIpRestrictionEnabled(enabled);
+    setAllowedIps(ips);
+    localStorage.setItem('ip_restriction_enabled', String(enabled));
+    localStorage.setItem('allowed_ips', JSON.stringify(ips));
+
+    try {
+      // 1. Obtener la config actual de Python
+      const res = await fetch('http://localhost:5005/api/config');
+      if (res.ok) {
+        const currentConfig = await res.json();
+        // 2. Modificar con los nuevos campos de seguridad
+        const updatedConfig = {
+          ...currentConfig,
+          ip_restriction_enabled: enabled,
+          allowed_ips: ips
+        };
+        // 3. Enviar de vuelta a Python
+        await fetch('http://localhost:5005/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedConfig)
+        });
+      }
+    } catch (e) {
+      console.error('Error al guardar configuración de seguridad en backend local:', e);
+    }
+  };
+
   // Obtener operador activo
   const activeOperator = useMemo(() => {
     return OPERATORS.find(op => op.id === selectedOperatorId) || OPERATORS[0];
@@ -941,37 +1324,6 @@ export default function Home() {
     }
   }, [selectedOperatorId]);
 
-
-  // Helper para determinar la etiqueta de régimen fiscal según operador y plan
-  const getTaxLabel = (opId: string, plan?: Plan | null): string => {
-    if (opId === 'win') {
-      return '(IGV Inc.)';
-    }
-    if (opId === 'orange') {
-      return '(IVA Inc. 21%)';
-    }
-    const isEmpresa = plan && (plan.category === 'fibra_movil_empresa' || plan.tags?.includes('Empresa') || plan.tags?.includes('TV Bares') || plan.id.includes('mi-negocio') || plan.id.includes('tv-bares') || plan.id.includes('digital-pro'));
-    if (isEmpresa) {
-      return '(Sin IVA)';
-    }
-    return '(IVA Incluido)';
-  };
-
-  // Helper para limpiar el nombre del plan para la propuesta al cliente
-  const getClientFacingPlanName = (rawName: string): string => {
-    if (!rawName) return '';
-    return rawName
-      .replace(/^Oferta Flash \d+P:\s*/i, '')
-      .replace(/^Oferta Flash ESPECIAL \d+\s*OTTs:\s*/i, '')
-      .replace(/^Digital Pro Total\s*-\s*/i, '')
-      .replace(/^Digital Pro\s*-\s*/i, '')
-      .replace(/^Mi Negocio Pro\s*(\(\d+\s*Líneas?\))?\s*-\s*/i, '')
-      .replace(/^Segunda Residencia:\s*/i, '')
-      .replace(/^Especial Digi:\s*/i, '')
-      .replace(/^N Extra \d+\s*-\s*/i, '')
-      .trim();
-  };
-
   // Filtrar planes del operador seleccionado y tab activa con origen de portabilidad
   const filteredPlans = useMemo(() => {
     let plans = globalPlans.filter(plan => plan.operatorId === selectedOperatorId);
@@ -1007,29 +1359,26 @@ export default function Home() {
     
     if (selectedOperatorId === 'vodafone') {
       if (planFilter === 'all') {
-        // En "Todos", excluimos bares para que solo se vean al hacer click en su pestaña exclusiva
-        return plans.filter(p => !p.tags?.includes('TV Bares') && !p.tags?.includes('HORECA') && !p.id.includes('tv-bares'));
+        // Excluir ofertas de Bares en la vista general
+        return plans.filter(p => !p.id.includes('tv-bares') && !p.tags?.includes('TV Bares') && !p.tags?.includes('HORECA'));
       }
-      if (planFilter === 'flash') {
+      if (planFilter === 'flash-agosto') {
         return plans.filter(p => p.category === 'flash_agosto' || p.tags?.includes('Oferta Flash') || p.id.includes('flash'));
       }
-      if (planFilter === '600mb') {
-        return plans.filter(p => (p.speed.includes('600') || p.fiber === '600Mb') && !p.tags?.includes('TV Bares'));
+      if (planFilter === 'fibra-600') {
+        return plans.filter(p => (p.speed?.includes('600') || p.name.includes('600Mb') || p.name.includes('600 Mb')) && !p.id.includes('tv-bares') && p.category !== 'segunda_residencia');
       }
-      if (planFilter === '1gb') {
-        return plans.filter(p => (p.speed.includes('1 Gb') || p.speed.includes('1000') || p.fiber === '1Gb') && !p.tags?.includes('TV Bares'));
+      if (planFilter === 'fibra-1gb') {
+        return plans.filter(p => (p.speed?.includes('1Gb') || p.name.includes('1Gb')) && !p.id.includes('tv-bares') && p.category !== 'segunda_residencia');
       }
-      if (planFilter === 'empresa') {
-        return plans.filter(p => p.category === 'fibra_movil_empresa' || p.tags?.includes('Empresa') || p.id.includes('mi-negocio'));
-      }
-      if (planFilter === 'bares') {
-        return plans.filter(p => p.tags?.includes('TV Bares') || p.tags?.includes('HORECA') || p.id.includes('tv-bares'));
-      }
-      if (planFilter === 'segunda_residencia') {
-        return plans.filter(p => p.category === 'segunda_residencia' || p.tags?.includes('Segunda Residencia'));
-      }
-      if (planFilter === 'solo_movil') {
+      if (planFilter === 'solo-movil') {
         return plans.filter(p => p.category === 'solo_movil');
+      }
+      if (planFilter === 'solo-fibra-2a') {
+        return plans.filter(p => p.category === 'solo_fibra' || p.category === 'segunda_residencia' || p.id.includes('solofibra') || p.id.includes('segunda-residencia') || p.id.includes('portatil'));
+      }
+      if (planFilter === 'bares-horeca') {
+        return plans.filter(p => p.id.includes('tv-bares') || p.tags?.includes('TV Bares') || p.tags?.includes('HORECA') || p.category === 'fibra_movil_empresa');
       }
     }
     
@@ -1084,6 +1433,24 @@ export default function Home() {
       }
       if (planFilter === 'empresa') {
         return plans.filter(p => p.category === 'fibra_movil_empresa');
+      }
+    }
+
+    if (selectedOperatorId === 'lowi') {
+      if (planFilter === 'fibra-movil') {
+        return plans.filter(p => p.category === 'fibra_movil');
+      }
+      if (planFilter === 'multilinea') {
+        return plans.filter(p => p.mobileLines === 2 || p.id.includes('multilinea'));
+      }
+      if (planFilter === 'fibra-tv') {
+        return plans.filter(p => p.category === 'fibra_tv');
+      }
+      if (planFilter === 'solo-movil') {
+        return plans.filter(p => p.category === 'solo_movil');
+      }
+      if (planFilter === 'solo-fibra') {
+        return plans.filter(p => p.category === 'solo_fibra');
       }
     }
     
@@ -1150,12 +1517,23 @@ export default function Home() {
       if (selectedOperatorId === 'orange') {
         const planName = activePlan?.name.toLowerCase() || '';
         if (addon.id === 'orange-linea-adicional-1573') {
-          // Mostrar 15.73€ solo para Extra 3, 5, 10
           return planName.includes('extra 3') || planName.includes('extra 5') || planName.includes('extra 10') || planName === '';
         }
         if (addon.id === 'orange-linea-adicional-1331') {
-          // Mostrar 13.31€ solo para Extra 20
           return planName.includes('extra 20');
+        }
+      }
+
+      // Filtrado de DAZN para Vodafone por segmento de cliente
+      if (selectedOperatorId === 'vodafone') {
+        if (addon.id.startsWith('vdf-dazn-')) {
+          if (daznSegment === 'nuevo') {
+            return addon.id.includes('-nuevo');
+          } else if (daznSegment === 'cartera') {
+            return addon.id.includes('-cartera');
+          } else if (daznSegment === 'nba') {
+            return addon.id.includes('-nba');
+          }
         }
       }
       
@@ -1185,12 +1563,26 @@ export default function Home() {
 
   const addonsTotal = addonsTotalPromo; // Compatibilidad
 
-  const totalPricePromo = Math.round((basePrice + addonsTotalPromo) * 100) / 100;
+  const taxRate = useMemo(() => {
+    if (selectedOperatorId !== 'orange') return 1.0;
+    if (taxType === 'iva') return 1.21;
+    if (taxType === 'igic') return 1.07;
+    return 1.0;
+  }, [selectedOperatorId, taxType]);
+
+  const iberdrolaDiscount = (selectedOperatorId === 'vodafone' && hasIberdrolaAlliance) ? 10 : 0;
+
+  const totalPricePromo = useMemo(() => {
+    const raw = (basePrice + addonsTotalPromo) * taxRate - iberdrolaDiscount;
+    return Math.max(0, Math.round(raw * 100) / 100);
+  }, [basePrice, addonsTotalPromo, taxRate, iberdrolaDiscount]);
+
   const totalPriceNormal = useMemo(() => {
     if (!activePlan) return 0;
     const priceAfter = activePlan.priceAfterPromo !== undefined ? activePlan.priceAfterPromo : activePlan.price;
-    return Math.round((priceAfter + addonsTotalRegular) * 100) / 100;
-  }, [activePlan, addonsTotalRegular]);
+    const raw = (priceAfter + addonsTotalRegular) * taxRate - iberdrolaDiscount;
+    return Math.max(0, Math.round(raw * 100) / 100);
+  }, [activePlan, addonsTotalRegular, taxRate, iberdrolaDiscount]);
 
   const hasPromo = activePlan?.isPromo || false;
 
@@ -1205,6 +1597,8 @@ export default function Home() {
     return getSalesArgument(selectedOperatorId, finalPrice, selectedAddonIds.size);
   }, [selectedOperatorId, hasPromo, totalPricePromo, totalPriceNormal, selectedAddonIds.size]);
 
+
+
   // Copiar resumen para WhatsApp
   const handleCopyWhatsApp = () => {
     if (!activePlan) return;
@@ -1218,9 +1612,8 @@ export default function Home() {
       return selectedOperatorId === 'win' ? `S/ ${price.toFixed(2)}` : `${price} €`;
     };
 
-    const cleanPlanName = getClientFacingPlanName(activePlan.name);
-    const taxLabel = getTaxLabel(selectedOperatorId, activePlan);
-    text += `*Plan Base:* ${cleanPlanName} (${formatPrice(basePrice)}/mes ${taxLabel})\n`;
+    const clientPlanName = getClientFacingPlanName(activePlan.name);
+    text += `*Plan Base:* ${clientPlanName} (${formatPrice(basePrice)}/mes)\n`;
     text += `*Velocidad Fibra:* ${activePlan.speed}\n`;
     text += `*Móvil:* ${activePlan.mobile}\n`;
     if (activePlan.tv) {
@@ -1247,11 +1640,40 @@ export default function Home() {
     text += `• Total Servicios Adicionales: ${selectedOperatorId === 'win' ? `+S/ ${addonsTotal.toFixed(2)}` : `+${addonsTotal} €`}/mes\n`;
     text += `${separatorLine}\n`;
 
+    if (selectedOperatorId === 'orange') {
+      if (taxType === 'iva') {
+        text += `*Impuesto Aplicado:* IVA (+21%)\n`;
+      } else if (taxType === 'igic') {
+        text += `*Impuesto Aplicado:* IGIC (+7%)\n`;
+      } else {
+        text += `*Impuesto Aplicado:* Sin Impuestos\n`;
+      }
+    }
+    
+    const getTaxLabel = () => {
+      if (selectedOperatorId === 'win') return '(IGV Inc.)';
+      if (selectedOperatorId === 'orange') {
+        if (taxType === 'iva') return '(IVA Inc. 21%)';
+        if (taxType === 'igic') return '(IGIC Inc. 7%)';
+        return '(Sin Impuestos)';
+      }
+      const isBusiness = activePlan?.category === 'fibra_movil_empresa' || 
+                         activePlan?.tags?.includes('Empresa') || 
+                         activePlan?.tags?.includes('TV Bares') || 
+                         activePlan?.tags?.includes('HORECA') ||
+                         activePlan?.id.includes('empresa') ||
+                         activePlan?.id.includes('mi-negocio') ||
+                         activePlan?.id.includes('tv-bares');
+      return isBusiness ? '(Sin IVA)' : '(IVA Incluido)';
+    };
+
+    const taxLabel = getTaxLabel();
+
     if (hasPromo) {
-      text += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes ${getTaxLabel(selectedOperatorId, activePlan)}* (${activePlan.promoLabel})\n`;
-      text += `*Precio Regular Posterior:* *${formatPrice(totalPriceNormal)}/mes ${getTaxLabel(selectedOperatorId, activePlan)}*\n`;
+      text += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes* ${taxLabel} (${activePlan.promoLabel})\n`;
+      text += `*Precio Regular Posterior:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
     } else {
-      text += `*TOTAL MENSUAL:* *${formatPrice(totalPriceNormal)}/mes ${getTaxLabel(selectedOperatorId, activePlan)}*\n`;
+      text += `*TOTAL MENSUAL:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
     }
     
     const installationAddon = activeAddons.find(a => a.isOneTime);
@@ -1292,6 +1714,13 @@ export default function Home() {
 
   // Renderizar mockup de plan
   const renderPlanMockup = (plan: Plan) => {
+    if (plan.category === 'solo_movil') {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950">
+          <AddonSmartphoneVisual />
+        </div>
+      );
+    }
     if (plan.id.includes('1gb')) {
       return <RouterTvComboVisual color={operatorColor} />;
     }
@@ -1420,9 +1849,86 @@ export default function Home() {
     }
   };
 
+  const isIpBlocked = ipRestrictionEnabled && clientIp && !allowedIps.includes(clientIp) && !ipBypassGranted && !isAdminMode;
+
+  if (isIpBlocked) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 text-slate-100 relative overflow-hidden font-sans">
+        <TelecomVisual />
+        <div className="absolute inset-0 bg-gradient-to-tr from-amber-950/10 via-transparent to-red-950/20 pointer-events-none" />
+        
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="w-full max-w-md p-8 bg-[#0F172A] border border-red-500/20 rounded-3xl shadow-2xl relative z-10 flex flex-col gap-6 mx-4 text-center"
+        >
+          <div className="flex justify-center">
+            <div className="h-16 w-16 bg-red-500/10 rounded-full flex items-center justify-center border border-red-500/30">
+              <Shield className="h-8 w-8 text-red-500 animate-pulse" />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-black tracking-tight text-white uppercase flex items-center justify-center gap-1.5">
+              Acceso Restringido por IP
+            </h3>
+            <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+              Esta aplicación solo está autorizada para uso dentro de la red corporativa u oficinas autorizadas de la empresa.
+            </p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col gap-1.5">
+            <span className="text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block">Tu Dirección IP Pública:</span>
+            <span className="text-sm font-black text-red-400 font-mono tracking-wider">{clientIp}</span>
+            <span className="text-[8px] font-bold text-red-400/80 uppercase">No Autorizada</span>
+          </div>
+
+          <p className="text-[11px] text-slate-400 leading-normal font-medium">
+            Por favor, solicita a tu supervisor o administrador de DreamTeam que registre tu IP pública en el panel de configuración de seguridad.
+          </p>
+
+          <div className="flex flex-col gap-2 mt-2">
+            <button
+              onClick={() => {
+                const pass = prompt('Ingresa el código maestro de administración para bypass temporal de IP:');
+                if (pass) {
+                  if (sha256(pass) === '90b99f7cb1dff6ef96daf8596b31546027a75fc1f0db7f61eddcee88eb91b7b7') {
+                    setIpBypassGranted(true);
+                    setIsAdminMode(true);
+                    sessionStorage.setItem('admin_mode', 'true');
+                    alert('Bypass concedido. Has accedido en modo administrador.');
+                  } else {
+                    alert('Código incorrecto.');
+                  }
+                }
+              }}
+              className="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-black uppercase py-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-slate-700"
+            >
+              🔐 Bypass de Administración (Supervisor)
+            </button>
+            
+            <button
+              onClick={() => {
+                window.location.reload();
+              }}
+              className="text-[10px] font-bold text-slate-450 hover:text-white transition-all underline cursor-pointer"
+            >
+              Volver a comprobar IP
+            </button>
+          </div>
+
+          <div className="text-center text-[10px] text-slate-500 font-bold uppercase tracking-wider border-t border-slate-850 pt-4 mt-2">
+            DREAMTEAM SECURITY
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-black text-[#f1f5f9] relative overflow-hidden font-sans">
+      <div className="min-h-screen w-full flex items-center justify-center bg-black text-[#f1f5f9] relative overflow-hidden font-sans" suppressHydrationWarning>
         <TelecomVisual />
         <div className="absolute inset-0 bg-gradient-to-tr from-red-950/10 via-transparent to-red-950/25 pointer-events-none" />
         
@@ -1487,7 +1993,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F9FAFB] dark:bg-black text-[#0F172A] dark:text-[#f1f5f9] font-sans antialiased relative overflow-x-hidden selection:bg-red-500/20">
+    <div className="flex min-h-screen bg-[#F9FAFB] dark:bg-black text-[#0F172A] dark:text-[#f1f5f9] font-sans antialiased relative overflow-x-hidden selection:bg-red-500/20" suppressHydrationWarning>
       
 
 
@@ -1698,12 +2204,21 @@ export default function Home() {
                  setQrCodeBase64={setQrCodeBase64}
                  handleConnectWSP={handleConnectWSP}
                  handleDisconnectWSP={handleDisconnectWSP}
+                 handleResetWSP={handleResetWSP}
+                 wspConnectionStateContra={wspConnectionStateContra}
+                 qrCodeBase64Contra={qrCodeBase64Contra}
+                 handleConnectWSPContra={handleConnectWSPContra}
+                 handleDisconnectWSPContra={handleDisconnectWSPContra}
+                 handleResetWSPContra={handleResetWSPContra}
                  advisorName={advisorName}
                  advisorRole={advisorRole}
                  saveAdvisorInfo={saveAdvisorInfo}
                  setAdvisorName={setAdvisorName}
                  setAdvisorRole={setAdvisorRole}
                  setActiveTab={setActiveTab}
+                 ipRestrictionEnabled={ipRestrictionEnabled}
+                 allowedIps={allowedIps}
+                 handleSaveSecurityConfig={handleSaveSecurityConfig}
                />
             </div>
           )}
@@ -1841,11 +2356,73 @@ export default function Home() {
 
             {/* PLANES BASE */}
             <motion.div variants={fadeUp} className="flex flex-col gap-3">
+              {/* Controles de Perfil y Descuentos Vodafone Arriba */}
+              {selectedOperatorId === 'vodafone' && (
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-900/5 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 rounded-2xl mb-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase flex items-center gap-1">
+                      ⚽ Modalidad DAZN:
+                    </span>
+                    <div className="flex items-center gap-1 bg-white dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                      <button
+                        type="button"
+                        onClick={() => setDaznSegment('nuevo')}
+                        className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+                          daznSegment === 'nuevo'
+                            ? 'bg-[#E60000] text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                        }`}
+                      >
+                        ⚡ Cliente Nuevo (12M)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDaznSegment('cartera')}
+                        className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+                          daznSegment === 'cartera'
+                            ? 'bg-[#E60000] text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                        }`}
+                      >
+                        💼 Cartera / Retenciones (24M)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDaznSegment('nba')}
+                        className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+                          daznSegment === 'nba'
+                            ? 'bg-[#E60000] text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                        }`}
+                      >
+                        ⭐ Oferta NBA (24M)
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Toggle Alianza Iberdrola */}
+                  <button
+                    type="button"
+                    onClick={() => setHasIberdrolaAlliance(!hasIberdrolaAlliance)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[10px] font-extrabold transition-all duration-300 ${
+                      hasIberdrolaAlliance
+                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm ring-2 ring-emerald-400/40'
+                        : 'bg-white hover:bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs'
+                    }`}
+                  >
+                    <span>⚡</span>
+                    <span>Alianza Iberdrola (-10€/mes x 24m)</span>
+                    {hasIberdrolaAlliance && <span className="bg-white/20 px-1 py-0.2 rounded text-[8px]">ACTIVADO</span>}
+                  </button>
+                </div>
+              )}
+
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <h4 className="ui-label text-[10px] text-slate-400 flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: operatorColor }}></span>
                   2. ELIGE TU PLAN BASE
                 </h4>
+
                 {/* Selectores de filtrado y búsqueda */}
                 <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
                   {/* Selector de Portabilidad de Origen (solo se muestra para Yoigo y Orange) */}
@@ -1921,13 +2498,12 @@ export default function Home() {
                 {selectedOperatorId === 'vodafone' && (
                   <>
                     {[
-                      { id: 'flash', label: '🔥 Ofertas Flash' },
-                      { id: '600mb', label: '⚡ Fibra 600Mb' },
-                      { id: '1gb', label: '🚀 Fibra 1 Gbps' },
-                      { id: 'empresa', label: '🏢 Mi Negocio Pro' },
-                      { id: 'bares', label: '🍻 TV Bares (HORECA)' },
-                      { id: 'segunda_residencia', label: '🏖️ 2ª Residencia' },
-                      { id: 'solo_movil', label: '📱 Solo Móvil' }
+                      { id: 'flash-agosto', label: '🔥 Ofertas Flash' },
+                      { id: 'fibra-600', label: '⚡ Fibra 600Mb' },
+                      { id: 'fibra-1gb', label: '🚀 Fibra 1Gbps' },
+                      { id: 'solo-movil', label: '📱 Solo Móvil' },
+                      { id: 'solo-fibra-2a', label: '🌐 Solo Fibra / 2ª Residencia' },
+                      { id: 'bares-horeca', label: '🏢 Bares HORECA' }
                     ].map(tab => (
                       <button
                         key={tab.id}
@@ -2015,6 +2591,30 @@ export default function Home() {
                     ))}
                   </>
                 )}
+
+                {selectedOperatorId === 'lowi' && (
+                  <>
+                    {[
+                      { id: 'fibra-movil', label: 'Fibra + Móvil' },
+                      { id: 'multilinea', label: 'Multilínea (2x25GB)' },
+                      { id: 'fibra-tv', label: 'Fibra + Lowi TV' },
+                      { id: 'solo-movil', label: 'Solo Móvil' },
+                      { id: 'solo-fibra', label: 'Solo Fibra' }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setPlanFilter(tab.id)}
+                        className={`text-[10px] font-bold px-3 py-1.5 rounded-xl border transition-all duration-200 ${
+                          planFilter === tab.id
+                            ? 'bg-[#E50015] border-[#E50015] text-white shadow-sm'
+                            : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-650'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredPlans
@@ -2025,6 +2625,51 @@ export default function Home() {
                   let cardBorder = 'border-slate-200/80 hover:border-slate-350';
                   let cardShadow = 'hover:shadow-lg shadow-sm';
                   let activeBadge = 'bg-slate-100 text-slate-650';
+                  
+                  // Colores dinámicos del plan según operador (90% Opacidad de Marca)
+                  let planDetailsBgClass = 'bg-slate-50/50 dark:bg-slate-900/30';
+                  let planTextClass = 'text-slate-650 dark:text-slate-350';
+                  let planTitleClass = 'text-slate-900 dark:text-slate-100 font-black';
+                  let planPriceClass = 'text-slate-950 dark:text-white';
+                  let planBorderClass = 'border-slate-200/60 dark:border-border/40';
+                  let planCheckClass = 'text-emerald-500 dark:text-emerald-400';
+
+                  if (selectedOperatorId === 'yoigo') {
+                    planDetailsBgClass = 'bg-[#B026FF]/90 text-white';
+                    planTextClass = 'text-white/90';
+                    planTitleClass = 'text-white font-black';
+                    planPriceClass = 'text-white font-black';
+                    planBorderClass = 'border-white/20';
+                    planCheckClass = 'text-white';
+                  } else if (selectedOperatorId === 'orange') {
+                    planDetailsBgClass = 'bg-[#FF7900]/95 text-white';
+                    planTextClass = 'text-white/95';
+                    planTitleClass = 'text-white font-black';
+                    planPriceClass = 'text-white font-black';
+                    planBorderClass = 'border-white/25';
+                    planCheckClass = 'text-white';
+                  } else if (selectedOperatorId === 'vodafone') {
+                    planDetailsBgClass = 'bg-[#E60000]/95 text-white';
+                    planTextClass = 'text-white/95';
+                    planTitleClass = 'text-white font-black';
+                    planPriceClass = 'text-white font-black';
+                    planBorderClass = 'border-white/25';
+                    planCheckClass = 'text-white';
+                  } else if (selectedOperatorId === 'win') {
+                    planDetailsBgClass = 'bg-[#FFCC00]/95 text-slate-950';
+                    planTextClass = 'text-slate-900';
+                    planTitleClass = 'text-slate-950 font-black';
+                    planPriceClass = 'text-slate-950 font-black';
+                    planBorderClass = 'border-slate-950/20';
+                    planCheckClass = 'text-slate-950';
+                  } else if (selectedOperatorId === 'lowi') {
+                    planDetailsBgClass = 'bg-[#0B0B0C] text-white';
+                    planTextClass = 'text-white/80';
+                    planTitleClass = 'text-white font-black';
+                    planPriceClass = 'text-[#E50015] font-black';
+                    planBorderClass = 'border-white/10';
+                    planCheckClass = 'text-[#E50015]';
+                  }
 
                   if (isSelected) {
                     cardShadow = 'shadow-md';
@@ -2057,7 +2702,25 @@ export default function Home() {
                         
                         {/* Badges del plan */}
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                          {plan.operatorId === 'yoigo' && (plan.price === 25 || plan.price === 31 || plan.price === 45) && (
+                          {plan.operatorId === 'lowi' && (
+                            <span className="text-[9px] px-2.5 py-1 bg-gradient-to-r from-amber-500 via-orange-500 to-[#E50015] text-white rounded-md font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 border border-amber-300/40">
+                              <Sun className="h-3.5 w-3.5 fill-amber-200 text-amber-100 stroke-[2.5px] animate-pulse" />
+                              <span className="font-extrabold tracking-wide drop-shadow-sm">300GB EXTRA</span>
+                            </span>
+                          )}
+                          {plan.category === 'fibra_movil_empresa' || plan.tags?.includes('Empresa') || plan.tags?.includes('TV Bares') || plan.tags?.includes('HORECA') || plan.id.includes('empresa') || plan.id.includes('mi-negocio') || plan.id.includes('tv-bares') ? (
+                            <span className="text-[8px] px-2 py-0.5 bg-blue-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
+                              EMPRESA
+                            </span>
+                          ) : plan.category === 'segunda_residencia' || plan.tags?.includes('Segunda Residencia') || plan.id.includes('segunda-residencia') ? (
+                            <span className="text-[8px] px-2 py-0.5 bg-indigo-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
+                              2ª RESIDENCIA
+                            </span>
+                          ) : plan.category === 'solo_movil' ? (
+                            <span className="text-[8px] px-2 py-0.5 bg-amber-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
+                              SOLO MÓVIL
+                            </span>
+                          ) : (
                             <span className="text-[8px] px-2 py-0.5 bg-emerald-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
                               TARIFA RESIDENCIAL
                             </span>
@@ -2081,18 +2744,13 @@ export default function Home() {
                           </div>
                         )}
 
-                        {/* Sticker de Nuevas Tarifas */}
-                        {plan.isNewCampaign && (
-                          <div className="scotch-tape-sticker animate-scotch-tape">
-                            Nuevas Tarifas
-                          </div>
-                        )}
+                        {/* Sticker de Nuevas Tarifas (Desactivado por preferencia) */}
                       </div>
 
                       {/* Detalles técnicos */}
-                      <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div className={`p-4 flex-1 flex flex-col justify-between transition-colors duration-300 ${planDetailsBgClass}`}>
                         <div>
-                          <h5 className="font-extrabold text-xs text-slate-900 leading-tight">
+                          <h5 className={`font-black text-sm leading-snug ${planTitleClass}`}>
                             {plan.name}
                           </h5>
                           {plan.segment && (
@@ -2103,43 +2761,61 @@ export default function Home() {
                           
                           <ul className="mt-3 space-y-1.5">
                             {plan.features.slice(0, 3).map((feat, idx) => (
-                              <li key={idx} className="text-[10px] text-slate-500 flex items-start gap-1.5">
-                                <Check className={`h-3 w-3 shrink-0 mt-0.5 ${operatorTextClass}`} />
+                              <li key={idx} className={`text-xs flex items-start gap-1.5 font-medium ${planTextClass}`}>
+                                <Check className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${planCheckClass}`} />
                                 <span className="line-clamp-2">{feat}</span>
                               </li>
                             ))}
                           </ul>
 
-                          {plan.notes && plan.notes.length > 0 && (
-                            <div className="mt-2.5 p-2 bg-amber-500/5 border border-amber-500/10 rounded-lg flex items-start gap-1">
-                              <Info className="h-3 w-3 text-amber-600 shrink-0 mt-0.5" />
-                              <div className="text-[9px] text-amber-700 leading-tight">
-                                {plan.notes.map((note, index) => (
-                                  <p key={index} className="font-medium">
-                                    {note}
-                                  </p>
-                                ))}
+                          {plan.notes && plan.notes.length > 0 && (() => {
+                            const isDarkBg = ['yoigo', 'orange', 'vodafone'].includes(selectedOperatorId);
+                            return (
+                              <div className={`mt-2.5 p-2 rounded-lg flex items-start gap-1.5 ${
+                                isDarkBg 
+                                  ? 'bg-white/15 border border-white/25' 
+                                  : 'bg-amber-500/5 border border-amber-500/10'
+                              }`}>
+                                <Info className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${isDarkBg ? 'text-white' : 'text-amber-600'}`} />
+                                <div className={`text-[10px] leading-tight ${isDarkBg ? 'text-white font-bold' : 'text-amber-700 font-medium'}`}>
+                                  {plan.notes.map((note, index) => (
+                                    <p key={index}>
+                                      {note}
+                                    </p>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            );
+                          })()}
                         </div>
 
                         {/* Fila precio */}
-                        <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-1">
+                        <div className={`mt-4 pt-3 border-t flex flex-col gap-1 ${planBorderClass}`}>
                           <div className="flex items-baseline justify-between w-full">
                             <div className="flex items-baseline gap-0.5">
                               {plan.operatorId === 'win' ? (
                                 <>
                                   <span className="price-suffix text-[10px] text-slate-400 mr-0.5 font-bold">S/</span>
-                                  <span className="price-main text-2xl text-slate-950 font-black">{plan.price.toFixed(2)}</span>
+                                  <span className={`price-main text-2xl font-black ${planPriceClass}`}>{plan.price.toFixed(2)}</span>
                                 </>
                               ) : (
                                 <>
-                                  <span className="price-main text-2xl text-slate-950 font-black">{plan.price}</span>
+                                  <span className={`price-main text-2xl font-black ${planPriceClass}`}>{plan.price}</span>
                                   <span className="price-suffix text-[10px] text-slate-400 font-bold">€</span>
                                 </>
                               )}
-                              <span className="price-suffix text-[10px] text-slate-400">/mes</span>
+                              <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
+                              <span className={`text-[9px] font-black uppercase tracking-wider ml-1.5 px-1.5 py-0.5 rounded ${
+                                plan.operatorId === 'orange' 
+                                  ? 'bg-white/20 text-white' 
+                                  : plan.operatorId === 'win'
+                                    ? 'bg-slate-950/15 text-slate-950'
+                                    : plan.operatorId === 'lowi'
+                                      ? 'bg-white/10 text-white/80'
+                                      : 'bg-white/20 text-white/90'
+                              }`}>
+                                {plan.operatorId === 'orange' ? 'SIN IMPUESTOS' : 'IVA INCLUIDO'}
+                              </span>
                             </div>
                             {plan.priceAfterPromo && plan.priceAfterPromo !== plan.price && (
                               <span className="price-suffix text-[9px] text-slate-400 font-bold">
@@ -2148,7 +2824,11 @@ export default function Home() {
                             )}
                           </div>
                           {plan.promoMonths && (
-                            <span className="text-[8px] text-red-500 font-semibold block text-left">
+                            <span className={`text-[10px] font-black block text-left ${
+                              ['yoigo', 'orange', 'vodafone'].includes(selectedOperatorId) 
+                                ? 'text-white' 
+                                : 'text-red-500'
+                            }`}>
                               Promoción durante {plan.promoMonths} meses
                             </span>
                           )}
@@ -2162,10 +2842,17 @@ export default function Home() {
 
             {/* AÑADIDOS CARDS COMPACTAS EN GRID */}
             <motion.div variants={fadeUp} className="flex flex-col gap-3">
-              <h4 className="ui-label text-[10px] text-slate-400 flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: operatorColor }}></span>
-                3. AÑADE SERVICIOS ADICIONALES
-              </h4>
+              <div className="flex items-center justify-between">
+                <h4 className="ui-label text-[10px] text-slate-400 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: operatorColor }}></span>
+                  3. AÑADE SERVICIOS ADICIONALES
+                </h4>
+                {selectedOperatorId === 'vodafone' && (
+                  <span className="text-[9.5px] font-bold text-slate-400">
+                    Modo DAZN: <strong className="text-[#E60000] uppercase">{daznSegment === 'nuevo' ? 'Cliente Nuevo' : (daznSegment === 'cartera' ? 'Cartera' : 'Oferta NBA')}</strong>
+                  </span>
+                )}
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {displayedAddons.map((addon) => {
@@ -2389,18 +3076,73 @@ export default function Home() {
                 
                 {/* Sección PLAN BASE */}
                 <div>
-                  <span className="text-[9px] text-slate-450 font-extrabold uppercase tracking-wider block mb-2">
+                  <span className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-2.5">
                     PLAN CONTRATADO
                   </span>
                   {activePlan && (
                     <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
                       <div className="flex justify-between items-center text-xs">
                         <span className="font-extrabold text-slate-800 truncate max-w-[170px]">{activePlan.name}</span>
-                        {activePlan.isPromo && (
-                          <span className="text-[8px] bg-red-600 px-1.5 py-0.5 rounded font-black text-white">
-                            PROMO {activePlan.promoMonths || 3} MESES
-                          </span>
-                        )}
+                        <div className="flex items-center gap-1 shrink-0">
+                          {selectedOperatorId === 'lowi' && (
+                            <span className="text-[8px] bg-gradient-to-r from-amber-500 to-[#E50015] px-1.5 py-0.5 rounded font-black text-white flex items-center gap-1">
+                              <Sun className="h-2.5 w-2.5 fill-amber-200 text-amber-100" />
+                              300GB EXTRA
+                            </span>
+                          )}
+                          {(() => {
+                            const isBusiness = activePlan.category === 'fibra_movil_empresa' || 
+                                               activePlan.tags?.includes('Empresa') || 
+                                               activePlan.tags?.includes('TV Bares') || 
+                                               activePlan.tags?.includes('HORECA') ||
+                                               activePlan.id.includes('empresa') ||
+                                               activePlan.id.includes('mi-negocio') ||
+                                               activePlan.id.includes('tv-bares');
+                            const isSecondHome = activePlan.category === 'segunda_residencia' ||
+                                                 activePlan.tags?.includes('Segunda Residencia') ||
+                                                 activePlan.id.includes('segunda-residencia');
+                            const isSoloMovil = activePlan.category === 'solo_movil' || activePlan.tags?.includes('Solo Móvil');
+
+                            if (isBusiness) {
+                              return (
+                                <span className="text-[8px] bg-blue-600 px-1.5 py-0.5 rounded font-black text-white">
+                                  EMPRESA / PRO
+                                </span>
+                              );
+                            }
+                            if (isSecondHome) {
+                              return (
+                                <span className="text-[8px] bg-indigo-600 px-1.5 py-0.5 rounded font-black text-white">
+                                  2ª RESIDENCIA
+                                </span>
+                              );
+                            }
+                            if (isSoloMovil) {
+                              return (
+                                <span className="text-[8px] bg-amber-600 px-1.5 py-0.5 rounded font-black text-white">
+                                  SOLO MÓVIL
+                                </span>
+                              );
+                            }
+                            return (
+                              <span className="text-[8px] bg-emerald-600 px-1.5 py-0.5 rounded font-black text-white">
+                                RESIDENCIAL
+                              </span>
+                            );
+                          })()}
+                          {(selectedOperatorId === 'yoigo' || selectedOperatorId === 'vodafone' || selectedOperatorId === 'lowi') && (
+                            <span className="text-[8px] bg-slate-100 border border-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">
+                              {activePlan.category === 'fibra_movil_empresa' || activePlan.id.includes('empresa') || activePlan.id.includes('mi-negocio') || activePlan.id.includes('tv-bares')
+                                ? 'PRECIO SIN IVA'
+                                : 'IVA INCLUIDO'}
+                            </span>
+                          )}
+                          {activePlan.isPromo && (
+                            <span className="text-[8px] bg-red-600 px-1.5 py-0.5 rounded font-black text-white">
+                              PROMO {activePlan.promoMonths || 3} MESES
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-baseline gap-0.5 mt-1">
                         {selectedOperatorId === 'win' ? (
@@ -2414,7 +3156,7 @@ export default function Home() {
                             <span className="price-suffix text-[10px] text-slate-400 font-bold">€</span>
                           </>
                         )}
-                        <span className="price-suffix text-[10px] text-slate-400">/mes</span>
+                        <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                         {activePlan.priceAfterPromo && activePlan.priceAfterPromo !== basePrice && (
                           <span className="price-suffix text-[9px] text-slate-400 font-bold ml-2">
                             Luego {selectedOperatorId === 'win' ? `S/ ${activePlan.priceAfterPromo.toFixed(2)}` : `${activePlan.priceAfterPromo}€`}/mes
@@ -2425,9 +3167,60 @@ export default function Home() {
                   )}
                 </div>
 
+                {/* Selector de Impuestos (Solo para Orange) */}
+                {selectedOperatorId === 'orange' && (
+                  <div className="p-3 bg-orange-50/80 border border-orange-200 rounded-2xl flex flex-col gap-2 shadow-sm">
+                    <span className="text-[10px] text-orange-950 font-black uppercase tracking-wider block">
+                      Impuesto a aplicar (Zona de envío):
+                    </span>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setTaxType('none')}
+                        className={`text-[10px] py-2 px-2.5 rounded-xl border font-extrabold transition-all ${
+                          taxType === 'none'
+                            ? 'bg-[#FF7900] text-white border-[#FF7900] shadow-md shadow-orange-500/10'
+                            : 'bg-white border-orange-200/80 text-orange-950/80 hover:bg-orange-100/50'
+                        }`}
+                      >
+                        Sin Impuesto
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTaxType('iva')}
+                        className={`text-[10px] py-2 px-2.5 rounded-xl border font-extrabold transition-all ${
+                          taxType === 'iva'
+                            ? 'bg-[#FF7900] text-white border-[#FF7900] shadow-md shadow-orange-500/10'
+                            : 'bg-white border-orange-200/80 text-orange-950/80 hover:bg-orange-100/50'
+                        }`}
+                      >
+                        +21% IVA
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTaxType('igic')}
+                        className={`text-[10px] py-2 px-2.5 rounded-xl border font-extrabold transition-all ${
+                          taxType === 'igic'
+                            ? 'bg-[#FF7900] text-white border-[#FF7900] shadow-md shadow-orange-500/10'
+                            : 'bg-white border-orange-200/80 text-orange-950/80 hover:bg-orange-100/50'
+                        }`}
+                      >
+                        +7% IGIC
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Resaltado de IGV para Win */}
+                {selectedOperatorId === 'win' && (
+                  <div className="text-[9px] text-slate-500/70 italic px-1">
+                    * Precios con IGV incluido de forma predeterminada.
+                  </div>
+                )}
+
                 {/* Sección SERVICIOS AÑADIDOS */}
                 <div>
-                  <span className="text-[9px] text-slate-450 font-extrabold uppercase tracking-wider block mb-2">
+                  <span className="text-[10px] text-slate-500 font-black uppercase tracking-wider block mb-2.5">
                     AÑADIDOS SELECCIONADOS
                   </span>
                   
@@ -2469,27 +3262,48 @@ export default function Home() {
                 <Separator className="bg-slate-100 border-dashed" />
 
                 {/* Desglose matemático */}
-                <div className="space-y-2 text-xs text-slate-550 font-semibold">
+                <div className="space-y-2 text-[13px] text-slate-650 font-bold">
                   <div className="flex justify-between">
-                    <span className="ui-label text-[9px] text-slate-400">CUOTA BASE PLAN</span>
-                    <span className="price-main text-slate-800">
-                      {selectedOperatorId === 'win' ? `S/ ${basePrice.toFixed(2)}` : `${basePrice.toFixed(2)} €`}
-                      <span className="price-suffix text-[10px] text-slate-400">/mes</span>
+                    <span className="ui-label text-[10px] text-slate-500 font-bold">CUOTA BASE PLAN</span>
+                    <span className="price-main text-slate-800 flex items-center gap-1">
+                      {selectedOperatorId === 'win' ? (
+                        `S/ ${basePrice.toFixed(2)}`
+                      ) : (
+                        `${basePrice.toFixed(2)} €`
+                      )}
+                      {(selectedOperatorId === 'yoigo' || selectedOperatorId === 'vodafone' || selectedOperatorId === 'lowi') && (
+                        <span className="text-[7.5px] bg-slate-100 text-slate-500 px-1 py-0.2 rounded border border-slate-200/50 font-black">
+                          {activePlan && (activePlan.category === 'fibra_movil_empresa' || activePlan.id.includes('empresa') || activePlan.id.includes('mi-negocio') || activePlan.id.includes('tv-bares'))
+                            ? 'SIN IVA'
+                            : 'IVA INC.'}
+                        </span>
+                      )}
+                      <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="ui-label text-[9px] text-slate-400">CUOTA ADICIONALES</span>
+                    <span className="ui-label text-[10px] text-slate-500 font-bold">CUOTA ADICIONALES</span>
                     <span className="price-main text-slate-800">
                       {selectedOperatorId === 'win' ? `+S/ ${addonsTotalPromo.toFixed(2)}` : `+${addonsTotalPromo.toFixed(2)} €`}
-                      <span className="price-suffix text-[10px] text-slate-400">/mes</span>
+                      <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                     </span>
                   </div>
+                  {selectedOperatorId === 'orange' && taxType !== 'none' && (
+                    <div className="flex justify-between pt-1 border-t border-slate-200 text-slate-650 font-semibold">
+                      <span className="ui-label text-[10px] text-slate-500 font-bold">
+                        {taxType === 'iva' ? 'IMPUESTO APLICADO (IVA 21%)' : 'IMPUESTO APLICADO (IGIC 7%)'}
+                      </span>
+                      <span className="price-main text-slate-900 font-black">
+                        {`+${((basePrice + addonsTotalPromo) * (taxType === 'iva' ? 0.21 : 0.07)).toFixed(2)} €`}
+                      </span>
+                    </div>
+                  )}
                   {hasPromo && (
                     <div className="flex justify-between pt-1 border-t border-slate-100/50">
-                      <span className="ui-label text-[9px] text-slate-400">DESPUÉS DE PROMO (PLAN + ADIC.)</span>
+                      <span className="ui-label text-[10px] text-slate-500 font-bold">DESPUÉS DE PROMO (PLAN + ADIC.)</span>
                       <span className="price-main text-slate-800">
                         {selectedOperatorId === 'win' ? `S/ ${totalPriceNormal.toFixed(2)}` : `${totalPriceNormal.toFixed(2)} €`}
-                        <span className="price-suffix text-[10px] text-slate-400">/mes</span>
+                        <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                       </span>
                     </div>
                   )}
@@ -2525,7 +3339,7 @@ export default function Home() {
 
                   {hasPromo && (
                     <div className="mt-2.5 pt-2.5 border-t border-slate-200 flex justify-between items-center text-[10px]">
-                      <span className="ui-label text-[9px] text-slate-400">LUEGO DE PROMO</span>
+                      <span className="ui-label text-[10px] text-slate-500 font-bold">LUEGO DE PROMO</span>
                       <span className="price-main text-slate-800 font-bold">
                         {selectedOperatorId === 'win' ? `S/ ${totalPriceNormal.toFixed(2)}` : `${totalPriceNormal.toFixed(2)} €`}
                         <span className="price-suffix text-[9px] text-slate-400">/mes</span>
@@ -2581,6 +3395,27 @@ export default function Home() {
                   <RotateCcw className="h-3 w-3 mr-1" />
                   LIMPIAR COTIZACIÓN
                 </Button>
+
+                <div className="border-t border-slate-100 dark:border-slate-800 my-2 pt-2 flex flex-col gap-1.5">
+                  <div className="flex justify-between items-center text-[10px] text-slate-500 font-bold">
+                    <span className="flex items-center gap-1">👤 Asesor: {advisorName} ({advisorRole})</span>
+                    <button 
+                      onClick={() => {
+                        const name = prompt('Nombre del Asesor:', advisorName);
+                        if (name !== null) {
+                          const role = prompt('Cargo / Rol del Asesor:', advisorRole);
+                          if (role !== null) {
+                            saveAdvisorInfo(name.trim() || 'Carlos Mendoza', role.trim() || 'Asesor Comercial');
+                            alert('¡Datos de asesor actualizados!');
+                          }
+                        }
+                      }}
+                      className="text-indigo-650 hover:text-indigo-750 dark:text-indigo-400 dark:hover:text-indigo-300 underline text-[9px] cursor-pointer"
+                    >
+                      Cambiar
+                    </button>
+                  </div>
+                </div>
 
                 <div className="flex items-center justify-center gap-1.5 text-[9px] text-slate-400 font-semibold mt-1">
                   <Lock className="h-3 w-3 text-slate-300" />
