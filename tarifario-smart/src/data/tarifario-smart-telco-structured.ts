@@ -14,6 +14,9 @@ export type PlanCategory =
   | 'fibra_tv'
   | 'solo_movil'
   | 'solo_fibra'
+  | 'flash_agosto'
+  | 'dazn_deportes'
+  | 'segunda_residencia'
   | 'fibra_movil_streaming'
   | 'fibra_movil_empresa'
   | 'solo_addon';
@@ -112,6 +115,359 @@ export const operators: OperatorMeta[] = [
 ];
 
 export const tariffPlans: TariffPlan[] = [
+  // ===================== VODAFONE AGOSTO 2026 =====================
+  // --- 1. Ofertas Flash Agosto (PVP Indefinido) ---
+  {
+    id: 'vodafone-flash-4p-prime-disney',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash 4P: Fibra 600Mb + 2 Ilimitadas + TV + Prime / Disney+ Anuncios',
+    fiber: '600Mb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV + 1 OTT (Prime o Disney+ Anuncios)',
+    streamingIncluded: ['Prime', 'Disney+'],
+    priceKind: 'final',
+    monthlyPrice: 49,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', 'Fibra 600', '2 líneas', '160GB', 'PVP Indefinido', 'Prime', 'Disney+'],
+    highlights: ['Fibra 600Mbps', '2 líneas móviles 160GB 5G', 'Vodafone TV con decodificador', 'Prime o Disney+ Anuncios incluido', 'Precio definitivo sin subidas'],
+    notes: ['Oferta privada con PVP indefinido. Incluye 2 líneas ilimitadas 160GB.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+  {
+    id: 'vodafone-flash-4p-netflix',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash 4P: Fibra 600Mb + 2 Ilimitadas + TV + Netflix',
+    fiber: '600Mb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV + Netflix',
+    streamingIncluded: ['Netflix'],
+    priceKind: 'final',
+    monthlyPrice: 53,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', 'Fibra 600', '2 líneas', '160GB', 'PVP Indefinido', 'Netflix'],
+    highlights: ['Fibra 600Mbps', '2 líneas móviles 160GB 5G', 'Vodafone TV con deco', 'Netflix incluido', 'Precio definitivo'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+  {
+    id: 'vodafone-flash-4p-hbo',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash 4P: Fibra 600Mb + 2 Ilimitadas + TV + HBO Max',
+    fiber: '600Mb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV + HBO Max',
+    streamingIncluded: ['HBO Max'],
+    priceKind: 'final',
+    monthlyPrice: 53,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', 'Fibra 600', '2 líneas', '160GB', 'PVP Indefinido', 'HBO Max'],
+    highlights: ['Fibra 600Mbps', '2 líneas móviles 160GB 5G', 'Vodafone TV con deco', 'HBO Max incluido', 'Precio definitivo'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+  {
+    id: 'vodafone-flash-4p-disney-sin-anuncios',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash 4P: Fibra 600Mb + 2 Ilimitadas + TV + Disney+ (Sin Anuncios)',
+    fiber: '600Mb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV + Disney+ Estándar',
+    streamingIncluded: ['Disney+'],
+    priceKind: 'final',
+    monthlyPrice: 54,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', 'Fibra 600', '2 líneas', '160GB', 'PVP Indefinido', 'Disney+'],
+    highlights: ['Fibra 600Mbps', '2 líneas móviles 160GB 5G', 'Vodafone TV con deco', 'Disney+ sin anuncios', 'Precio definitivo'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+  {
+    id: 'vodafone-flash-3p-1gb',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash 3P: Fibra 1Gbps + 2 Ilimitadas 160GB',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    priceKind: 'final',
+    monthlyPrice: 44.70,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', 'Fibra 1Gb', '2 líneas', '160GB', 'PVP Indefinido'],
+    highlights: ['Fibra 1Gbps Simétrica', '2 líneas móviles 160GB 5G', 'PVP Indefinido a 44,70€/mes', 'Velocidad 5G máxima'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+  {
+    id: 'vodafone-flash-especial-2otts',
+    operatorId: 'vodafone',
+    category: 'flash_agosto',
+    name: 'Oferta Flash ESPECIAL 2 OTTs: Fibra 600Mb + 2 Ilimitadas + TV + Prime + Disney+',
+    fiber: '600Mb',
+    mobileLines: 2,
+    mobileData: '2x Ilimitadas 160GB 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV + Prime + Disney+ con Anuncios',
+    streamingIncluded: ['Prime', 'Disney+'],
+    priceKind: 'final',
+    monthlyPrice: 53,
+    permanenceMonths: 12,
+    tags: ['Oferta Flash', '2 OTTs', 'Prime', 'Disney+', 'PVP Indefinido', 'Fibra 600'],
+    highlights: ['Fibra 600Mbps', '2 líneas móviles 160GB 5G', 'Vodafone TV + 2 OTTs (Prime + Disney+)', 'Precio indefinido'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 3'
+  },
+
+  // --- Solo Fibra 1P (Residencia Principal) ---
+  {
+    id: 'vodafone-solofibra-600mb',
+    operatorId: 'vodafone',
+    category: 'solo_fibra',
+    name: 'Solo Fibra 600Mbps (Residencia Principal)',
+    fiber: '600Mb',
+    priceKind: 'final',
+    monthlyPrice: 30,
+    permanenceMonths: 12,
+    tags: ['Solo Fibra', 'Fibra 600', 'Residencia Principal', 'Fijo incluido'],
+    highlights: ['Fibra 600Mbps Simétrica', 'Teléfono fijo con llamadas ilimitadas a fijos y móviles', 'Router WiFi incluido', 'Instalación gratis'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vodafone-solofibra-1gb',
+    operatorId: 'vodafone',
+    category: 'solo_fibra',
+    name: 'Solo Fibra 1Gbps (Residencia Principal)',
+    fiber: '1Gb',
+    priceKind: 'final',
+    monthlyPrice: 35,
+    permanenceMonths: 12,
+    tags: ['Solo Fibra', 'Fibra 1Gb', 'Residencia Principal', 'Fijo incluido'],
+    highlights: ['Fibra 1Gbps Simétrica de máxima velocidad', 'Teléfono fijo con llamadas ilimitadas', 'Router WiFi 6 incluido', 'Instalación gratis'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+
+  // --- 2. Solo Móvil 5G Vodafone ---
+  {
+    id: 'vodafone-solomovil-60gb',
+    operatorId: 'vodafone',
+    category: 'solo_movil',
+    name: 'Solo Móvil 60GB 5G',
+    mobileLines: 1,
+    mobileData: '60GB 5G (luego 2Mbps ilimitado)',
+    priceKind: 'final',
+    monthlyPrice: 16,
+    tags: ['Solo Móvil', '60GB', '5G', 'Llamadas ilimitadas'],
+    highlights: ['60GB a velocidad 5G', 'Llamadas ilimitadas', 'Roaming en UE y EE.UU.', 'Sin cortes de datos'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vodafone-solomovil-160gb',
+    operatorId: 'vodafone',
+    category: 'solo_movil',
+    name: 'Solo Móvil 160GB 5G',
+    mobileLines: 1,
+    mobileData: '160GB 5G (luego 2Mbps ilimitado)',
+    priceKind: 'final',
+    monthlyPrice: 21,
+    tags: ['Solo Móvil', '160GB', '5G', 'Llamadas ilimitadas'],
+    highlights: ['160GB a velocidad 5G', 'Llamadas ilimitadas', 'Roaming en UE y EE.UU.', 'Alta velocidad garantizada'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vodafone-solomovil-siempre5g',
+    operatorId: 'vodafone',
+    category: 'solo_movil',
+    name: 'Solo Móvil Ilimitado Siempre 5G',
+    mobileLines: 1,
+    mobileData: 'Datos Ilimitados Siempre a velocidad 5G + Secure Net',
+    priceKind: 'final',
+    monthlyPrice: 26,
+    tags: ['Solo Móvil', 'Ilimitado', 'Siempre 5G', 'Secure Net'],
+    highlights: ['GB Ilimitados a máxima velocidad 5G continua', 'Llamadas ilimitadas', 'Secure Net incluido gratis', 'Roaming en UE y EE.UU.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+
+  // --- 3. Segundas Residencias & Internet Portátil ---
+  {
+    id: 'vodafone-segunda-residencia-fibra600',
+    operatorId: 'vodafone',
+    category: 'segunda_residencia',
+    name: 'Segunda Residencia: Fibra 600Mb',
+    fiber: '600Mb',
+    priceKind: 'final',
+    monthlyPrice: 15,
+    tags: ['Segunda Residencia', 'Fibra 600', 'Vacaciones'],
+    highlights: ['Fibra 600Mbps para tu segunda vivienda', 'Sin cuota de línea adicional', 'Fijo con llamadas ilimitadas incluido'],
+    notes: ['Exclusivo para clientes con paquete convergente principal activo.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4 y 6'
+  },
+  {
+    id: 'vodafone-segunda-residencia-fibra1gb',
+    operatorId: 'vodafone',
+    category: 'segunda_residencia',
+    name: 'Segunda Residencia: Fibra 1Gbps',
+    fiber: '1Gb',
+    priceKind: 'final',
+    monthlyPrice: 20,
+    tags: ['Segunda Residencia', 'Fibra 1Gb', 'Vacaciones'],
+    highlights: ['Fibra 1Gbps de máxima velocidad para tu segunda vivienda', 'Router incluido', 'Fijo con llamadas ilimitadas'],
+    notes: ['Exclusivo para clientes con paquete convergente principal activo.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4 y 6'
+  },
+  {
+    id: 'vodafone-segunda-residencia-portatil',
+    operatorId: 'vodafone',
+    category: 'segunda_residencia',
+    name: 'Segunda Residencia: Internet Portátil hasta 1Gbps',
+    priceKind: 'final',
+    monthlyPrice: 16,
+    tags: ['Segunda Residencia', 'Internet Portátil', 'Sin instalación'],
+    highlights: ['Internet portátil hasta 1Gbps', 'Sin necesidad de instalación por cable', 'Llévalo contigo'],
+    notes: ['Exclusivo para clientes convergentes.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4 y 6'
+  },
+  {
+    id: 'vodafone-portatil-residencia-principal',
+    operatorId: 'vodafone',
+    category: 'segunda_residencia',
+    name: 'Internet Portátil (Residencia Principal) hasta 1Gbps',
+    priceKind: 'final',
+    monthlyPrice: 30,
+    tags: ['Internet Portátil', 'Residencia Principal', 'Sin cables'],
+    highlights: ['Internet Portátil 5G hasta 1Gbps', 'Sin obras ni cables', 'Enchufar y navegar'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+
+  // --- 4. Autónomos & Empresas: Mi Negocio Pro ---
+  {
+    id: 'vodafone-mi-negocio-pro-2lineas',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Mi Negocio Pro (2 Líneas) - Fibra 1Gb + 2 Móviles Ilimitadas 5G',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2 líneas móviles Ilimitadas 5G (MultiSIM incluida)',
+    priceKind: 'final',
+    monthlyPrice: 50.89,
+    tags: ['Mi Negocio Pro', 'Empresa', 'Fibra 1Gb', '2 líneas', 'MultiSIM'],
+    highlights: ['Fibra 1Gbps WiFi 6', '2 líneas móviles ilimitadas 5G con MultiSIM', '200 min internacionales por línea', 'Secure Net fijo y móvil', 'Soporte informático 24x7'],
+    notes: ['Precios profesionales sin IVA. Compatible con TV Bares y Soluciones Digitales.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 11'
+  },
+  {
+    id: 'vodafone-mi-negocio-pro-3lineas',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Mi Negocio Pro (3 Líneas) - Fibra 1Gb + 3 Móviles Ilimitadas 5G',
+    fiber: '1Gb',
+    mobileLines: 3,
+    mobileData: '3 líneas móviles Ilimitadas 5G (MultiSIM incluida)',
+    priceKind: 'final',
+    monthlyPrice: 63.16,
+    tags: ['Mi Negocio Pro', 'Empresa', 'Fibra 1Gb', '3 líneas', 'Atención Premium'],
+    highlights: ['Fibra 1Gbps WiFi 6', '3 líneas móviles ilimitadas 5G', 'Seguridad Digital incluida', 'Atención Premium en España especializada', 'Descuento 5€ aplicado'],
+    notes: ['Precio formado por Mi Negocio Pro 2 + línea adicional + Seguridad Digital + dto 5€.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 11'
+  },
+  {
+    id: 'vodafone-mi-negocio-pro-5lineas',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Mi Negocio Pro (5 Líneas) - Fibra 1Gb + 5 Móviles Ilimitadas 5G',
+    fiber: '1Gb',
+    mobileLines: 5,
+    mobileData: '5 líneas móviles Ilimitadas 5G (MultiSIM incluida)',
+    priceKind: 'final',
+    monthlyPrice: 80.00,
+    tags: ['Mi Negocio Pro', 'Empresa', 'Fibra 1Gb', '5 líneas', 'Súper WiFi 6'],
+    highlights: ['Fibra 1Gbps con Súper WiFi 6', '5 líneas móviles ilimitadas 5G con MultiSIM', '200 min internacionales por línea', 'Atención Premium especializada', 'Soporte informático 24x7'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 11'
+  },
+
+  // --- 5. Vodafone TV Bares (HORECA + Mi Negocio Pro 2) ---
+  {
+    id: 'vodafone-tv-bares-menos10k',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Vodafone TV Bares (<10K hab) + Mi Negocio Pro 2',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2 líneas móviles Ilimitadas 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV Bares (Fútbol LaLiga, Champions, DAZN Bar y Moto/F1)',
+    priceKind: 'promo_then_regular',
+    promoPrice: 280.89,
+    promoMonths: 6,
+    regularPrice: 340.80,
+    tags: ['TV Bares', 'HORECA', 'Fútbol', 'DAZN Bar', '<10K hab', 'Promo 6 meses'],
+    highlights: ['Todo el Fútbol (LaLiga EA Sports, Champions, Premier, DAZN Bar, F1, Moto)', 'Hasta 3 pantallas / decodificadores gratis', 'Fibra 1Gb + 2 móviles 5G', 'Ahorro 60€/mes durante 6 meses (360€ total)'],
+    notes: ['Localidades <10.000 habitantes. Precio base TV Bares 290€ con 60€ dto promo + Mi Negocio Pro 2 (50,89€).'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 15'
+  },
+  {
+    id: 'vodafone-tv-bares-10k-45k',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Vodafone TV Bares (10K-45K hab) + Mi Negocio Pro 2',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2 líneas móviles Ilimitadas 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV Bares (Fútbol LaLiga, Champions, DAZN Bar y Moto/F1)',
+    priceKind: 'promo_then_regular',
+    promoPrice: 305.89,
+    promoMonths: 6,
+    regularPrice: 365.89,
+    tags: ['TV Bares', 'HORECA', 'Fútbol', 'DAZN Bar', '10K-45K hab', 'Promo 6 meses'],
+    highlights: ['Todo el Fútbol y Deportes HORECA', 'Hasta 3 decos incluidos', 'Fibra 1Gb + 2 líneas ilimitadas', '60€ dto mensual los primeros 6 meses'],
+    notes: ['Localidades de 10.000 a 45.000 habitantes.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 15'
+  },
+  {
+    id: 'vodafone-tv-bares-45k-250k',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Vodafone TV Bares (45K-250K hab) + Mi Negocio Pro 2',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2 líneas móviles Ilimitadas 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV Bares (Fútbol LaLiga, Champions, DAZN Bar y Moto/F1)',
+    priceKind: 'promo_then_regular',
+    promoPrice: 330.89,
+    promoMonths: 6,
+    regularPrice: 390.89,
+    tags: ['TV Bares', 'HORECA', 'Fútbol', 'DAZN Bar', '45K-250K hab', 'Promo 6 meses'],
+    highlights: ['Todo el Fútbol y Deportes HORECA', 'Hasta 3 decos incluidos', 'Fibra 1Gb + 2 líneas ilimitadas', '60€ dto mensual los primeros 6 meses'],
+    notes: ['Localidades de 45.000 a 250.000 habitantes.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 15'
+  },
+  {
+    id: 'vodafone-tv-bares-mas250k',
+    operatorId: 'vodafone',
+    category: 'fibra_movil_empresa',
+    name: 'Vodafone TV Bares (>250K hab) + Mi Negocio Pro 2',
+    fiber: '1Gb',
+    mobileLines: 2,
+    mobileData: '2 líneas móviles Ilimitadas 5G',
+    tvIncluded: true,
+    tvPackage: 'Vodafone TV Bares (Fútbol LaLiga, Champions, DAZN Bar y Moto/F1)',
+    priceKind: 'promo_then_regular',
+    promoPrice: 355.89,
+    promoMonths: 6,
+    regularPrice: 415.89,
+    tags: ['TV Bares', 'HORECA', 'Fútbol', 'DAZN Bar', '>250K hab', 'Promo 6 meses'],
+    highlights: ['Todo el Fútbol y Deportes HORECA', 'Hasta 3 decos incluidos', 'Fibra 1Gb + 2 líneas ilimitadas', '60€ dto mensual los primeros 6 meses'],
+    notes: ['Localidades de más de 250.000 habitantes.'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 15'
+  },
+
   // ===================== VODAFONE =====================
   // Productos 3P permanencia 12 meses - Solo 1 línea móvil
   {
@@ -1558,7 +1914,219 @@ export const addons: Addon[] = [
   { id: 'global-mesh-wifi', name: 'Mesh WiFi', category: 'business', monthlyPrice: 5, description: 'Repetidor Mesh / mejora de cobertura.', tags: ['Global', 'WiFi'], source: 'Valor referencial inicial / ajustar por operador' },
   { id: 'global-tv-basica', operatorId: 'vodafone', name: 'TV básica / Pack extra', category: 'tv', monthlyPrice: 10, description: 'Pack TV básico referencial.', tags: ['Global', 'TV'], source: 'Valor referencial inicial / ajustar por operador' },
 
-  // Vodafone: no aparecen añadidos sueltos detallados en el PDF, se modelan por packs de plataformas.
+  // ===================== VODAFONE SVA & DAZN AGOSTO 2026 =====================
+  // --- DAZN Promociones Cliente Nuevo (Agosto 2026) ---
+  {
+    id: 'vdf-dazn-futbol-nuevo',
+    operatorId: 'vodafone',
+    name: 'DAZN Fútbol (Cliente Nuevo)',
+    category: 'football',
+    monthlyPrice: 14.99,
+    promoPrice: 14.99,
+    promoMonths: 12,
+    regularPrice: 19.99,
+    description: 'LaLiga EA Sports (5 partidos/jornada en 35 de 38 jornadas), Premier League, Serie A, Bundesliga y Liga F. Ahorro 60€.',
+    tags: ['Vodafone', 'DAZN', 'Fútbol', 'Cliente Nuevo', 'Promo 12M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+  {
+    id: 'vdf-dazn-premium-nuevo',
+    operatorId: 'vodafone',
+    name: 'DAZN Premium (Cliente Nuevo)',
+    category: 'football',
+    monthlyPrice: 25.99,
+    promoPrice: 25.99,
+    promoMonths: 12,
+    regularPrice: 31.99,
+    description: 'Todo el fútbol + Fórmula 1, MotoGP, Baloncesto ACB, NBA, NFL y Eurosport 1 y 2. Ahorro 72€.',
+    tags: ['Vodafone', 'DAZN', 'Premium', 'Cliente Nuevo', 'Promo 12M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+
+  // --- DAZN Promociones Clientes Existentes / Cartera (24 Meses) ---
+  {
+    id: 'vdf-dazn-futbol-cartera',
+    operatorId: 'vodafone',
+    name: 'DAZN Fútbol (Cartera 24M)',
+    category: 'football',
+    monthlyPrice: 9.99,
+    promoPrice: 9.99,
+    promoMonths: 24,
+    regularPrice: 19.99,
+    description: 'LaLiga EA Sports y fútbol internacional por solo 9,99€/mes durante 24 meses.',
+    tags: ['Vodafone', 'DAZN', 'Fútbol', 'Cartera', 'Promo 24M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+  {
+    id: 'vdf-dazn-motor-cartera',
+    operatorId: 'vodafone',
+    name: 'DAZN Motor (Cartera 24M)',
+    category: 'tv',
+    monthlyPrice: 9.99,
+    promoPrice: 9.99,
+    promoMonths: 24,
+    regularPrice: 19.99,
+    description: 'Fórmula 1 integra, MotoGP, DTM, NASCAR y Eurosport por solo 9,99€/mes durante 24 meses.',
+    tags: ['Vodafone', 'DAZN', 'Motor', 'Cartera', 'Promo 24M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+  {
+    id: 'vdf-dazn-premium-cartera',
+    operatorId: 'vodafone',
+    name: 'DAZN Premium (Cartera 24M)',
+    category: 'football',
+    monthlyPrice: 11.99,
+    promoPrice: 11.99,
+    promoMonths: 24,
+    regularPrice: 31.99,
+    description: 'Todo el deporte: Fútbol + Motor F1/MotoGP + NBA/ACB por solo 11,99€/mes durante 24 meses.',
+    tags: ['Vodafone', 'DAZN', 'Premium', 'Cartera', 'Promo 24M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+
+  // --- DAZN Ofertas Exclusivas NBA Personalizadas (24 Meses) ---
+  {
+    id: 'vdf-dazn-futbol-nba',
+    operatorId: 'vodafone',
+    name: 'DAZN Fútbol (Oferta Exclusiva NBA)',
+    category: 'football',
+    monthlyPrice: 6.99,
+    promoPrice: 6.99,
+    promoMonths: 24,
+    regularPrice: 19.99,
+    description: 'Oferta personalizada NBA: LaLiga y ligas internacionales a solo 6,99€/mes durante 24 meses.',
+    tags: ['Vodafone', 'DAZN', 'Fútbol', 'NBA Exclusiva', 'Promo 24M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+  {
+    id: 'vdf-dazn-motor-nba',
+    operatorId: 'vodafone',
+    name: 'DAZN Motor (Oferta Exclusiva NBA)',
+    category: 'tv',
+    monthlyPrice: 6.99,
+    promoPrice: 6.99,
+    promoMonths: 24,
+    regularPrice: 19.99,
+    description: 'Oferta personalizada NBA: Fórmula 1 y MotoGP a solo 6,99€/mes durante 24 meses.',
+    tags: ['Vodafone', 'DAZN', 'Motor', 'NBA Exclusiva', 'Promo 24M'],
+    source: 'Vodafone Circular DAZN Agosto 2026'
+  },
+
+  // --- Vodafone TV y Streaming Individuales ---
+  {
+    id: 'vdf-tv-sola',
+    operatorId: 'vodafone',
+    name: 'Vodafone TV (Deco 4K + 100 canales)',
+    category: 'tv',
+    monthlyPrice: 5,
+    description: 'Más de 100 canales con decodificador 4K, grabación, control del directo y últimos 7 días.',
+    tags: ['Vodafone', 'TV', 'Deco 4K'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-laliga-hypermotion',
+    operatorId: 'vodafone',
+    name: 'LaLiga Hypermotion + Eurosport',
+    category: 'football',
+    monthlyPrice: 6,
+    description: 'Toda la Segunda División española y canales Eurosport 1 y 2.',
+    tags: ['Vodafone', 'Fútbol', 'LaLiga Hypermotion'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-max',
+    operatorId: 'vodafone',
+    name: 'Pack HBO Max',
+    category: 'streaming',
+    monthlyPrice: 11,
+    description: 'Vodafone TV con decodificador y suscripción a HBO Max.',
+    tags: ['Vodafone', 'Streaming', 'HBO Max'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-filmin',
+    operatorId: 'vodafone',
+    name: 'Pack Filmin',
+    category: 'streaming',
+    monthlyPrice: 10,
+    description: 'Vodafone TV con decodificador y catálogo de cine de autor Filmin.',
+    tags: ['Vodafone', 'Streaming', 'Filmin'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-disney-anuncios',
+    operatorId: 'vodafone',
+    name: 'Disney+ (con Anuncios)',
+    category: 'streaming',
+    monthlyPrice: 6.99,
+    description: 'Suscripción de Disney+ con anuncios integrada en Vodafone TV.',
+    tags: ['Vodafone', 'Streaming', 'Disney+'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-prime',
+    operatorId: 'vodafone',
+    name: 'Amazon Prime',
+    category: 'streaming',
+    monthlyPrice: 6.99,
+    description: 'Suscripción de Amazon Prime (Prime Video, envíos gratis, Prime Music y Photos).',
+    tags: ['Vodafone', 'Streaming', 'Prime'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-netflix',
+    operatorId: 'vodafone',
+    name: 'Netflix',
+    category: 'streaming',
+    monthlyPrice: 8.99,
+    description: 'Suscripción de Netflix Plan Estándar integrada en Vodafone.',
+    tags: ['Vodafone', 'Streaming', 'Netflix'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+
+  // --- Líneas Móviles Adicionales Vodafone & Mi Negocio ---
+  {
+    id: 'vdf-linea-adicional-4a',
+    operatorId: 'vodafone',
+    name: '4ª Línea Móvil Adicional',
+    category: 'mobile_line',
+    monthlyPrice: 6,
+    description: 'Hasta la 4ª línea móvil adicional en tu plan Fibra + Móvil por solo 6€/mes cada una.',
+    tags: ['Vodafone', 'Línea Adicional', '6€'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
+  {
+    id: 'vdf-linea-empresa-60gb',
+    operatorId: 'vodafone',
+    name: 'Línea Adicional Mi Negocio (60GB)',
+    category: 'mobile_line',
+    monthlyPrice: 4.96,
+    description: 'Línea adicional para autónomos y empresas con 60GB 5G y llamadas ilimitadas.',
+    tags: ['Vodafone', 'Empresa', 'Línea 60GB'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 11'
+  },
+  {
+    id: 'vdf-linea-empresa-ilimitada',
+    operatorId: 'vodafone',
+    name: 'Línea Adicional Mi Negocio (Ilimitada 5G)',
+    category: 'mobile_line',
+    monthlyPrice: 9.09,
+    description: 'Línea adicional profesional con datos ilimitados 5G y llamadas ilimitadas.',
+    tags: ['Vodafone', 'Empresa', 'Línea Ilimitada'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 11'
+  },
+
+  // --- Seguridad ---
+  {
+    id: 'vdf-secure-net',
+    operatorId: 'vodafone',
+    name: 'Secure Net (Protección Antivirus y Phishing)',
+    category: 'security',
+    monthlyPrice: 1,
+    description: 'Protege tu navegación móvil y fija contra virus, estafas y sitios fraudulentos.',
+    tags: ['Vodafone', 'Seguridad', 'Secure Net'],
+    source: 'Vodafone AACC Agosto 2026 - Pág. 4'
+  },
 
   // Yoigo extras página 1 y 2
   { id: 'yoigo-upgrade-fibra-1gb', operatorId: 'yoigo', name: 'Upgrade Fibra 1Gb', category: 'fiber_upgrade', promoPrice: 0, promoMonths: 3, regularPrice: 15, description: '1Gb gratis 3 primeros meses, luego 15€/mes.', tags: ['Yoigo', 'Fibra 1Gb'], source: 'Yoigo 02.06.26 - página 1' },
