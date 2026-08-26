@@ -28,6 +28,7 @@ export interface Plan {
   regularPrice?: number;
   segment?: string;
   category: PlanCategory;
+  tags?: string[];
   notes?: string[];
   streamingIncluded?: string[];
   portabilityFrom?: string;
@@ -208,6 +209,7 @@ export const PLANS: Plan[] = tariffPlans.map((p: TariffPlan) => {
     regularPrice: p.regularPrice,
     segment: p.segment,
     category: p.category,
+    tags: p.tags || [],
     notes: p.notes,
     streamingIncluded: p.streamingIncluded,
     portabilityFrom: p.portabilityFrom,
@@ -286,19 +288,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         fraseCliente: `"Señor cliente, con esta tarifa de Yoigo usted se asegura un precio fijo de ${totalPrice} € al mes, con fibra simétrica de alta velocidad y llamadas ilimitadas. Lo que contrata hoy es lo que pagará."`,
         objecionSugerida: 'Si el cliente duda de la permanencia: recalcar la alta satisfacción de cliente de Yoigo que hace que no necesiten retener a la fuerza.',
         rebuttalOptions: [
-          {
-            objection: 'Prefiero otra compañía con fútbol.',
-            counter: 'Yoigo se centra en ofrecer la mejor fibra y tarifas móviles sin inflar tu factura con fútbol que a veces no usas. Si quieres fútbol, puedes añadir Yoigo TV Depor o contratar plataformas externas y seguirás ahorrando.'
-          },
-          {
-            objection: 'La permanencia es de 12 meses.',
-            counter: 'La satisfacción de cliente en Yoigo es la más alta del mercado. La permanencia garantiza la instalación gratis de fibra de última generación y equipamiento premium sin coste inicial.'
-          },
-          {
-            objection: 'El precio me parece elevado.',
-            counter: 'Este plan incluye GB ilimitados reales en 2 líneas móviles. Si contratas fibra y 2 líneas por separado en otra compañía pagarías más de 70€ al mes.'
-          }
-        ],
+          {\n            objection: 'Prefiero otra compañía con fútbol.',\n            counter: 'Yoigo se centra en ofrecer la mejor fibra y tarifas móviles sin inflar tu factura con fútbol que a veces no usas. Si quieres fútbol, puedes añadir Yoigo TV Depor o contratar plataformas externas y seguirás ahorrando.'\n          },\n          {\n            objection: 'La permanencia es de 12 meses.',\n            counter: 'La satisfacción de cliente en Yoigo es la más alta del mercado. La permanencia garantiza la instalación gratis de fibra de última generación y equipamiento premium sin coste inicial.'\n          },\n          {\n            objection: 'El precio me parece elevado.',\n            counter: 'Este plan incluye GB ilimitados reales en 2 líneas móviles. Si contratas fibra y 2 líneas por separado en otra compañía pagarías más de 70€ al mes.'\n          }\n        ],
         sellingPoints: [
           'Precio definitivo garantizado por contrato (sin sorpresas ni subidas tras la promo).',
           'Red de Fibra simétrica de alta velocidad con router autoinstalable inteligente.',
@@ -316,19 +306,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         fraseCliente: `"Con Orange no solo se lleva una excelente conexión de fibra, sino un pack completo de entretenimiento y televisión para su hogar por ${totalPrice} € al mes. Toda la familia estará conectada y disfrutando de series, cine y datos 5G ilimitados."`,
         objecionSugerida: 'Si encuentra el precio elevado: desglosar el coste del deco 4K y de los canales de TV que ya vienen incluidos sin coste extra.',
         rebuttalOptions: [
-          {
-            objection: 'No quiero pagar tanto por la televisión.',
-            counter: 'Con Orange, la televisión no es un extra costoso; está integrada en el paquete de forma que el precio conjunto es mucho menor que contratar la fibra y plataformas de streaming por separado.'
-          },
-          {
-            objection: 'Movistar me ofrece mejor cobertura.',
-            counter: 'Orange cuenta con la red 5G+ más moderna de España, con una cobertura excelente en interiores y velocidades que superan los 1 Gbps en zonas urbanas.'
-          },
-          {
-            objection: 'No necesito router WiFi 6.',
-            counter: 'El router WiFi 6 de Orange mejora la cobertura en toda la casa, reduce interferencias con vecinos y permite conectar hasta 50 dispositivos a la vez sin perder velocidad.'
-          }
-        ],
+          {\n            objection: 'No quiero pagar tanto por la televisión.',\n            counter: 'Con Orange, la televisión no es un extra costoso; está integrada en el paquete de forma que el precio conjunto es mucho menor que contratar la fibra y plataformas de streaming por separado.'\n          },\n          {\n            objection: 'Movistar me ofrece mejor cobertura.',\n            counter: 'Orange cuenta con la red 5G+ más moderna de España, con una cobertura excelente en interiores y velocidades que superan los 1 Gbps en zonas urbanas.'\n          },\n          {\n            objection: 'No necesito router WiFi 6.',\n            counter: 'El router WiFi 6 de Orange mejora la cobertura en toda la casa, reduce interferencias con vecinos y permite conectar hasta 50 dispositivos a la vez sin perder velocidad.'\n          }\n        ],
         sellingPoints: [
           'Pack completo de entretenimiento con más de 60 canales y contenido premium.',
           'Fibra simétrica de 1Gbps óptima para teletrabajo, gaming y streaming en 4K simultáneo.',
@@ -344,19 +322,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         fraseCliente: `"Señor cliente, con WIN se asegura una conexión de Fibra Óptica 100% simétrica real por solo S/ ${totalPrice.toFixed(2)} al mes. Con la tecnología de los Winners, navegará a la máxima velocidad y sin caídas."`,
         objecionSugerida: 'Destacar la simetría y los beneficios exclusivos de latencia (ExitLag) en comparación con el cable coaxial (HFC) de otros operadores.',
         rebuttalOptions: [
-          {
-            objection: '¿Tiene costo de instalación?',
-            counter: 'La instalación regular está totalmente bonificada. Para planes corporativos RUC 20 es sumamente accesible: solo S/ 60 pago único o S/ 120 en 3 meses.'
-          },
-          {
-            objection: '¿Qué es ExitLag?',
-            counter: 'ExitLag optimiza tu conexión redirigiendo tu tráfico por las rutas de internet más cortas y estables, reduciendo drásticamente el lag (ping) en tus juegos favoritos.'
-          },
-          {
-            objection: '¿Es realmente simétrico?',
-            counter: 'Sí, a diferencia de otros operadores, la subida tiene exactamente la misma velocidad que la bajada, lo que es vital para videollamadas, subir archivos y streaming sin cortes.'
-          }
-        ],
+          {\n            objection: '¿Tiene costo de instalación?',\n            counter: 'La instalación regular está totalmente bonificada. Para planes corporativos RUC 20 es sumamente accesible: solo S/ 60 pago único o S/ 120 en 3 meses.'\n          },\n          {\n            objection: '¿Qué es ExitLag?',\n            counter: 'ExitLag optimiza tu conexión redirigiendo tu tráfico por las rutas de internet más cortas y estables, reduciendo drásticamente el lag (ping) en tus juegos favoritos.'\n          },\n          {\n            objection: '¿Es realmente simétrico?',\n            counter: 'Sí, a diferencia de otros operadores, la subida tiene exactamente la misma velocidad que la bajada, lo que es vital para videollamadas, subir archivos y streaming sin cortes.'\n          }\n        ],
         sellingPoints: [
           'Fibra 100% Simétrica (Misma velocidad de subida y bajada).',
           'Equipamiento WiFi 6 dual (2.4 GHz y 5 GHz) para mayor alcance.',
@@ -366,32 +332,22 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
       };
     case 'vodafone':
       return {
-        headline: 'Vodafone: Máximo Ahorro Inicial y Red Líder',
-        gancho: 'La tarifa promocional más baja de entrada del mercado convergente y Roaming gratis en EE.UU. y Europa.',
+        headline: 'Vodafone: Ofertas Flash Agosto y La Mayor Temporada Deportiva (DAZN)',
+        gancho: 'Packs convergentes Flash con PVP indefinido, todo el fútbol/motor con DAZN y hasta 240€ de ahorro con la Alianza Iberdrola.',
         beneficio: totalPrice < 60 
-          ? 'Acceso inmediato a la red móvil 5G número 1 del país por una cuota de entrada de tan solo 39€/49€ al mes.'
-          : 'La máxima velocidad de fibra y conectividad total móvil con soporte prioritario para familias exigentes.',
-        fraseCliente: `"Aproveche la promoción de Vodafone: pagará una cuota reducida los primeros meses y disfrutará de roaming completo y la mejor red móvil del país. Es la oportunidad ideal para ahorrar desde el primer día."`,
-        objecionSugerida: 'Si le preocupa el precio después de la promo: hacer el cálculo anual promedio para demostrarle que el ahorro de los primeros meses compensa holgadamente el precio regular.',
+          ? 'Ofertas Flash 4P y 3P con PVP indefinido desde 44,70€/mes, 2 líneas móviles 160GB 5G y roaming total en UE y EE.UU.'
+          : 'Centro de entretenimiento y deportes completo: DAZN Fútbol/Motor/Premium con tarifas promocionales desde 6,99€/mes y TV Bares HORECA para negocios.',
+        fraseCliente: `"Señor cliente, con Vodafone no solo asegura la mejor red 5G y fibra simétrica, sino que en agosto se lleva ofertas Flash con precio indefinido sin subidas, promociones exclusivas en DAZN (LaLiga, Premier, F1, MotoGP) y un descuento directo de 10€ al mes durante 2 años si activa el Plan Energía Conectada de Iberdrola."`,
+        objecionSugerida: 'Si ya tiene DAZN: explicarle que puede integrarlo directamente en su factura de Vodafone manteniendo su usuario y claves, obteniendo descuentos de hasta 72€ al año.',
         rebuttalOptions: [
-          {
-            objection: 'El precio sube mucho tras los 3 meses de promoción.',
-            counter: 'El descuento de los primeros meses es tan agresivo que, al promediar el coste total del primer año, terminarás pagando mucho menos que con cualquier otra tarifa plana regular.'
-          },
-          {
-            objection: 'No necesito tantas plataformas de streaming.',
-            counter: 'Vodafone te permite elegir y agrupar tus plataformas favoritas (Netflix, Prime, Disney, HBO) bajo una única factura y con un descuento que no conseguirás contratándolas por separado.'
-          },
-          {
-            objection: '¿Cómo sé si la red es buena?',
-            counter: 'Vodafone cuenta con la red 5G certificada como la más rápida y con mejor latencia de España por múltiples auditorías independientes.'
-          }
-        ],
+          {\n            objection: 'Ya tengo contratado DAZN por mi cuenta.',\n            counter: 'No hay ningún problema: al integrarlo en su factura de Vodafone mantiene su mismo usuario y contraseña, centraliza todo el pago y se beneficia de los precios reducidos exclusivos para clientes Vodafone (desde 6,99€ o 14,99€ en vez de los 19,99€ oficiales).'
+          },\n          {\n            objection: '¿El precio subirá a los pocos meses?',\n            counter: 'Con las nuevas Ofertas Flash de Agosto, el precio es indefinido (PVP BTL cerrado) sin fecha de caducidad. Y con la Alianza Iberdrola, su descuento de 10€/mes está blindado y garantizado por contrato durante 24 meses.'\n          },\n          {\n            objection: '¿Es compatible con negocios o locales de hostelería?',\n            counter: 'Disponemos de Vodafone TV Bares oficial con licencia HORECA para emitir todo el fútbol (LaLiga EA Sports, Champions, DAZN Bar) con hasta 3 decodificadores gratis y 60€ de descuento al mes los primeros 6 meses.'\n          }\n        ],
         sellingPoints: [
-          'Máximo ahorro inicial con cuotas de entrada sumamente competitivas.',
-          'Roaming gratuito incluido en toda la Unión Europea y EE.UU.',
-          'Más de 100 canales de televisión con decodificador inteligente 4K incluido.',
-          'Segunda línea móvil de 160GB o Ilimitada 5G incluida en el pack.'
+          'Ofertas Flash 4P y 3P de Agosto con PVP Indefinido garantizado.',
+          'Promociones exclusivas de DAZN Fútbol, Motor y Premium (desde 6,99€ / 14,99€).',
+          'Alianza Vodafone-Iberdrola: 10€/mes de descuento directo durante 24 meses (240€ de ahorro).',
+          'Roaming gratuito incluido en toda la Unión Europea, Reino Unido y EE.UU.',
+          'Vodafone TV con decodificador 4K Pro y hasta 4 plataformas a elegir (Netflix, Max, Disney+, Prime).'
         ]
       };
     default:
@@ -402,11 +358,7 @@ export function getSalesArgument(operatorId: string, totalPrice: number, selecte
         fraseCliente: `"Este paquete le ofrece exactamente lo que necesita para estar comunicado en casa y en movilidad por un total mensual de ${totalPrice} €."`,
         objecionSugerida: 'Validar la cobertura geográfica para asegurar el cierre inmediato.',
         rebuttalOptions: [
-          {
-            objection: '¿Qué cobertura tiene?',
-            counter: 'Contamos con acceso a las tres redes principales de España, garantizando cobertura en el 99% del territorio nacional.'
-          }
-        ],
+          {\n            objection: '¿Qué cobertura tiene?',\n            counter: 'Contamos con acceso a las tres redes principales de España, garantizando cobertura en el 99% del territorio nacional.'\n          }\n        ],
         sellingPoints: [
           'Fibra óptica simétrica garantizada.',
           'Cobertura nacional multi-operador.',
