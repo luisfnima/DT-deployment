@@ -278,8 +278,8 @@ export default function Home() {
   // Estado de portabilidad de origen
   const [portabilityOrigin, setPortabilityOrigin] = useState<string>('all');
 
-  // Estados de autenticación
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  // Estados de autenticación (Acceso directo para integración en CRM)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
 
