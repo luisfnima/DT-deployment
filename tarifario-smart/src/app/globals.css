@@ -4,6 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Keep the quote readable while retaining the requested side-by-side mobile layout. */
+@media (max-width: 639px) {
+  .proposal-sidebar [data-slot="card"] { --card-spacing: 8px; }
+  .proposal-sidebar .p-6 { padding: 8px; }
+  .proposal-sidebar * { min-width: 0; }
+  .proposal-sidebar .grid-cols-3 { grid-template-columns: minmax(0, 1fr); }
+  .proposal-sidebar button { white-space: normal; height: auto; min-height: 36px; overflow-wrap: anywhere; }
+  .proposal-sidebar .flex.justify-between { flex-wrap: wrap; gap: 4px; }
+  .proposal-sidebar .truncate { white-space: normal; overflow-wrap: anywhere; }
+  .proposal-sidebar .text-5xl { font-size: 2rem; }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

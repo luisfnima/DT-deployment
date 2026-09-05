@@ -726,7 +726,7 @@ export default function AdminConfigPanel({
           <div className="bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
             <div className="p-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/10 flex justify-between items-center">
               <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-                Catálogo Activo de {selectedOperator.toUpperCase()} ({plans.filter(p => p.operatorId === selectedOperator).length} tarifas)
+                Catálogo Activo de {selectedOperator.toUpperCase()} ({plans.filter(p => p.operatorId === selectedOperator && p.commercialStatus !== 'DEPRECATED_INVALID').length} tarifas)
               </span>
               <span className="text-[10px] text-slate-400 font-bold">
                 💾 Todo se guarda automáticamente en memoria local
@@ -734,7 +734,7 @@ export default function AdminConfigPanel({
             </div>
 
             <div className="divide-y divide-slate-100 dark:divide-slate-850">
-              {plans.filter(p => p.operatorId === selectedOperator).map(plan => {
+              {plans.filter(p => p.operatorId === selectedOperator && p.commercialStatus !== 'DEPRECATED_INVALID').map(plan => {
                 const isCompany = plan.category === 'fibra_movil_empresa' || plan.tags?.includes('Empresa') || plan.tags?.includes('TV Bares') || plan.id.includes('mi-negocio') || plan.id.includes('tv-bares');
                 const isSecond = plan.category === 'segunda_residencia' || plan.tags?.includes('Segunda Residencia');
                 const isSoloM = plan.category === 'solo_movil';

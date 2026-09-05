@@ -1,17 +1,20 @@
 import { 
   tariffPlans, 
   addons as rawAddons,
-  TariffPlan, 
-  Addon as RawAddon,
-  PriceKind,
-  PlanCategory
-} from './tarifario-smart-telco-structured';
+  type TariffPlan, 
+  type Addon as RawAddon,
+  type PriceKind,
+  type PlanCategory,
+  type CommercialStatus,
+  type SourceType
+} from './tarifario-smart-telco-structured.ts';
 
 export interface Plan {
   id: string;
   operatorId: string;
   name: string;
   speed: string;
+  fiber?: string;
   mobile: string;
   tv?: string;
   price: number; // Precio mensual base o precio promocional si existe
@@ -36,6 +39,14 @@ export interface Plan {
   mobileLines?: number;
   tvIncluded?: boolean;
   isNewCampaign?: boolean;
+
+  // Metadatos de trazabilidad y gobernanza comercial
+  commercialStatus?: CommercialStatus;
+  sourceType?: SourceType;
+  calculationFormula?: string;
+  tryAndPayEligible?: boolean;
+  btsMaxOtts?: number;
+  blockedReason?: string;
 }
 
 export interface Addon {
@@ -55,6 +66,14 @@ export interface Addon {
   promoMonths?: number;
   regularPrice?: number;
   notes?: string[];
+  tags?: string[];
+
+  // Metadatos de trazabilidad y gobernanza comercial
+  isInformative?: boolean;
+  commercialStatus?: CommercialStatus;
+  sourceType?: SourceType;
+  calculationFormula?: string;
+  blockedReason?: string;
 }
 
 export interface Operator {
@@ -139,9 +158,12 @@ export const OPERATORS: Operator[] = [
   }
 ];
 
-// Mapper de TariffPlan real a Plan de UI
-export const PLANS: Plan[] = tariffPlans.map((p: TariffPlan) => {
-  const isPromo = p.priceKind === 'promo_then_regular' || p.priceKind === 'segmented_discount';
+// Mapper de TariffPlan real a Plan de UI (excluyendo ofertas inválidas/descartadas)
+export const PLANS: Plan[] = tariffPlans
+  .filter((p: TariffPlan) => p.commercialStatus !== 'DEPRECATED_INVALID')
+  .map((p: TariffPlan) => {
+  const isSegmented = p.priceKind === 'segmented_discount';
+  const isPromo = p.priceKind === 'promo_then_regular';
   const basePrice = isPromo ? (p.promoPrice ?? p.monthlyPrice ?? 0) : (p.monthlyPrice ?? 0);
   const isWin = p.operatorId === 'win';
   
@@ -154,11 +176,13 @@ export const PLANS: Plan[] = tariffPlans.map((p: TariffPlan) => {
     ...(p.highlights || [])
   ].filter((f): f is string => !!f);
 
-  const promoLabel = isPromo 
-    ? (isWin 
-        ? `Promo ${p.promoMonths || 2} meses, luego S/ ${(p.regularPrice ?? p.monthlyPrice ?? basePrice).toFixed(2)}/mes`
-        : `Promo ${p.promoMonths || 3} meses, luego ${(p.regularPrice ?? p.monthlyPrice ?? basePrice)}€/mes`) 
-    : undefined;
+  const promoLabel = isSegmented
+    ? 'Oferta privada de retención - consultar canal'
+    : (isPromo 
+        ? (isWin 
+            ? `Promo ${p.promoMonths || 2} meses, luego S/ ${(p.regularPrice ?? p.monthlyPrice ?? basePrice).toFixed(2)}/mes`
+            : `Promo ${p.promoMonths || 3} meses, luego ${(p.regularPrice ?? p.monthlyPrice ?? basePrice)}€/mes`) 
+        : undefined);
 
   let speedVal = 'Fibra óptica';
   if (p.category === 'solo_movil') {
@@ -193,6 +217,7 @@ export const PLANS: Plan[] = tariffPlans.map((p: TariffPlan) => {
     operatorId: p.operatorId,
     name: p.name,
     speed: speedVal,
+    fiber: p.fiber,
     mobile: mobileVal,
     tv: tvVal,
     price: basePrice,
@@ -216,14 +241,26 @@ export const PLANS: Plan[] = tariffPlans.map((p: TariffPlan) => {
     fixedLineIncluded: p.fixedLineIncluded,
     mobileLines: p.mobileLines,
     tvIncluded: p.tvIncluded,
-    isNewCampaign: p.isNewCampaign
+    isNewCampaign: p.isNewCampaign,
+
+    // Metadatos de trazabilidad y gobernanza comercial
+    commercialStatus: p.commercialStatus,
+    sourceType: p.sourceType,
+    calculationFormula: p.calculationFormula,
+    tryAndPayEligible: p.tryAndPayEligible,
+    btsMaxOtts: p.btsMaxOtts,
+    blockedReason: p.blockedReason
   };
 });
 
 // Mapper de Addon de datos reales a estructura de UI
 export const ADDONS: Addon[] = rawAddons.map((a: RawAddon) => {
   const isOneTime = a.oneTimePrice !== undefined && a.monthlyPrice === undefined;
-  const price = a.promoPrice ?? a.monthlyPrice ?? a.oneTimePrice ?? 0;
+  // En las tarjetas generales se debe mostrar su precio ordinario mensual de catálogo.
+  // No priorizar promoPrice = 0 que solo corresponde a una promoción BTS condicional.
+  const price = a.operatorId === 'vodafone'
+    ? a.monthlyPrice ?? a.regularPrice ?? a.oneTimePrice ?? a.promoPrice ?? 0
+    : a.promoPrice ?? a.monthlyPrice ?? a.oneTimePrice ?? 0;
   
   // Asignar iconos de Lucide correspondientes
   let iconName = 'Smartphone';
@@ -250,6 +287,7 @@ export const ADDONS: Addon[] = rawAddons.map((a: RawAddon) => {
     iconName: iconName,
     category: uiCategory,
     isOneTime: isOneTime,
+    isInformative: a.isInformative ?? (a.tags?.includes('Informativo') || a.tags?.includes('Autogestión') || a.id === 'vdf-addon-videoclub-rakuten'),
     
     // Metadatos adicionales reales
     operatorId: a.operatorId,
@@ -258,7 +296,14 @@ export const ADDONS: Addon[] = rawAddons.map((a: RawAddon) => {
     promoPrice: a.promoPrice,
     promoMonths: a.promoMonths,
     regularPrice: a.regularPrice,
-    notes: a.notes
+    notes: a.notes,
+    tags: a.tags,
+
+    // Metadatos de trazabilidad y gobernanza comercial
+    commercialStatus: a.commercialStatus,
+    sourceType: a.sourceType,
+    calculationFormula: a.calculationFormula,
+    blockedReason: a.blockedReason
   };
 });
 

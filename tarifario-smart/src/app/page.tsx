@@ -11,6 +11,9 @@ import {
   Addon, 
   Operator 
 } from '@/data/plans';
+import { calculateVodafoneQuote, type VodafoneCalculationResult } from '@/lib/vodafone-calculator.ts';
+import { getVodafoneAddonLabel, getVodafoneServicesTotal, isVodafonePublicOffer } from '@/lib/vodafone-addon-display.ts';
+import { isCommerciallyValid, type CommercialStatus } from '@/data/vodafone-commercial-truth.ts';
 import CompactPermisoPanel from '@/components/CompactPermisoPanel';
 import AdminConfigPanel from '@/components/AdminConfigPanel';
 import { 
@@ -216,7 +219,8 @@ export default function Home() {
   const [planFilter, setPlanFilter] = useState<string>('all');
   const [showOnlySelectedPlan, setShowOnlySelectedPlan] = useState<boolean>(false);
   const [hasIberdrolaAlliance, setHasIberdrolaAlliance] = useState<boolean>(false);
-  const [daznSegment, setDaznSegment] = useState<'nuevo' | 'cartera' | 'nba'>('nuevo');
+  const [daznSegment, setDaznSegment] = useState<'nuevo' | 'regular' | 'cartera' | 'nba'>('nuevo');
+  const [tryAndPayEnabled, setTryAndPayEnabled] = useState<boolean>(true);
 
   
   // Reiniciar filtro de planes al cambiar de operador
@@ -227,6 +231,7 @@ export default function Home() {
     setTaxType('none');
     setHasIberdrolaAlliance(false);
     setDaznSegment('nuevo');
+    setTryAndPayEnabled(true);
   }, [selectedOperatorId]);
 
   // Restablecer vista completa cuando cambia la categoría del filtro
@@ -323,7 +328,7 @@ export default function Home() {
 
       // Carga persistente de tarifas con control de versión de catálogo oficial
       try {
-        const CURRENT_CATALOG_VERSION = '2026.08.26-v2';
+        const CURRENT_CATALOG_VERSION = '2026.09.04-v3';
         const savedVersion = localStorage.getItem('smart_catalog_version');
 
         if (savedVersion !== CURRENT_CATALOG_VERSION) {
@@ -417,8 +422,7 @@ export default function Home() {
       }
 
       const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      if (savedTheme === 'dark') {
         setDarkMode(true);
         document.documentElement.classList.add('dark');
       } else {
@@ -1164,12 +1168,42 @@ export default function Home() {
       if (activeAddons.length > 0) {
         captionText += `*Servicios Adicionales:*\n`;
         activeAddons.forEach(addon => {
+          if (
+            addon.isInformative ||
+            addon.tags?.includes('Informativo') ||
+            addon.tags?.includes('Autogestión') ||
+            addon.tags?.includes('No Seleccionable') ||
+            addon.id === 'vdf-addon-videoclub-rakuten'
+          ) {
+            return;
+          }
           const qty = addon.id === 'addon-line-mobile' || addon.id === 'global-mobile-line' || addon.id === 'yoigo-duo-adicional' || addon.id.includes('linea-adicional') ? mobileLinesCount : 1;
           const qtyStr = qty > 1 ? ` (x${qty})` : '';
-          const addonPriceText = selectedOperatorId === 'win' 
-            ? `+S/ ${(addon.price * qty).toFixed(2)}/mes` 
-            : `+${addon.price * qty} €/mes`;
-          captionText += `• ${addon.name}${qtyStr}: ${addonPriceText}\n`;
+          const costType = addon.isOneTime ? ' (Pago único)' : '';
+          
+          let addonPriceText = '';
+          if (selectedOperatorId === 'vodafone' && vodafoneQuote?.btsApplied) {
+            if (addon.id === 'vdf-addon-deco-3' || addon.id === 'vdf-addon-deco-4') {
+              addonPriceText = '0 €/mes (Gratis con BTS)';
+            } else if (
+              addon.id === 'vdf-addon-prime' ||
+              addon.id === 'vdf-addon-disney' ||
+              addon.id === 'vdf-addon-hbo' ||
+              addon.id === 'vdf-addon-netflix-standalone'
+            ) {
+              addonPriceText = '0 €/mes (Bonificado BTS 100% hasta 31/12/2026)';
+            } else {
+              addonPriceText = `+${addon.price * qty} €/mes`;
+            }
+          } else {
+            addonPriceText = selectedOperatorId === 'win' 
+              ? `+S/ ${(addon.price * qty).toFixed(2)}/mes` 
+              : `+${addon.price * qty} €/mes`;
+          }
+          if (selectedOperatorId === 'vodafone') {
+            addonPriceText = getVodafoneAddonLabel(addon, vodafoneQuote) ?? addonPriceText;
+          }
+          captionText += `• ${addon.name}${qtyStr}: ${addonPriceText}${costType}\n`;
         });
         captionText += `\n`;
       }
@@ -1193,7 +1227,37 @@ export default function Home() {
 
       const taxLabel = getTaxLabel();
 
-      if (hasPromo) {
+      if (selectedOperatorId === 'vodafone' && vodafoneQuote) {
+        if (!vodafoneQuote.isValidForCommercialization || !vodafoneQuote.summary || !vodafoneQuote.periods) {
+          alert(`⚠️ TARIFA BLOQUEADA POR AUDITORÍA COMERCIAL:\n\n${vodafoneQuote.blockingReasons.join('\n')}\n\nEsta configuración NO puede enviarse ni comercializarse.`);
+          setSendingProposal(false);
+          return;
+        }
+        const m1_3 = Math.max(0, Math.round((vodafoneQuote.summary.meses1_3 - iberdrolaDiscount) * 100) / 100);
+        const m4_dic26 = Math.max(0, Math.round((vodafoneQuote.summary.meses4_dic2026 - iberdrolaDiscount) * 100) / 100);
+        const desde27 = Math.max(0, Math.round((vodafoneQuote.summary.desde2027 - iberdrolaDiscount) * 100) / 100);
+
+        const m1_3_desc = [
+          vodafoneQuote.specialPromoApplied ? 'Promo Especial 39€' : (vodafoneQuote.tryAndPayApplied ? 'Try&Pay / primeros 3 meses' : null),
+          vodafoneQuote.btsApplied ? 'BTS' : null,
+          vodafoneQuote.periods.months1to3.secureNetPrice === 0 ? 'Secure Net 0€' : `Secure Net ${vodafoneQuote.periods.months1to3.secureNetPrice}€`,
+          iberdrolaDiscount > 0 ? 'Alianza Iberdrola' : null
+        ].filter(Boolean).join(' + ');
+
+        captionText += `*CRONOGRAMA OFICIAL DE PRECIOS VODAFONE:*\n`;
+        captionText += `• Meses 1 a 3: *${formatPrice(m1_3)}/mes*${m1_3_desc ? ` (${m1_3_desc})` : ''}\n`;
+        captionText += `• Meses 4 a Dic 2026: *${formatPrice(m4_dic26)}/mes* (Cuota y servicios seleccionados${vodafoneQuote.periods.months4toDec2026.secureNetPrice > 0 ? ' + Secure Net 1€' : ''}${iberdrolaDiscount > 0 ? ' - Alianza Iberdrola' : ''})\n`;
+        captionText += `• Desde 01/01/2027: *${formatPrice(desde27)}/mes* (Tarifa definitiva sin promo BTS${iberdrolaDiscount > 0 ? ' - Alianza Iberdrola' : ''})\n`;
+        if (vodafoneQuote.btsApplied) {
+          captionText += `• Promoción BTS: ${vodafoneQuote.btsOttCountGranted} plataforma(s) bonificadas al 100% hasta 31/12/2026.\n`;
+        }
+        if (activePlan?.commercialStatus === 'RESTRICTED_CHANNEL' || activePlan?.id.startsWith('vdf-flash-') || activePlan?.tags?.includes('Flash')) {
+          captionText += `⚠️ *Aviso Canal Restringido:* Oferta Flash sujeta a disponibilidad de canal y validación de código de campaña.\n`;
+        }
+        if (hasIberdrolaAlliance) {
+          captionText += `• Alianza Iberdrola: -10€/mes aplicados durante 24 meses.\n`;
+        }
+      } else if (hasPromo) {
         captionText += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes* ${taxLabel} (${activePlan?.promoLabel})\n`;
         captionText += `*Precio Regular posterior:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
       } else {
@@ -1340,7 +1404,7 @@ export default function Home() {
 
   // Filtrar planes del operador seleccionado y tab activa con origen de portabilidad
   const filteredPlans = useMemo(() => {
-    let plans = globalPlans.filter(plan => plan.operatorId === selectedOperatorId);
+    let plans = globalPlans.filter(plan => plan.operatorId === selectedOperatorId && plan.commercialStatus !== 'DEPRECATED_INVALID');
 
     // Filtrar por operador de origen de portabilidad
     if (portabilityOrigin !== 'all') {
@@ -1369,21 +1433,83 @@ export default function Home() {
       }
     }
     
-    if (planFilter === 'all') return plans;
-    
     if (selectedOperatorId === 'vodafone') {
       if (planFilter === 'all') {
-        // Excluir ofertas de Bares en la vista general
-        return plans.filter(p => !p.id.includes('tv-bares') && !p.tags?.includes('TV Bares') && !p.tags?.includes('HORECA'));
+        // Excluir ofertas de Bares/Negocios, Flash/Privadas y bloqueadas en la vista general confirmada
+        return plans.filter(p => 
+          !p.id.includes('tv-bares') && 
+          !p.tags?.includes('TV Bares') && 
+          !p.tags?.includes('HORECA') && 
+          p.category !== 'fibra_movil_empresa' &&
+          !p.id.startsWith('vdf-flash-') &&
+          !p.tags?.includes('Flash') &&
+          !p.id.startsWith('vdf-retencion-') &&
+          p.commercialStatus !== 'RESTRICTED_CHANNEL' &&
+          p.commercialStatus !== 'CONFLICT' && 
+          p.commercialStatus !== 'PENDING_COMMERCIAL_VALIDATION' && 
+          p.commercialStatus !== 'DERIVED_HYPOTHESIS_PENDING_VALIDATION' &&
+          p.commercialStatus !== 'DEPRECATED_INVALID' &&
+          p.commercialStatus !== 'CONFLICTO_DOCUMENTAL' &&
+          p.commercialStatus !== 'EXTERNAL_PROJECT_SOURCE'
+        );
       }
-      if (planFilter === 'flash-agosto') {
-        return plans.filter(p => p.category === 'flash_agosto' || p.tags?.includes('Oferta Flash') || p.id.includes('flash'));
+      if (planFilter === 'bts-vuelta-cole') {
+        return plans.filter(p => p.tags?.includes('BTS') || p.tags?.includes('Vuelta al Cole') || p.id.includes('bts'));
+      }
+      if (planFilter === 'bases-convergencia') {
+        return plans.filter(p => p.tags?.includes('Tarifa Base') || p.tags?.includes('Base Convergente') || p.tags?.includes('Tarifario Base') || p.id.startsWith('vdf-base-'));
+      }
+      if (planFilter === 'sin-tv') {
+        return plans.filter(p => 
+          (p.id === 'vdf-oferta-39-euros' || 
+           p.id === 'vdf-public-600m-2xilim-44' || 
+           p.tags?.includes('Sin TV') || 
+           (!p.tvIncluded && !p.streamingIncluded && p.category !== 'solo_fibra' && p.category !== 'segunda_residencia' && p.category !== 'solo_movil')) &&
+          p.category !== 'fibra_movil_empresa' &&
+          !p.id.includes('tv-bares') &&
+          !p.id.includes('portatil') &&
+          !p.id.startsWith('vdf-retencion-') &&
+          p.commercialStatus !== 'RESTRICTED_CHANNEL' &&
+          p.commercialStatus !== 'CONFLICT' &&
+          p.commercialStatus !== 'PENDING_COMMERCIAL_VALIDATION' &&
+          p.commercialStatus !== 'DERIVED_HYPOTHESIS_PENDING_VALIDATION' &&
+          p.commercialStatus !== 'DEPRECATED_INVALID' &&
+          p.commercialStatus !== 'EXTERNAL_PROJECT_SOURCE' &&
+          (p.commercialStatus === 'CONFIRMED' || p.commercialStatus === 'INTERNAL_CONFIRMED')
+        );
+      }
+      if (planFilter === 'flash-privadas') {
+        return plans.filter(p => 
+          p.commercialStatus === 'RESTRICTED_CHANNEL' || 
+          p.id.startsWith('vdf-flash-') || 
+          p.id.startsWith('vdf-retencion-') ||
+          p.tags?.includes('Flash') || 
+          p.tags?.includes('Oferta Privada')
+        );
       }
       if (planFilter === 'fibra-600') {
-        return plans.filter(p => (p.speed?.includes('600') || p.name.includes('600Mb') || p.name.includes('600 Mb')) && !p.id.includes('tv-bares') && p.category !== 'segunda_residencia');
+        return plans.filter(p => 
+          (p.speed?.includes('600') || p.name.includes('600Mb') || p.name.includes('600 Mb') || p.fiber?.includes('600')) && 
+          !p.id.includes('tv-bares') && 
+          p.category !== 'segunda_residencia' && 
+          p.category !== 'solo_fibra' && 
+          !p.id.includes('solofibra') &&
+          p.commercialStatus !== 'RESTRICTED_CHANNEL' &&
+          (p.commercialStatus === 'CONFIRMED' || p.commercialStatus === 'INTERNAL_CONFIRMED')
+        );
       }
       if (planFilter === 'fibra-1gb') {
-        return plans.filter(p => (p.speed?.includes('1Gb') || p.name.includes('1Gb')) && !p.id.includes('tv-bares') && p.category !== 'segunda_residencia');
+        return plans.filter(p => 
+          (p.speed?.includes('1Gb') || p.name.includes('1Gb') || p.fiber?.includes('1G')) && 
+          !p.id.includes('tv-bares') && 
+          !p.id.includes('portatil') &&
+          p.category !== 'segunda_residencia' && 
+          p.category !== 'solo_fibra' && 
+          !p.id.includes('solofibra') &&
+          p.category !== 'fibra_movil_empresa' &&
+          p.commercialStatus !== 'RESTRICTED_CHANNEL' &&
+          (p.commercialStatus === 'CONFIRMED' || p.commercialStatus === 'INTERNAL_CONFIRMED')
+        );
       }
       if (planFilter === 'solo-movil') {
         return plans.filter(p => p.category === 'solo_movil');
@@ -1391,10 +1517,16 @@ export default function Home() {
       if (planFilter === 'solo-fibra-2a') {
         return plans.filter(p => p.category === 'solo_fibra' || p.category === 'segunda_residencia' || p.id.includes('solofibra') || p.id.includes('segunda-residencia') || p.id.includes('portatil'));
       }
+      if (planFilter === 'bloqueadas') {
+        return plans.filter(p => p.commercialStatus && p.commercialStatus !== 'CONFIRMED' && p.commercialStatus !== 'INTERNAL_CONFIRMED');
+      }
       if (planFilter === 'bares-horeca') {
         return plans.filter(p => p.id.includes('tv-bares') || p.tags?.includes('TV Bares') || p.tags?.includes('HORECA') || p.category === 'fibra_movil_empresa');
       }
+      return plans;
     }
+    
+    if (planFilter === 'all') return plans;
     
     if (selectedOperatorId === 'yoigo') {
       if (planFilter === 'portabilidad') {
@@ -1473,18 +1605,18 @@ export default function Home() {
 
   // Obtener plan activo
   const activePlan = useMemo(() => {
-    const plan = globalPlans.find(p => p.id === selectedPlanId);
-    if (!plan || plan.operatorId !== selectedOperatorId) {
+    const plan = filteredPlans.find(p => p.id === selectedPlanId);
+    if (!plan) {
       return filteredPlans[0] || null;
     }
     return plan;
-  }, [selectedPlanId, selectedOperatorId, filteredPlans]);
+  }, [selectedPlanId, filteredPlans]);
 
-  // Sincronizar plan activo si cambia el operador
+  // Sincronizar plan activo si cambia el operador o la lista filtrada
   useEffect(() => {
     if (filteredPlans.length > 0) {
-      const currentPlan = globalPlans.find(p => p.id === selectedPlanId);
-      if (!currentPlan || currentPlan.operatorId !== selectedOperatorId) {
+      const planExists = filteredPlans.some(p => p.id === selectedPlanId);
+      if (!planExists) {
         setSelectedPlanId(filteredPlans[0].id);
       }
     }
@@ -1502,10 +1634,38 @@ export default function Home() {
 
   // Alternar selección de añadidos
   const toggleAddon = (addonId: string) => {
+    const clickedAddon = globalAddons.find(a => a.id === addonId);
+    if (
+      clickedAddon?.isInformative ||
+      clickedAddon?.tags?.includes('Informativo') ||
+      clickedAddon?.tags?.includes('Autogestión') ||
+      clickedAddon?.tags?.includes('No Seleccionable') ||
+      addonId === 'vdf-addon-videoclub-rakuten'
+    ) {
+      return;
+    }
     const updated = new Set(selectedAddonIds);
     if (updated.has(addonId)) {
       updated.delete(addonId);
     } else {
+      if (clickedAddon?.commercialStatus && !isCommerciallyValid(clickedAddon.commercialStatus)) {
+        alert(`⚠️ SERVICIO BLOQUEADO POR AUDITORÍA COMERCIAL:\n\n${clickedAddon.blockedReason || 'Este servicio presenta conflicto documental o validación pendiente y no puede comercializarse.'}`);
+        return;
+      }
+      if (selectedOperatorId === 'vodafone') {
+        const groups = [
+          ['vdf-addon-deco-3', 'vdf-addon-deco-4'],
+          ['vdf-addon-netflix-standalone', 'vdf-addon-netflix-added'],
+          ['vdf-addon-linea-convergente', 'vdf-addon-linea-basica', 'vdf-addon-linea-negocio-60gb'],
+        ];
+        for (const group of groups) {
+          if (group.includes(addonId)) group.forEach(id => updated.delete(id));
+        }
+        if (addonId.startsWith('vdf-dazn-')) {
+          Array.from(updated).filter(id => id.startsWith('vdf-dazn-')).forEach(id => updated.delete(id));
+        }
+        if (addonId.startsWith('vdf-addon-linea-')) setMobileLinesCount(1);
+      }
       updated.add(addonId);
       if (addonId === 'addon-line-mobile' || addonId === 'global-mobile-line' || addonId === 'yoigo-duo-adicional' || addonId.includes('linea-adicional')) {
         setMobileLinesCount(1);
@@ -1538,22 +1698,150 @@ export default function Home() {
         }
       }
 
-      // Filtrado de DAZN para Vodafone por segmento de cliente
+      // Filtrado específico para Vodafone
       if (selectedOperatorId === 'vodafone') {
+        // En Vodafone no deben aparecer los addons globales/referenciales no oficiales
+        if (addon.id === 'global-mobile-line' || addon.id === 'global-tv-basica' || addon.id === 'global-mesh-wifi') {
+          return false;
+        }
+
+        // Filtrado de DAZN para Vodafone por segmento de cliente
         if (addon.id.startsWith('vdf-dazn-')) {
           if (daznSegment === 'nuevo') {
             return addon.id.includes('-nuevo');
+          } else if (daznSegment === 'regular') {
+            return addon.id.includes('-regular');
           } else if (daznSegment === 'cartera') {
             return addon.id.includes('-cartera');
           } else if (daznSegment === 'nba') {
             return addon.id.includes('-nba');
           }
         }
+
+        // No mostrar addons B2B en residencial
+        if (addon.id.startsWith('vdf-b2b-') || addon.id.includes('negocio') || addon.tags?.includes('Empresa') || addon.tags?.includes('B2B')) {
+          const isB2B = activePlan?.category === 'fibra_movil_empresa' || activePlan?.tags?.includes('Empresa') || activePlan?.tags?.includes('HORECA') || activePlan?.tags?.includes('B2B') || activePlan?.id.includes('empresa') || activePlan?.id.includes('mi-negocio') || activePlan?.id.includes('tv-bares');
+          if (!isB2B) return false;
+        }
       }
       
       return true;
     });
-  }, [selectedOperatorId, activePlan]);
+  }, [selectedOperatorId, activePlan, daznSegment]);
+
+  // Cotización técnica oficial de Vodafone con desglose de 3 periodos y trazabilidad
+  const vodafoneQuote = useMemo<VodafoneCalculationResult | null>(() => {
+    if (selectedOperatorId !== 'vodafone' || !activePlan) return null;
+
+    let baseId = activePlan.id;
+    let customPromoId: string | undefined = undefined;
+
+    if (activePlan.id === 'vdf-bts-la-completa') {
+      baseId = 'vdf-base-1g-2xilim';
+    } else if (activePlan.id === 'vdf-bts-la-mas-economica') {
+      baseId = 'vdf-base-1g-1x60gb';
+    } else if (activePlan.id === 'vdf-bts-la-mas-vendida') {
+      baseId = 'vdf-base-1g-1x160gb';
+    } else if (activePlan.id === 'vdf-bts-la-familiar') {
+      baseId = 'vdf-base-1g-2x160gb';
+    } else if (
+      activePlan.id === 'vdf-oferta-39-euros' || 
+      activePlan.id === 'vdf-public-600m-2x160gb-39' ||
+      activePlan.id === 'vdf-public-600m-2xilim-44' ||
+      activePlan.id === 'vdf-oferta-45-euros' ||
+      activePlan.id === 'vdf-internal-1g-1ilim-39' ||
+      activePlan.id === 'vdf-internal-1g-2ilim-45-hypothesis' ||
+      activePlan.id.startsWith('vdf-retencion-')
+    ) {
+      customPromoId = activePlan.id;
+    } else if (activePlan.id === 'vdf-internal-1g-2ilim-39') {
+      baseId = 'vdf-base-1g-2xilim';
+    }
+
+    const otts: ('netflix' | 'hbo_max' | 'prime' | 'disney')[] = [];
+    if (activePlan.id === 'vdf-bts-la-completa') {
+      otts.push('disney', 'prime', 'hbo_max');
+    } else if (activePlan.id === 'vdf-bts-la-mas-economica') {
+      otts.push('prime');
+    } else if (activePlan.id === 'vdf-bts-la-mas-vendida') {
+      otts.push('prime', 'netflix');
+    } else if (activePlan.id === 'vdf-bts-la-familiar') {
+      otts.push('prime', 'disney');
+    }
+
+    if ((selectedAddonIds.has('vdf-addon-prime') || selectedAddonIds.has('vdf-tv-prime')) && !otts.includes('prime')) {
+      otts.push('prime');
+    }
+    if ((selectedAddonIds.has('vdf-addon-disney') || selectedAddonIds.has('vdf-tv-disney')) && !otts.includes('disney')) {
+      otts.push('disney');
+    }
+    if ((selectedAddonIds.has('vdf-addon-hbo') || selectedAddonIds.has('vdf-tv-hbo')) && !otts.includes('hbo_max')) {
+      otts.push('hbo_max');
+    }
+    if ((selectedAddonIds.has('vdf-addon-netflix-standalone') || selectedAddonIds.has('vdf-tv-netflix-standalone') || selectedAddonIds.has('vdf-addon-netflix-added')) && !otts.includes('netflix')) {
+      otts.push('netflix');
+    }
+    if (selectedAddonIds.has('vdf-tv-2otts-familiar')) {
+      if (!otts.includes('prime')) otts.push('prime');
+      if (!otts.includes('disney')) otts.push('disney');
+    }
+    if (selectedAddonIds.has('vdf-tv-3otts-completa')) {
+      if (!otts.includes('prime')) otts.push('prime');
+      if (!otts.includes('disney')) otts.push('disney');
+      if (!otts.includes('hbo_max')) otts.push('hbo_max');
+    }
+
+    const includeVodafoneTvStandalone = selectedAddonIds.has('vdf-addon-tv-sola') || selectedAddonIds.has('vdf-tv-standalone');
+
+    let decoderOptionId: 'vdf-deco-standard-3' | 'vdf-deco-premium-4' | 'none' = 'none';
+    if (selectedAddonIds.has('vdf-addon-deco-4') || selectedAddonIds.has('vdf-deco-premium-4')) {
+      decoderOptionId = 'vdf-deco-premium-4';
+    } else if (selectedAddonIds.has('vdf-addon-deco-3') || selectedAddonIds.has('vdf-deco-standard-3') || (activePlan.tags?.includes('BTS') || activePlan.id.includes('bts'))) {
+      decoderOptionId = 'vdf-deco-standard-3';
+    }
+
+    const includeSecureNet = selectedAddonIds.has('vdf-addon-secure-net') || selectedAddonIds.has('vdf-secure-net') || activePlan.tags?.includes('BTS') || activePlan.id.includes('bts');
+
+    let daznPackId: string | undefined = undefined;
+    const selectedDaznId = Array.from(selectedAddonIds).find(id => id.startsWith('vdf-dazn-'));
+    if (selectedDaznId) {
+      daznPackId = selectedDaznId;
+    }
+
+    let extraLinesCount = 0;
+    let extraLineType: 'convergente' | 'basica-10gb' | 'negocio-60gb' = 'convergente';
+    if (selectedAddonIds.has('vdf-addon-linea-basica') || selectedAddonIds.has('vdf-addon-linea-basica-10gb') || selectedAddonIds.has('vdf-linea-adicional-basica-10gb')) {
+      extraLineType = 'basica-10gb';
+    } else if (selectedAddonIds.has('vdf-addon-linea-negocio-60gb') || selectedAddonIds.has('vdf-linea-adicional-negocio-60gb')) {
+      extraLineType = 'negocio-60gb';
+    }
+
+    const selectedLine = Array.from(selectedAddonIds).find(id => id.startsWith('vdf-addon-linea-') || id.startsWith('vdf-linea-adicional-'));
+    extraLinesCount = selectedLine ? (selectedLine.startsWith('vdf-addon-linea-') ? 1 : mobileLinesCount) : 0;
+
+    return calculateVodafoneQuote({
+      baseConfigId: baseId,
+      customPromoId,
+      specialPromoId: activePlan.id === 'vdf-internal-1g-2ilim-39' ? 'vdf-internal-1g-2ilim-39' : undefined,
+      tryAndPayEligible: tryAndPayEnabled && 
+        activePlan.tryAndPayEligible === true && 
+        (activePlan.fiber === '1Gb' || activePlan.speed?.includes('1G') || activePlan.fiber?.includes('1G')) &&
+        activePlan.id !== 'vdf-oferta-39-euros' &&
+        activePlan.id !== 'vdf-public-600m-2x160gb-39' &&
+        activePlan.id !== 'vdf-public-600m-2xilim-44' &&
+        activePlan.id !== 'vdf-oferta-45-euros' &&
+        activePlan.id !== 'vdf-internal-1g-1ilim-39' &&
+        activePlan.id !== 'vdf-internal-1g-2ilim-45-hypothesis',
+      selectedOtts: otts,
+      includeVodafoneTvStandalone,
+      includeSecureNet,
+      decoderOptionId,
+      daznPackId,
+      extraLinesCount,
+      extraLineType,
+      selectedAddonIds: Array.from(selectedAddonIds)
+    });
+  }, [selectedOperatorId, activePlan, selectedAddonIds, mobileLinesCount, tryAndPayEnabled]);
 
   // Calcular precios
   const basePrice = activePlan ? activePlan.price : 0;
@@ -1575,7 +1863,9 @@ export default function Home() {
     }, 0);
   }, [activeAddons, mobileLinesCount]);
 
-  const addonsTotal = addonsTotalPromo; // Compatibilidad
+  const addonsTotal = selectedOperatorId === 'vodafone' && vodafoneQuote?.isValidForCommercialization
+    ? getVodafoneServicesTotal(vodafoneQuote)
+    : addonsTotalPromo;
 
   const taxRate = useMemo(() => {
     if (selectedOperatorId !== 'orange') return 1.0;
@@ -1587,16 +1877,22 @@ export default function Home() {
   const iberdrolaDiscount = (selectedOperatorId === 'vodafone' && hasIberdrolaAlliance) ? 10 : 0;
 
   const totalPricePromo = useMemo(() => {
+    if (selectedOperatorId === 'vodafone' && vodafoneQuote && vodafoneQuote.isValidForCommercialization && vodafoneQuote.summary) {
+      return Math.max(0, Math.round((vodafoneQuote.summary.meses1_3 - iberdrolaDiscount) * 100) / 100);
+    }
     const raw = (basePrice + addonsTotalPromo) * taxRate - iberdrolaDiscount;
     return Math.max(0, Math.round(raw * 100) / 100);
-  }, [basePrice, addonsTotalPromo, taxRate, iberdrolaDiscount]);
+  }, [selectedOperatorId, vodafoneQuote, basePrice, addonsTotalPromo, taxRate, iberdrolaDiscount]);
 
   const totalPriceNormal = useMemo(() => {
     if (!activePlan) return 0;
+    if (selectedOperatorId === 'vodafone' && vodafoneQuote && vodafoneQuote.isValidForCommercialization && vodafoneQuote.summary) {
+      return Math.max(0, Math.round((vodafoneQuote.summary.desde2027 - iberdrolaDiscount) * 100) / 100);
+    }
     const priceAfter = activePlan.priceAfterPromo !== undefined ? activePlan.priceAfterPromo : activePlan.price;
     const raw = (priceAfter + addonsTotalRegular) * taxRate - iberdrolaDiscount;
     return Math.max(0, Math.round(raw * 100) / 100);
-  }, [activePlan, addonsTotalRegular, taxRate, iberdrolaDiscount]);
+  }, [selectedOperatorId, vodafoneQuote, activePlan, addonsTotalRegular, taxRate, iberdrolaDiscount]);
 
   const hasPromo = activePlan?.isPromo || false;
 
@@ -1638,12 +1934,42 @@ export default function Home() {
     if (activeAddons.length > 0) {
       text += `*Añadidos Seleccionados:*\n`;
       activeAddons.forEach(addon => {
+        if (
+          addon.isInformative ||
+          addon.tags?.includes('Informativo') ||
+          addon.tags?.includes('Autogestión') ||
+          addon.tags?.includes('No Seleccionable') ||
+          addon.id === 'vdf-addon-videoclub-rakuten'
+        ) {
+          return;
+        }
         const qty = addon.id === 'addon-line-mobile' || addon.id === 'global-mobile-line' || addon.id === 'yoigo-duo-adicional' || addon.id.includes('linea-adicional') ? mobileLinesCount : 1;
         const qtyStr = qty > 1 ? ` (x${qty})` : '';
         const costType = addon.isOneTime ? ' (Pago único)' : '';
-        const addonPriceText = selectedOperatorId === 'win'
-          ? `+S/ ${(addon.price * qty).toFixed(2)}/mes`
-          : `+${addon.price * qty} €/mes`;
+        
+        let addonPriceText = '';
+        if (selectedOperatorId === 'vodafone' && vodafoneQuote?.btsApplied) {
+          if (addon.id === 'vdf-addon-deco-3' || addon.id === 'vdf-addon-deco-4') {
+            addonPriceText = '0 €/mes (Gratis con BTS)';
+          } else if (
+            addon.id === 'vdf-addon-prime' ||
+            addon.id === 'vdf-addon-disney' ||
+            addon.id === 'vdf-addon-hbo' ||
+            addon.id === 'vdf-addon-netflix-standalone'
+          ) {
+            addonPriceText = '0 €/mes (Bonificado BTS 100% hasta 31/12/2026)';
+          } else {
+            addonPriceText = `+${addon.price * qty} €/mes`;
+          }
+        } else {
+          addonPriceText = selectedOperatorId === 'win'
+            ? `+S/ ${(addon.price * qty).toFixed(2)}/mes`
+            : `+${addon.price * qty} €/mes`;
+        }
+
+        if (selectedOperatorId === 'vodafone') {
+          addonPriceText = getVodafoneAddonLabel(addon, vodafoneQuote) ?? addonPriceText;
+        }
         text += `• ${addon.name}${qtyStr}: ${addonPriceText}${costType}\n`;
       });
       text += `\n`;
@@ -1683,7 +2009,36 @@ export default function Home() {
 
     const taxLabel = getTaxLabel();
 
-    if (hasPromo) {
+    if (selectedOperatorId === 'vodafone' && vodafoneQuote) {
+      if (!vodafoneQuote.isValidForCommercialization || !vodafoneQuote.summary || !vodafoneQuote.periods) {
+        alert(`⚠️ TARIFA BLOQUEADA POR AUDITORÍA COMERCIAL:\n\n${vodafoneQuote.blockingReasons.join('\n')}\n\nEsta configuración NO puede enviarse ni comercializarse.`);
+        return;
+      }
+      const m1_3 = Math.max(0, Math.round((vodafoneQuote.summary.meses1_3 - iberdrolaDiscount) * 100) / 100);
+      const m4_dic26 = Math.max(0, Math.round((vodafoneQuote.summary.meses4_dic2026 - iberdrolaDiscount) * 100) / 100);
+      const desde27 = Math.max(0, Math.round((vodafoneQuote.summary.desde2027 - iberdrolaDiscount) * 100) / 100);
+
+      const m1_3_desc = [
+        vodafoneQuote.specialPromoApplied ? 'Promo Especial 39€' : (vodafoneQuote.tryAndPayApplied ? 'Try&Pay / primeros 3 meses' : null),
+        vodafoneQuote.btsApplied ? 'BTS' : null,
+        vodafoneQuote.periods.months1to3.secureNetPrice === 0 ? 'Secure Net 0€' : `Secure Net ${vodafoneQuote.periods.months1to3.secureNetPrice}€`,
+        iberdrolaDiscount > 0 ? 'Alianza Iberdrola' : null
+      ].filter(Boolean).join(' + ');
+
+      text += `*CRONOGRAMA OFICIAL DE PRECIOS VODAFONE:*\n`;
+      text += `• Meses 1 a 3: *${formatPrice(m1_3)}/mes*${m1_3_desc ? ` (${m1_3_desc})` : ''}\n`;
+      text += `• Meses 4 a Dic 2026: *${formatPrice(m4_dic26)}/mes* (Cuota y servicios seleccionados${vodafoneQuote.periods.months4toDec2026.secureNetPrice > 0 ? ' + Secure Net 1€' : ''}${iberdrolaDiscount > 0 ? ' - Alianza Iberdrola' : ''})\n`;
+      text += `• Desde 01/01/2027: *${formatPrice(desde27)}/mes* (Tarifa definitiva sin promo BTS${iberdrolaDiscount > 0 ? ' - Alianza Iberdrola' : ''})\n`;
+      if (vodafoneQuote.btsApplied) {
+        text += `• Promoción BTS: ${vodafoneQuote.btsOttCountGranted} plataforma(s) bonificadas al 100% hasta 31/12/2026.\n`;
+      }
+      if (activePlan.commercialStatus === 'RESTRICTED_CHANNEL' || activePlan.id.startsWith('vdf-flash-') || activePlan.tags?.includes('Flash')) {
+        text += `⚠️ *Aviso Canal Restringido:* Oferta Flash sujeta a disponibilidad de canal y validación de código de campaña.\n`;
+      }
+      if (hasIberdrolaAlliance) {
+        text += `• Alianza Iberdrola: -10€/mes aplicados durante 24 meses.\n`;
+      }
+    } else if (hasPromo) {
       text += `*PRECIO PROMOCIONAL:* *${formatPrice(totalPricePromo)}/mes* ${taxLabel} (${activePlan.promoLabel})\n`;
       text += `*Precio Regular Posterior:* *${formatPrice(totalPriceNormal)}/mes* ${taxLabel}\n`;
     } else {
@@ -2134,7 +2489,7 @@ export default function Home() {
         </header>
 
         {/* 3. CORE CONTENT GRID */}
-        <main className="flex-1 p-6 lg:p-8 grid grid-cols-1 xl:grid-cols-12 gap-8 max-w-[1440px] w-full mx-auto">
+        <main className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 grid grid-cols-12 gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-[1600px] w-full mx-auto">
           {/* Admin Modal Passcode */}
           {showAdminModal && (
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -2244,7 +2599,7 @@ export default function Home() {
                 initial="hidden"
                 animate="visible"
                 variants={staggerContainer}
-                className="xl:col-span-8 flex flex-col gap-8"
+                className="col-span-6 sm:col-span-7 md:col-span-7 lg:col-span-7 xl:col-span-8 flex flex-col gap-4 sm:gap-6 lg:gap-8 min-w-0"
               >
             
             {/* HERO COMPACTO */}
@@ -2380,7 +2735,16 @@ export default function Home() {
                     <div className="flex items-center gap-1 bg-white dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
                       <button
                         type="button"
-                        onClick={() => setDaznSegment('nuevo')}
+                        onClick={() => {
+                          setDaznSegment('nuevo');
+                          setSelectedAddonIds(prev => {
+                            const next = new Set(prev);
+                            for (const id of next) {
+                              if (id.startsWith('vdf-dazn-')) next.delete(id);
+                            }
+                            return next;
+                          });
+                        }}
                         className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                           daznSegment === 'nuevo'
                             ? 'bg-[#E60000] text-white shadow-xs'
@@ -2391,18 +2755,56 @@ export default function Home() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setDaznSegment('cartera')}
+                        onClick={() => {
+                          setDaznSegment('regular');
+                          setSelectedAddonIds(prev => {
+                            const next = new Set(prev);
+                            for (const id of next) {
+                              if (id.startsWith('vdf-dazn-')) next.delete(id);
+                            }
+                            return next;
+                          });
+                        }}
+                        className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+                          daznSegment === 'regular'
+                            ? 'bg-[#E60000] text-white shadow-xs'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                        }`}
+                      >
+                        🏷️ PVP Regular
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDaznSegment('cartera');
+                          setSelectedAddonIds(prev => {
+                            const next = new Set(prev);
+                            for (const id of next) {
+                              if (id.startsWith('vdf-dazn-')) next.delete(id);
+                            }
+                            return next;
+                          });
+                        }}
                         className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                           daznSegment === 'cartera'
                             ? 'bg-[#E60000] text-white shadow-xs'
                             : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100'
                         }`}
                       >
-                        💼 Cartera / Retenciones (24M)
+                        💼 Cartera (24M)
                       </button>
                       <button
                         type="button"
-                        onClick={() => setDaznSegment('nba')}
+                        onClick={() => {
+                          setDaznSegment('nba');
+                          setSelectedAddonIds(prev => {
+                            const next = new Set(prev);
+                            for (const id of next) {
+                              if (id.startsWith('vdf-dazn-')) next.delete(id);
+                            }
+                            return next;
+                          });
+                        }}
                         className={`text-[9.5px] font-bold px-2.5 py-1 rounded-lg transition-all ${
                           daznSegment === 'nba'
                             ? 'bg-[#E60000] text-white shadow-xs'
@@ -2414,20 +2816,77 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Toggle Alianza Iberdrola */}
-                  <button
-                    type="button"
-                    onClick={() => setHasIberdrolaAlliance(!hasIberdrolaAlliance)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[10px] font-extrabold transition-all duration-300 ${
-                      hasIberdrolaAlliance
-                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm ring-2 ring-emerald-400/40'
-                        : 'bg-white hover:bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs'
-                    }`}
-                  >
-                    <span>⚡</span>
-                    <span>Alianza Iberdrola (-10€/mes x 24m)</span>
-                    {hasIberdrolaAlliance && <span className="bg-white/20 px-1 py-0.2 rounded text-[8px]">ACTIVADO</span>}
-                  </button>
+                  {/* Acciones Rápidas Vodafone: Try&Pay, Secure Net, Iberdrola */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Toggle Try&Pay */}
+                    {activePlan?.tryAndPayEligible === true &&
+                     (activePlan?.fiber === '1Gb' || activePlan?.speed?.includes('1G') || activePlan?.fiber?.includes('1G')) &&
+                     activePlan?.id !== 'vdf-oferta-39-euros' &&
+                     activePlan?.id !== 'vdf-public-600m-2x160gb-39' &&
+                     activePlan?.id !== 'vdf-public-600m-2xilim-44' &&
+                     activePlan?.id !== 'vdf-oferta-45-euros' &&
+                     activePlan?.id !== 'vdf-internal-1g-1ilim-39' &&
+                     activePlan?.id !== 'vdf-internal-1g-2ilim-45-hypothesis' && (
+                      <button
+                        type="button"
+                        onClick={() => setTryAndPayEnabled(!tryAndPayEnabled)}
+                        className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-[10px] font-extrabold transition-all duration-300 ${
+                          tryAndPayEnabled
+                            ? 'bg-[#E60000] border-[#E60000] text-white shadow-sm ring-2 ring-red-400/40'
+                            : 'bg-white hover:bg-red-50 border-red-300 text-red-800 shadow-xs'
+                        }`}
+                        title="Fibra 1Gbps al precio de 600Mbps durante los 3 primeros meses (-10€/mes)"
+                      >
+                        <Zap className="h-3 w-3" />
+                        <span>Try&Pay / primeros 3 meses</span>
+                        {tryAndPayEnabled && <span className="bg-white/20 px-1 py-0.2 rounded text-[8px]">-10€</span>}
+                      </button>
+                    )}
+
+                    {/* Toggle Secure Net */}
+                    {(() => {
+                      const isSecureNetSelected = selectedAddonIds.has('vdf-secure-net') || selectedAddonIds.has('vdf-addon-secure-net');
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (selectedAddonIds.has('vdf-addon-secure-net')) {
+                              toggleAddon('vdf-addon-secure-net');
+                            } else if (selectedAddonIds.has('vdf-secure-net')) {
+                              toggleAddon('vdf-secure-net');
+                            } else {
+                              toggleAddon('vdf-addon-secure-net');
+                            }
+                          }}
+                          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-[10px] font-extrabold transition-all duration-300 ${
+                            isSecureNetSelected
+                              ? 'bg-blue-600 border-blue-600 text-white shadow-sm ring-2 ring-blue-400/40'
+                              : 'bg-white hover:bg-blue-50 border-blue-300 text-blue-800 shadow-xs'
+                          }`}
+                          title="Seguridad de red. Meses 1 a 3 gratis (0€), luego 1€/mes"
+                        >
+                          <Shield className="h-3 w-3" />
+                          <span>Secure Net (0€ m1-3 / 1€ m4+)</span>
+                          {isSecureNetSelected && <span className="bg-white/20 px-1 py-0.2 rounded text-[8px]">OK</span>}
+                        </button>
+                      );
+                    })()}
+
+                    {/* Toggle Alianza Iberdrola */}
+                    <button
+                      type="button"
+                      onClick={() => setHasIberdrolaAlliance(!hasIberdrolaAlliance)}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-[10px] font-extrabold transition-all duration-300 ${
+                        hasIberdrolaAlliance
+                          ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm ring-2 ring-emerald-400/40'
+                          : 'bg-white hover:bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs'
+                      }`}
+                    >
+                      <span>⚡</span>
+                      <span>Iberdrola (-10€ x 24m)</span>
+                      {hasIberdrolaAlliance && <span className="bg-white/20 px-1 py-0.2 rounded text-[8px]">OK</span>}
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -2512,12 +2971,16 @@ export default function Home() {
                 {selectedOperatorId === 'vodafone' && (
                   <>
                     {[
-                      { id: 'flash-agosto', label: '🔥 Ofertas Flash' },
+                      { id: 'bts-vuelta-cole', label: '🎒 Vuelta al Cole (BTS)' },
+                      { id: 'bases-convergencia', label: '🏛️ 12 Bases Convergentes' },
+                      { id: 'sin-tv', label: '📺 Sin TV' },
+                      { id: 'flash-privadas', label: '🔒 Flash / Privadas' },
                       { id: 'fibra-600', label: '⚡ Fibra 600Mb' },
                       { id: 'fibra-1gb', label: '🚀 Fibra 1Gbps' },
                       { id: 'solo-movil', label: '📱 Solo Móvil' },
                       { id: 'solo-fibra-2a', label: '🌐 Solo Fibra / 2ª Residencia' },
-                      { id: 'bares-horeca', label: '🏢 Bares HORECA' }
+                      { id: 'bloqueadas', label: '⚠️ Bloqueadas (Auditoría)' },
+                      { id: 'bares-horeca', label: '🏢 Negocios / Bares HORECA' }
                     ].map(tab => (
                       <button
                         key={tab.id}
@@ -2716,6 +3179,28 @@ export default function Home() {
                         
                         {/* Badges del plan */}
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                          {plan.commercialStatus && !isCommerciallyValid(plan.commercialStatus) && (
+                            <span className="text-[8px] px-2 py-0.5 bg-red-700 text-white rounded font-black uppercase tracking-wider shadow-md flex items-center gap-1 border border-red-400">
+                              <Lock className="h-2.5 w-2.5" />
+                              BLOQUEADO: {plan.commercialStatus}
+                            </span>
+                          )}
+                          {plan.commercialStatus === 'RESTRICTED_CHANNEL' && (
+                            <span className="text-[8px] px-2 py-0.5 bg-amber-600 text-white rounded font-black uppercase tracking-wider shadow-sm flex items-center gap-1 border border-amber-400">
+                              <Lock className="h-2.5 w-2.5" />
+                              OFERTA PRIVADA
+                            </span>
+                          )}
+                          {plan.commercialStatus === 'CONFIRMED' && plan.sourceType && (
+                            <span className="text-[7.5px] px-1.5 py-0.5 bg-emerald-800/80 text-emerald-100 rounded font-bold uppercase tracking-wider">
+                              {plan.sourceType}
+                            </span>
+                          )}
+                          {(plan.tags?.includes('BTS') || plan.id.includes('bts')) && (
+                            <span className="text-[8px] px-2 py-0.5 bg-rose-600 text-white rounded font-black uppercase tracking-wider shadow-sm flex items-center gap-1">
+                              🎒 CAMPAÑA BTS
+                            </span>
+                          )}
                           {plan.operatorId === 'lowi' && (
                             <span className="text-[9px] px-2.5 py-1 bg-gradient-to-r from-amber-500 via-orange-500 to-[#E50015] text-white rounded-md font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 border border-amber-300/40">
                               <Sun className="h-3.5 w-3.5 fill-amber-200 text-amber-100 stroke-[2.5px] animate-pulse" />
@@ -2739,12 +3224,15 @@ export default function Home() {
                               TARIFA RESIDENCIAL
                             </span>
                           )}
-                          {plan.isPromo && (
-                            <span className="text-[8px] px-2 py-0.5 bg-red-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
-                              {plan.promoMonths ? `PROMO ${plan.promoMonths} MESES` : 'DESCUENTO'}
+                          {plan.priceKind === 'segmented_discount' ? (
+                            <span className="text-[8px] px-2 py-0.5 bg-purple-700 text-white rounded font-black uppercase tracking-wider shadow-sm">
+                              RETENCIÓN / SEGMENTADO
                             </span>
-                          )}
-                          {!plan.isPromo && (
+                          ) : plan.isPromo ? (
+                            <span className="text-[8px] px-2 py-0.5 bg-red-600 text-white rounded font-black uppercase tracking-wider shadow-sm">
+                              {isVodafonePublicOffer(plan.id) ? 'HASTA 31/12/2026' : plan.promoMonths ? `PROMO ${plan.promoMonths} MESES` : 'DESCUENTO'}
+                            </span>
+                          ) : (
                             <span className="text-[8px] px-2 py-0.5 bg-slate-800 text-slate-200 rounded font-black uppercase tracking-wider shadow-sm">
                               SIN PROMOCIÓN
                             </span>
@@ -2807,43 +3295,50 @@ export default function Home() {
                         <div className={`mt-4 pt-3 border-t flex flex-col gap-1 ${planBorderClass}`}>
                           <div className="flex items-baseline justify-between w-full">
                             <div className="flex items-baseline gap-0.5">
-                              {plan.operatorId === 'win' ? (
+                              {plan.priceKind === 'segmented_discount' || plan.price === 0 ? (
+                                <span className={`text-xs font-black uppercase tracking-wider ${planPriceClass}`}>
+                                  Consultar canal / Segmentado
+                                </span>
+                              ) : plan.operatorId === 'win' ? (
                                 <>
                                   <span className="price-suffix text-[10px] text-slate-400 mr-0.5 font-bold">S/</span>
                                   <span className={`price-main text-2xl font-black ${planPriceClass}`}>{plan.price.toFixed(2)}</span>
+                                  <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                                 </>
                               ) : (
                                 <>
                                   <span className={`price-main text-2xl font-black ${planPriceClass}`}>{plan.price}</span>
                                   <span className="price-suffix text-[10px] text-slate-400 font-bold">€</span>
+                                  <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                                 </>
                               )}
-                              <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
-                              <span className={`text-[9px] font-black uppercase tracking-wider ml-1.5 px-1.5 py-0.5 rounded ${
-                                plan.operatorId === 'orange' 
-                                  ? 'bg-white/20 text-white' 
-                                  : plan.operatorId === 'win'
-                                    ? 'bg-slate-950/15 text-slate-950'
-                                    : plan.operatorId === 'lowi'
-                                      ? 'bg-white/10 text-white/80'
-                                      : 'bg-white/20 text-white/90'
-                              }`}>
-                                {plan.operatorId === 'orange' ? 'SIN IMPUESTOS' : 'IVA INCLUIDO'}
-                              </span>
+                              {plan.priceKind !== 'segmented_discount' && plan.price !== 0 && (
+                                <span className={`text-[9px] font-black uppercase tracking-wider ml-1.5 px-1.5 py-0.5 rounded ${
+                                  plan.operatorId === 'orange' 
+                                    ? 'bg-white/20 text-white' 
+                                    : plan.operatorId === 'win'
+                                      ? 'bg-slate-950/15 text-slate-950'
+                                      : plan.operatorId === 'lowi'
+                                        ? 'bg-white/10 text-white/80'
+                                        : 'bg-white/20 text-white/90'
+                                }`}>
+                                  {plan.operatorId === 'orange' ? 'SIN IMPUESTOS' : 'IVA INCLUIDO'}
+                                </span>
+                              )}
                             </div>
-                            {plan.priceAfterPromo && plan.priceAfterPromo !== plan.price && (
+                            {plan.priceKind !== 'segmented_discount' && plan.priceAfterPromo && plan.priceAfterPromo !== plan.price && (
                               <span className="price-suffix text-[9px] text-slate-400 font-bold">
                                 Luego {plan.operatorId === 'win' ? `S/ ${plan.priceAfterPromo.toFixed(2)}` : `${plan.priceAfterPromo}€`}/mes
                               </span>
                             )}
                           </div>
-                          {plan.promoMonths && (
+                          {plan.priceKind !== 'segmented_discount' && plan.promoMonths && (
                             <span className={`text-[10px] font-black block text-left ${
                               ['yoigo', 'orange', 'vodafone'].includes(selectedOperatorId) 
                                 ? 'text-white' 
                                 : 'text-red-500'
                             }`}>
-                              Promoción durante {plan.promoMonths} meses
+                              {isVodafonePublicOffer(plan.id) ? 'Promoción hasta 31/12/2026' : `Promoción durante ${plan.promoMonths} meses`}
                             </span>
                           )}
                         </div>
@@ -2863,20 +3358,55 @@ export default function Home() {
                 </h4>
                 {selectedOperatorId === 'vodafone' && (
                   <span className="text-[9.5px] font-bold text-slate-400">
-                    Modo DAZN: <strong className="text-[#E60000] uppercase">{daznSegment === 'nuevo' ? 'Cliente Nuevo' : (daznSegment === 'cartera' ? 'Cartera' : 'Oferta NBA')}</strong>
+                    Modo DAZN: <strong className="text-[#E60000] uppercase">{daznSegment === 'nuevo' ? 'Cliente Nuevo' : (daznSegment === 'regular' ? 'PVP Regular' : (daznSegment === 'cartera' ? 'Cartera' : 'Oferta NBA'))}</strong>
                   </span>
                 )}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4">
                 {displayedAddons.map((addon) => {
                   const isSelected = selectedAddonIds.has(addon.id);
                   
+                  const isRakuten = addon.id === 'vdf-addon-videoclub-rakuten';
+                  const isAutogestion = addon.tags?.includes('Autogestión') ||
+                    addon.id === 'vdf-addon-disney-sin-anuncios' ||
+                    addon.id === 'vdf-addon-disney-premium' ||
+                    addon.id === 'vdf-addon-hbo-sin-anuncios' ||
+                    addon.id === 'vdf-addon-netflix-estandar' ||
+                    addon.id === 'vdf-addon-netflix-premium';
+                  const isInformative = addon.isInformative ||
+                    addon.tags?.includes('Informativo') ||
+                    addon.tags?.includes('No Seleccionable') ||
+                    isRakuten ||
+                    isAutogestion;
+
+                  // BTS Free condition check: Only show "Gratis" when configuration really meets promotion and is selected!
+                  const appliedAddonLabel = isSelected && selectedOperatorId === 'vodafone'
+                    ? getVodafoneAddonLabel(addon, vodafoneQuote) : null;
+                  let isFreeUnderBts = false;
+                  if (selectedOperatorId === 'vodafone' && vodafoneQuote?.btsApplied) {
+                    if (
+                      isSelected && (
+                        addon.id === 'vdf-addon-deco-3' ||
+                        addon.id === 'vdf-addon-deco-4' ||
+                        addon.id === 'vdf-addon-prime' ||
+                        addon.id === 'vdf-addon-disney' ||
+                        addon.id === 'vdf-addon-hbo' ||
+                        addon.id === 'vdf-addon-netflix-standalone'
+                      )
+                    ) {
+                      isFreeUnderBts = appliedAddonLabel?.startsWith('Gratis') === true;
+                    }
+                  }
+
                   let cardBorder = 'border-slate-200/80 hover:border-slate-350';
                   let cardBg = 'bg-white';
                   let btnColor = 'bg-slate-100 hover:bg-slate-200 text-slate-650';
 
-                  if (isSelected) {
+                  if (isInformative) {
+                    cardBg = 'bg-slate-50/60';
+                    cardBorder = 'border-slate-200/70';
+                  } else if (isSelected) {
                     cardBg = 'bg-white shadow-sm';
                     if (selectedOperatorId === 'yoigo') {
                       cardBorder = 'border-[#B026FF] shadow-[0_0_12px_rgba(176,38,255,0.05)]';
@@ -2898,26 +3428,55 @@ export default function Home() {
                   return (
                     <motion.div
                       key={addon.id}
-                      onClick={() => toggleAddon(addon.id)}
+                      onClick={() => !isInformative && toggleAddon(addon.id)}
                       variants={popSelect}
-                      whileHover="hover"
-                      whileTap="pressed"
-                      className={`cursor-pointer rounded-2xl border p-2.5 flex flex-col justify-between gap-3 transition-all duration-300 h-44 ${cardBorder} ${cardBg}`}
+                      whileHover={isInformative ? undefined : "hover"}
+                      whileTap={isInformative ? undefined : "pressed"}
+                      className={`rounded-2xl border p-2.5 flex flex-col justify-between gap-3 transition-all duration-300 h-44 ${cardBorder} ${cardBg} ${isInformative ? 'cursor-default select-none' : 'cursor-pointer'}`}
                     >
                       {/* Fila Superior: Mini visual e Icono de apoyo */}
                       <div className="flex justify-between items-start">
                         {renderAddonThumbnail(addon.id)}
-                        <span 
-                          className="price-main text-[11px] font-black border px-2 py-0.5 rounded-lg transition-all duration-300 shadow-sm"
-                          style={{
-                            color: operatorColor,
-                            borderColor: `${operatorColor}40`,
-                            backgroundColor: darkMode ? `${operatorColor}20` : `${operatorColor}08`
-                          }}
-                        >
-                          {addon.price === 0 ? 'Gratis' : (selectedOperatorId === 'win' ? `+S/ ${addon.price.toFixed(2)}` : `+${addon.price}`)}
-                          {addon.price !== 0 && selectedOperatorId !== 'win' && <span className="price-suffix text-[9px] ml-0.5" style={{ color: operatorColor }}>€</span>}
-                        </span>
+                        <div className="flex flex-col items-end gap-1">
+                          {addon.commercialStatus && !isCommerciallyValid(addon.commercialStatus) && (
+                            <span className="text-[7.5px] px-1.5 py-0.5 bg-red-700 text-white rounded font-black uppercase tracking-wider flex items-center gap-0.5">
+                              <Lock className="h-2 w-2" />
+                              BLOQUEADO
+                            </span>
+                          )}
+                          {isRakuten ? (
+                            <span className="text-[9px] font-black border border-slate-300 px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 shadow-xs">
+                              Sin cuota fija
+                            </span>
+                          ) : isAutogestion ? (
+                            <div className="flex flex-col items-end gap-0.5">
+                              <span className="text-[7px] font-black px-1.5 py-0.2 bg-purple-100 text-purple-700 border border-purple-200 rounded uppercase tracking-wider">
+                                Autogestión
+                              </span>
+                              <span className="price-main text-[11px] font-black border border-slate-200 px-2 py-0.5 rounded-lg text-slate-700 bg-white shadow-xs">
+                                +{addon.price} €
+                              </span>
+                            </div>
+                          ) : appliedAddonLabel ? (
+                            <span className="text-[9px] max-w-28 text-right font-bold text-slate-700">{appliedAddonLabel}</span>
+                          ) : isFreeUnderBts ? (
+                            <span className="price-main text-[10.5px] font-black border border-emerald-300 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 shadow-xs">
+                              Gratis (BTS)
+                            </span>
+                          ) : (
+                            <span 
+                              className="price-main text-[11px] font-black border px-2 py-0.5 rounded-lg transition-all duration-300 shadow-sm"
+                              style={{
+                                color: operatorColor,
+                                borderColor: `${operatorColor}40`,
+                                backgroundColor: darkMode ? `${operatorColor}20` : `${operatorColor}08`
+                              }}
+                            >
+                              {addon.price === 0 ? 'Gratis' : (selectedOperatorId === 'win' ? `+S/ ${addon.price.toFixed(2)}` : `+${addon.price}`)}
+                              {addon.price !== 0 && selectedOperatorId !== 'win' && <span className="price-suffix text-[9px] ml-0.5" style={{ color: operatorColor }}>€</span>}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Textos de Añadido */}
@@ -2926,16 +3485,21 @@ export default function Home() {
                           {addon.name}
                         </h5>
                         <p className="text-[9px] text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
-                          {addon.description}
+                          {isRakuten ? 'Sin cuota fija. Pago por alquiler o compra.' : isAutogestion ? 'Información de autogestión (App/Web). No venta automática.' : addon.description}
                         </p>
                       </div>
 
-                      {/* Botón Añadir circular */}
+                      {/* Botón Añadir circular o Badge Informativo */}
                       <div className="flex items-center justify-between mt-1 pt-2 border-t border-slate-100">
                         <span className="text-[9px] text-slate-400 font-bold uppercase">
-                          {addon.price === 0 ? 'Único' : 'Mensual'}
+                          {isInformative ? 'Informativo' : (addon.isOneTime ? 'Único' : 'Mensual')}
                         </span>
-                        {isSelected && isMobileLineAddon ? (
+                        {isInformative ? (
+                          <div className="h-5 px-2 rounded-full flex items-center justify-center gap-1 text-[8.5px] font-bold text-slate-500 bg-slate-100 border border-slate-200 select-none">
+                            <Info className="h-3 w-3 text-slate-400" />
+                            <span>{isAutogestion ? 'App/Web' : 'Info'}</span>
+                          </div>
+                        ) : isSelected && isMobileLineAddon ? (
                           <div className="flex items-center gap-1.5 bg-slate-100/80 rounded-full p-0.5" onClick={(e) => e.stopPropagation()}>
                             <button
                               type="button"
@@ -3009,7 +3573,7 @@ export default function Home() {
           </motion.div>
 
           {/* COLUMNA DERECHA TICKET DE COTIZACIÓN */}
-          <section className="xl:col-span-4 flex flex-col gap-6 sticky top-24">
+          <section className="proposal-sidebar col-span-6 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-4 flex flex-col gap-3 sm:gap-4 md:gap-6 sticky top-20 sm:top-20 lg:top-24 h-fit min-w-0 max-h-[calc(100dvh-6rem)] overflow-y-auto pr-0.5 sm:pr-1 [&>*]:shrink-0">
             
             {/* CARD DATOS CLIENTE */}
             <Card className="border-border bg-card overflow-hidden rounded-3xl">
@@ -3153,7 +3717,7 @@ export default function Home() {
                           )}
                           {activePlan.isPromo && (
                             <span className="text-[8px] bg-red-600 px-1.5 py-0.5 rounded font-black text-white">
-                              PROMO {activePlan.promoMonths || 3} MESES
+                              {isVodafonePublicOffer(activePlan.id) ? 'HASTA 31/12/2026' : `PROMO ${activePlan.promoMonths || 3} MESES`}
                             </span>
                           )}
                         </div>
@@ -3244,6 +3808,15 @@ export default function Home() {
                     <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
                       {activeAddons.map(addon => {
                         const qty = addon.id === 'addon-line-mobile' || addon.id === 'global-mobile-line' || addon.id === 'yoigo-duo-adicional' || addon.id.includes('linea-adicional') ? mobileLinesCount : 1;
+                        const appliedAddonLabel = selectedOperatorId === 'vodafone' ? getVodafoneAddonLabel(addon, vodafoneQuote) : null;
+                        const isBtsBonified = appliedAddonLabel?.startsWith('Gratis') === true && (
+                          addon.id === 'vdf-addon-deco-3' ||
+                          addon.id === 'vdf-addon-deco-4' ||
+                          addon.id === 'vdf-addon-prime' ||
+                          addon.id === 'vdf-addon-disney' ||
+                          addon.id === 'vdf-addon-hbo' ||
+                          addon.id === 'vdf-addon-netflix-standalone'
+                        );
                         return (
                           <div key={addon.id} className="flex justify-between items-center text-xs py-1.5 px-2.5 bg-slate-50 border border-slate-100 rounded-lg">
                             <span className="text-slate-600 flex items-center gap-1.5 truncate font-medium">
@@ -3252,7 +3825,13 @@ export default function Home() {
                             </span>
                             <div className="flex flex-col items-end shrink-0">
                               <span className="price-main text-xs text-slate-900 font-bold">
-                                {addon.price === 0 ? 'Gratis' : (
+                                {appliedAddonLabel ? (
+                                  <span className="text-[10px] whitespace-normal text-right block max-w-40">{appliedAddonLabel}</span>
+                                ) : isBtsBonified ? (
+                                  <span className="text-emerald-600 font-bold">Gratis (BTS)</span>
+                                ) : addon.price === 0 ? (
+                                  'Gratis'
+                                ) : (
                                   <>
                                     {selectedOperatorId === 'win' ? 'S/ ' : '+'}{(addon.price * qty).toFixed(2)}
                                     {selectedOperatorId !== 'win' && <span className="price-suffix text-[9px] text-slate-400">€/mes</span>}
@@ -3260,7 +3839,7 @@ export default function Home() {
                                   </>
                                 )}
                               </span>
-                              {addon.regularPrice !== undefined && addon.regularPrice !== addon.price && (
+                              {!isBtsBonified && addon.regularPrice !== undefined && addon.regularPrice !== addon.price && (
                                 <span className="text-[8px] text-slate-400 font-medium">
                                   Luego: {selectedOperatorId === 'win' ? `S/ ${(addon.regularPrice * qty).toFixed(2)}` : `+${(addon.regularPrice * qty).toFixed(2)}€`}/mes
                                 </span>
@@ -3274,6 +3853,99 @@ export default function Home() {
                 </div>
 
                 <Separator className="bg-slate-100 border-dashed" />
+
+                {/* BLOQUEO O CRONOGRAMA OFICIAL PARA VODAFONE */}
+                {selectedOperatorId === 'vodafone' && vodafoneQuote && (
+                  !vodafoneQuote.isValidForCommercialization || !vodafoneQuote.summary || !vodafoneQuote.periods ? (
+                    <div className="p-3.5 bg-red-500/10 border-2 border-red-500 rounded-2xl text-left space-y-2">
+                      <div className="flex items-center gap-1.5 text-red-600 font-black text-xs uppercase">
+                        <Lock className="h-4 w-4 shrink-0" />
+                        <span>TARIFA BLOQUEADA POR AUDITORÍA</span>
+                      </div>
+                      <p className="text-[10px] text-red-700 font-bold leading-relaxed">
+                        Esta oferta contiene precios o condiciones no confirmadas o en conflicto documental. Está terminantemente prohibida su comercialización oficial.
+                      </p>
+                      <div className="text-[9px] text-red-800 bg-red-100/80 p-2 rounded-lg space-y-1">
+                        {vodafoneQuote.blockingReasons.map((reason, i) => (
+                          <p key={i}>• {reason}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-slate-900 text-white rounded-2xl space-y-2.5 shadow-md">
+                      {(activePlan?.commercialStatus === 'RESTRICTED_CHANNEL' || activePlan?.id.startsWith('vdf-flash-') || activePlan?.tags?.includes('Flash')) && (
+                        <div className="p-2 bg-amber-500/20 border border-amber-400/40 rounded-xl text-left flex items-start gap-1.5">
+                          <Lock className="h-3.5 w-3.5 text-amber-300 shrink-0 mt-0.5" />
+                          <div className="text-[8px] text-amber-200 leading-tight font-medium">
+                            <strong className="text-amber-100 font-bold block uppercase tracking-wider">Aviso Canal Restringido</strong>
+                            Oferta Flash sujeta a disponibilidad de canal y validación de código de campaña.
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between border-b border-white/15 pb-1.5">
+                        <span className="text-[9.5px] font-black uppercase tracking-wider text-red-400 flex items-center gap-1">
+                          📅 CRONOGRAMA 3 PERIODOS (AACC)
+                        </span>
+                        {vodafoneQuote.btsApplied && (
+                          <span className="text-[8px] bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 px-1.5 py-0.5 rounded font-black">
+                            BTS ({vodafoneQuote.btsOttCountGranted} OTTs Gratis)
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 3 Periodos Oficiales */}
+                      <div className="grid grid-cols-3 gap-1.5 text-center">
+                        {/* Meses 1 a 3 */}
+                        <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                          <span className="text-[8px] font-bold text-white/70 block uppercase">Meses 1 - 3</span>
+                          <div className="my-1">
+                            <span className="text-xl font-black text-white">{vodafoneQuote.summary.meses1_3}</span>
+                            <span className="text-[9px] text-white/60 ml-0.5 font-bold">€</span>
+                          </div>
+                          <div className="text-[7.5px] text-white/60 space-y-0.5">
+                            {vodafoneQuote.tryAndPayApplied && <p className="text-emerald-400 font-bold">Try&Pay / primeros 3 meses (-10€)</p>}
+                            <p>SN: {vodafoneQuote.periods.months1to3.secureNetPrice === 0 ? '0€' : `${vodafoneQuote.periods.months1to3.secureNetPrice}€`}</p>
+                            {vodafoneQuote.periods.months1to3.decoderPrice === 0 && <p className="text-emerald-400 font-bold">Deco 0€</p>}
+                          </div>
+                        </div>
+
+                        {/* Meses 4 a Dic 2026 */}
+                        <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                          <span className="text-[8px] font-bold text-white/70 block uppercase">Meses 4 - Dic 26</span>
+                          <div className="my-1">
+                            <span className="text-xl font-black text-white">{vodafoneQuote.summary.meses4_dic2026}</span>
+                            <span className="text-[9px] text-white/60 ml-0.5 font-bold">€</span>
+                          </div>
+                          <div className="text-[7.5px] text-white/60 space-y-0.5">
+                            <p>Base estándar</p>
+                            {vodafoneQuote.periods.months4toDec2026.secureNetPrice > 0 && <p>SN: +{vodafoneQuote.periods.months4toDec2026.secureNetPrice}€</p>}
+                            {vodafoneQuote.btsApplied && <p className="text-emerald-400 font-bold">BTS bonif.</p>}
+                          </div>
+                        </div>
+
+                        {/* Desde 01/01/2027 */}
+                        <div className="p-2 rounded-xl bg-white/10 border border-white/20 flex flex-col justify-between">
+                          <span className="text-[8px] font-bold text-amber-300 block uppercase">Desde 2027</span>
+                          <div className="my-1">
+                            <span className="text-xl font-black text-amber-300">{vodafoneQuote.summary.desde2027}</span>
+                            <span className="text-[9px] text-amber-200/70 ml-0.5 font-bold">€</span>
+                          </div>
+                          <div className="text-[7.5px] text-white/60 space-y-0.5">
+                            <p className="text-amber-200/80">Fin BTS</p>
+                            <p>PVP regular</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Trazabilidad de Auditoría */}
+                      {vodafoneQuote.baseConfig?.calculationFormula && (
+                        <p className="text-[7.5px] text-white/50 italic border-t border-white/10 pt-1 leading-tight">
+                          Fórmula trazabilidad: {vodafoneQuote.baseConfig.calculationFormula}
+                        </p>
+                      )}
+                    </div>
+                  )
+                )}
 
                 {/* Desglose matemático */}
                 <div className="space-y-2 text-[13px] text-slate-650 font-bold">
@@ -3298,7 +3970,7 @@ export default function Home() {
                   <div className="flex justify-between">
                     <span className="ui-label text-[10px] text-slate-500 font-bold">CUOTA ADICIONALES</span>
                     <span className="price-main text-slate-800">
-                      {selectedOperatorId === 'win' ? `+S/ ${addonsTotalPromo.toFixed(2)}` : `+${addonsTotalPromo.toFixed(2)} €`}
+                      {selectedOperatorId === 'win' ? `+S/ ${addonsTotalPromo.toFixed(2)}` : `+${addonsTotal.toFixed(2)} €`}
                       <span className="price-suffix text-[11px] text-slate-400 font-medium">/mes</span>
                     </span>
                   </div>
@@ -3312,7 +3984,7 @@ export default function Home() {
                       </span>
                     </div>
                   )}
-                  {hasPromo && (
+                  {hasPromo && selectedOperatorId !== 'vodafone' && (
                     <div className="flex justify-between pt-1 border-t border-slate-100/50">
                       <span className="ui-label text-[10px] text-slate-500 font-bold">DESPUÉS DE PROMO (PLAN + ADIC.)</span>
                       <span className="price-main text-slate-800">
@@ -3326,7 +3998,7 @@ export default function Home() {
                 {/* TOTAL MENSUAL GRANDE */}
                 <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center relative overflow-hidden shadow-inner">
                   <span className="ui-label text-[9px] text-slate-400 block">
-                    TOTAL MENSUAL NETO
+                    {selectedOperatorId === 'vodafone' ? 'CUOTA INICIAL (MESES 1 - 3)' : 'TOTAL MENSUAL NETO'}
                   </span>
                   
                   <div className="flex items-baseline justify-center gap-0.5 mt-1.5">
@@ -3334,7 +4006,7 @@ export default function Home() {
                       <span className="price-suffix text-xl text-slate-500 font-black mr-1">S/</span>
                     )}
                     <motion.span
-                      key={hasPromo ? totalPricePromo : totalPriceNormal}
+                      key={selectedOperatorId === 'vodafone' || hasPromo ? totalPricePromo : totalPriceNormal}
                       initial={{ scale: 0.85, opacity: 0.7 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: "spring", stiffness: 200, damping: 14 }}
@@ -3343,7 +4015,7 @@ export default function Home() {
                     >
                       {selectedOperatorId === 'win' 
                         ? (hasPromo ? totalPricePromo.toFixed(2) : totalPriceNormal.toFixed(2)) 
-                        : (hasPromo ? totalPricePromo : totalPriceNormal)}
+                        : (selectedOperatorId === 'vodafone' || hasPromo ? totalPricePromo : totalPriceNormal)}
                     </motion.span>
                     {selectedOperatorId !== 'win' && (
                       <span className="price-suffix text-sm text-slate-500 font-black ml-0.5">€</span>
@@ -3351,7 +4023,18 @@ export default function Home() {
                     <span className="price-suffix text-xs text-slate-450 ml-0.5">/mes</span>
                   </div>
 
-                  {hasPromo && (
+                  {selectedOperatorId === 'vodafone' && vodafoneQuote && vodafoneQuote.isValidForCommercialization && vodafoneQuote.summary ? (
+                    <div className="mt-2.5 pt-2.5 border-t border-slate-200 flex flex-col gap-1 text-[10px] text-slate-600">
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Meses 4 - Dic 2026:</span>
+                        <strong className="text-slate-800 font-black">{Math.max(0, Math.round((vodafoneQuote.summary.meses4_dic2026 - iberdrolaDiscount) * 100) / 100)} €/mes</strong>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-semibold">Desde 01/01/2027:</span>
+                        <strong className="text-slate-800 font-black">{Math.max(0, Math.round((vodafoneQuote.summary.desde2027 - iberdrolaDiscount) * 100) / 100)} €/mes</strong>
+                      </div>
+                    </div>
+                  ) : hasPromo && (
                     <div className="mt-2.5 pt-2.5 border-t border-slate-200 flex justify-between items-center text-[10px]">
                       <span className="ui-label text-[10px] text-slate-500 font-bold">LUEGO DE PROMO</span>
                       <span className="price-main text-slate-800 font-bold">
@@ -3363,7 +4046,7 @@ export default function Home() {
                 </div>
 
                 {/* Banner de Ahorro Promocional */}
-                {hasPromo && savingsAmount > 0 && (
+                {hasPromo && savingsAmount > 0 && selectedOperatorId !== 'vodafone' && (
                   <div className="p-3 bg-gradient-to-r from-red-50 to-white border border-red-200 rounded-2xl flex items-center justify-between gap-2 shadow-sm">
                     <div className="flex items-center gap-2">
                       <span className="text-lg">🐷</span>
@@ -3383,22 +4066,29 @@ export default function Home() {
 
               {/* Acciones */}
               <div className="px-6 pb-6 pt-2 flex flex-col gap-3">
-                <Button 
-                  onClick={handleCopyWhatsApp}
-                  className={`w-full py-6 text-xs uppercase tracking-wider font-extrabold flex items-center justify-center gap-2 rounded-xl transition-all duration-300 ${operatorBtnBgClass}`}
-                >
-                  {copySuccess ? (
-                    <>
-                      <Check className="h-4 w-4 stroke-[3.5px]" />
-                      ¡PROPUESTA COPIADA!
-                    </>
-                  ) : (
-                    <>
-                      <Share2 className="h-4 w-4" />
-                      COPIAR PROPUESTA PARA WHATSAPP
-                    </>
-                  )}
-                </Button>
+                {selectedOperatorId === 'vodafone' && vodafoneQuote && (!vodafoneQuote.isValidForCommercialization || !vodafoneQuote.summary) ? (
+                  <div className="w-full py-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 rounded-xl bg-red-100 border border-red-300 text-red-700 shadow-sm">
+                    <Lock className="h-4 w-4" />
+                    TARIFA BLOQUEADA (NO COMERCIALIZABLE)
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={handleCopyWhatsApp}
+                    className={`w-full py-6 text-xs uppercase tracking-wider font-extrabold flex items-center justify-center gap-2 rounded-xl transition-all duration-300 ${operatorBtnBgClass}`}
+                  >
+                    {copySuccess ? (
+                      <>
+                        <Check className="h-4 w-4 stroke-[3.5px]" />
+                        ¡PROPUESTA COPIADA!
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="h-4 w-4" />
+                        COPIAR PROPUESTA PARA WHATSAPP
+                      </>
+                    )}
+                  </Button>
+                )}
 
                 <Button
                   variant="outline"
